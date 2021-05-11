@@ -1,0 +1,11 @@
+_Store
+Thumbs.db
+db.json  
+*.log
+.deploy*/
+node_modules/
+.npmignore
+public
+.idea
+pyyaml
+.DS_Store

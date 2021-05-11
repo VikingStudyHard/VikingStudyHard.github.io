@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vikingstudyhard.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Automated Driving System Toolbox 提供了一套通过摄像机的数据检测并追踪车道、机动车、行人的计算机视觉算法：Visual Perception Using Monocular Camera，使用单目照相机的视觉感知">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【ADAS】Visual Perception Using Monocular Camera">
+<meta property="og:url" content="https://vikingstudyhard.github.io/2018/05/08/ADAS_VisualPerceptionUsingMonocularCamera/index.html">
+<meta property="og:site_name" content="加载起来特别特别慢的小博客">
+<meta property="og:description" content="Automated Driving System Toolbox 提供了一套通过摄像机的数据检测并追踪车道、机动车、行人的计算机视觉算法：Visual Perception Using Monocular Camera，使用单目照相机的视觉感知">
+<meta property="og:locale">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_VisualPerceptionUsingMonocularCamera/557A7853C421B5C93AD046C18D3D24DC.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_VisualPerceptionUsingMonocularCamera/8B0AC551304894E1B042876F3D2E5DCE.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_VisualPerceptionUsingMonocularCamera/B525B730D2235B93AC65A2061922C87E.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_VisualPerceptionUsingMonocularCamera/E2B16EEAF6367D72A6CCAE237F31A3F6.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_VisualPerceptionUsingMonocularCamera/F53B95EA034F12E20A580B149FE09413.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_VisualPerceptionUsingMonocularCamera/FE913FC0F560E17D42B2CE342CB41B0B.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_VisualPerceptionUsingMonocularCamera/946852F1410E1EB0163453C4D3EED636.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_VisualPerceptionUsingMonocularCamera/339330D8C2CBB830FD868D04B17B2108.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_VisualPerceptionUsingMonocularCamera/81CDCECCC3A36FDA5DDD6F1BD33D10CE.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_VisualPerceptionUsingMonocularCamera/4C6D4DCA6AC3CC4F2DC92592C0C57A7E.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_VisualPerceptionUsingMonocularCamera/E98E990E0104C238BAEA845B794BC961.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_VisualPerceptionUsingMonocularCamera/056B4F0CE8CEF9CF21D2AD172D86DA24.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_VisualPerceptionUsingMonocularCamera/D1558F50A4E5B85F7BD53F3243A4B5EE.jpg">
+<meta property="article:published_time" content="2018-05-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-05-11T06:56:58.512Z">
+<meta property="article:author" content="VikingWang">
+<meta property="article:tag" content="CATARC">
+<meta property="article:tag" content="Matlab">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vikingstudyhard.github.io/images/ADAS_VisualPerceptionUsingMonocularCamera/557A7853C421B5C93AD046C18D3D24DC.jpg">
+
+<link rel="canonical" href="https://vikingstudyhard.github.io/2018/05/08/ADAS_VisualPerceptionUsingMonocularCamera/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>【ADAS】Visual Perception Using Monocular Camera | 加载起来特别特别慢的小博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">加载起来特别特别慢的小博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">图片墙第一弹第二弹欢迎惠顾！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-photo">
+
+    <a href="/photo/" rel="section"><i class="fa fa-camera fa-fw"></i>photo</a>
+
+  </li>
+        <li class="menu-item menu-item-photo2">
+
+    <a href="/photo2/" rel="section"><i class="fa fa-camera fa-fw"></i>photo2</a>
+
+  </li>
+        <li class="menu-item menu-item-friends">
+
+    <a href="/friends/" rel="section"><i class="fa fa-rocket fa-fw"></i>friends</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://vikingstudyhard.github.io/2018/05/08/ADAS_VisualPerceptionUsingMonocularCamera/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.JPG">
+      <meta itemprop="name" content="VikingWang">
+      <meta itemprop="description" content="这是一个需要耐心等着加载的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="加载起来特别特别慢的小博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【ADAS】Visual Perception Using Monocular Camera
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-05-08 00:00:00" itemprop="dateCreated datePublished" datetime="2018-05-08T00:00:00+08:00">2018-05-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-11 14:56:58" itemprop="dateModified" datetime="2021-05-11T14:56:58+08:00">2021-05-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E4%BB%BF%E7%9C%9F%E6%B5%8B%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">自动驾驶仿真测试</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">Automated Driving System Toolbox 提供了一套通过摄像机的数据检测并追踪车道、机动车、行人的计算机视觉算法：Visual Perception Using Monocular Camera，使用单目照相机的视觉感知</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>单目摄像头系统，传感器可以完成：</p>
+<ol>
+<li>车道边界检测</li>
+<li>车、人识别</li>
+<li>本车到障碍物之间的距离估计</li>
+</ol>
+<p>发出车道偏离警告、碰撞警告或设计车道保持辅助控制系统。也可以配合其他传感器实现紧急制动系统和其他安全功能。</p>
+<h1 id="代码流程"><a href="#代码流程" class="headerlink" title="代码流程"></a>代码流程</h1><h2 id="定义摄像头配置"><a href="#定义摄像头配置" class="headerlink" title="定义摄像头配置"></a>定义摄像头配置</h2><p>掌握相机本身和外部的校准参数对准确转换像素和机动车坐标来说非常关键。</p>
+<h3 id="定义相机本身校准参数"><a href="#定义相机本身校准参数" class="headerlink" title="定义相机本身校准参数"></a>定义相机本身校准参数</h3><p>以下参数是使用棋盘校准模式(checkerboard calibration pattern)的相机校准程序较早确定的。使用 cameraCalibrator app 从摄像头获得数据。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">focalLength = [<span class="number">309.4362</span>, <span class="number">344.2161</span>]; <span class="comment">% [fx, fy] in pixel units</span></span><br><span class="line">principalPoint = [<span class="number">318.9034</span>, <span class="number">257.5352</span>]; <span class="comment">% [cx, cy] optical center in pixel coordinates 像素坐标中的光学中心</span></span><br><span class="line">imageSize = [<span class="number">480</span>, <span class="number">640</span>]; <span class="comment">% [nrows, mcols]</span></span><br></pre></td></tr></table></figure>
+
+<p>镜头失真系数 (lens distortion coefficients)被忽略，因为数据中有小的失真。参数被储存到<code>cameraIntrinsics</code>对象里。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">camIntrinsics = cameraIntrinsics(focalLength, principalPoint, imageSize);</span><br></pre></td></tr></table></figure>
+<h3 id="定义相对于车辆底盘的摄像机方向"><a href="#定义相对于车辆底盘的摄像机方向" class="headerlink" title="定义相对于车辆底盘的摄像机方向"></a>定义相对于车辆底盘的摄像机方向</h3><p>使用此信息建立摄像机外部定位系统，来定义3-D摄像机坐标系相对于车辆坐标系的位置。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">height = <span class="number">2.1798</span>; <span class="comment">% mounting height in meters from the ground 离地面距离的安装高度（米） </span></span><br><span class="line">pitch = <span class="number">14</span>; <span class="comment">% pitch of the camera in degrees 相机的pitch的百分比度数</span></span><br></pre></td></tr></table></figure>
+
+<p>上述量可以从 <code>extrinsics</code> 函数返回的旋转和平移矩阵中导出。Pitch指定相机水平位置倾斜度。 对于本例中使用的摄像机，传感器的横摇和横摆均为零。 定义内部函数和外部函数的整个配置存储在 <code>monoCamera</code> 对象中。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sensor = monoCamera(camIntrinsics, height, <span class="string">&#x27;Pitch&#x27;</span>, pitch);</span><br></pre></td></tr></table></figure>
+
+<p><code>monoCamera</code> 对象X轴指向机动车行驶方向，Y轴指向机动车左侧。</p>
+<p><img src="/images/ADAS_VisualPerceptionUsingMonocularCamera/557A7853C421B5C93AD046C18D3D24DC.jpg" alt="IMAGE"></p>
+<p>坐标系的原点位于地面上，正下方是由相机焦点定义的相机中心。 </p>
+<p><code>monoCamera</code> 还提供 <code>imageToVehicle</code> 和 <code>vehicleToImage</code> 方法，用于图像和车辆坐标系之间的转换。<br>注意：坐标系之间的转换采用平坦的道路。它基于建立单应矩阵，将成像平面上的位置映射到路面上的位置。 非平坦的道路会在距离计算中引入误差，特别是在距离车辆很远的地方。</p>
+<h2 id="加载一帧视频"><a href="#加载一帧视频" class="headerlink" title="加载一帧视频"></a>加载一帧视频</h2><p>首先创建一个打开视频文件的 <code>VideoReader</code> 对象。为了提高内存效率，<code>VideoReader</code> 一次加载一个视频帧。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">videoName = <span class="string">&#x27;caltech _ cordova1.avi&#x27;</span>; </span><br><span class="line">videoReader = VideoReader(videoName);</span><br></pre></td></tr></table></figure>
+<p>读取包含车道和机动车的视频：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">timeStamp = <span class="number">0.06667</span>; <span class="comment">% time from the beginning of the video </span></span><br><span class="line">videoReader.CurrentTime = timeStamp; <span class="comment">% point to the chosen frame</span></span><br><span class="line"></span><br><span class="line">frame = readFrame(videoReader); <span class="comment">% read frame at timeStamp seconds </span></span><br><span class="line">imshow(frame) <span class="comment">% display frame</span></span><br></pre></td></tr></table></figure>
+<p>例子中忽略了镜头失真。若要考虑镜头失真引入的距离测量的错误，要用 <code>undistortImage</code>函数移除镜头失真。</p>
+<h2 id="建立鸟瞰视角图"><a href="#建立鸟瞰视角图" class="headerlink" title="建立鸟瞰视角图"></a>建立鸟瞰视角图</h2><p>分割和检测车道标记方法之一：使用鸟瞰图像变换。</p>
+<p>缺点：带来计算成本<br>优势：<br>鸟瞰图中的车道标记厚度均匀——简化了分割过程。<br>属于相同车道的车道标记变得平行——便于进一步的分析。</p>
+<p>对于给定相机的设置，<code>birdEyeView</code> 对象将原图转为鸟瞰图。它允许使用车辆坐标指定要变换的区域。</p>
+<p>当摄像机安装高度以米为单位指定时，车辆坐标单位由 <code>monoCamera</code> 对象建立。例如，如果高度以毫米为单位指定，则模拟的其余部分将使用毫米。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% Using vehicle coordinates, define area to transform</span></span><br><span class="line">distAheadOfSensor = <span class="number">30</span>; <span class="comment">% in meters, as previously specified inmonoCamera ... </span></span><br><span class="line">height input</span><br><span class="line">spaceToOneSide = <span class="number">6</span>; <span class="comment">% all other distance quantities are also in meters </span></span><br><span class="line">bottomOffset = <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line">outView = [bottomOffset, distAheadOfSensor, -spaceToOneSide, ...</span><br><span class="line">spaceToOneSide]; <span class="comment">% [xmin, xmax, ymin, ymax]</span></span><br><span class="line">imageSize = [NaN, <span class="number">250</span>]; <span class="comment">% output image width in pixels; height is ... </span></span><br><span class="line">chosen automatically to preserve units per pixel ratio</span><br><span class="line"></span><br><span class="line">birdsEyeConfig = birdsEyeView(sensor, outView, imageSize);</span><br></pre></td></tr></table></figure>
+<p>生成鸟瞰图：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">birdsEyeImage = transformImage(birdsEyeConfig, frame); </span><br><span class="line"><span class="built_in">figure</span></span><br><span class="line">imshow(birdsEyeImage)</span><br></pre></td></tr></table></figure>
+
+<p>距传感器更远的区域更模糊，因为具有较少的像素并需要更大量的插值。<br>只要可以在车辆坐标中找到车道边界候选像素，就可以在不使用鸟瞰视图的情况下完成后面的处理步骤。</p>
+<h2 id="在车辆坐标中查找车道标记"><a href="#在车辆坐标中查找车道标记" class="headerlink" title="在车辆坐标中查找车道标记"></a>在车辆坐标中查找车道标记</h2><p>有了鸟瞰图，可用 <code>segmentLaneMarkerRidge</code> 方法从路面分割车道标记候选像素。<br>参数要用世界通用单位。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% Convert to grayscale</span></span><br><span class="line">birdsEyeImage = rgb2gray(birdsEyeImage);</span><br><span class="line"></span><br><span class="line"><span class="comment">% Lane marker segmentation ROI in world units</span></span><br><span class="line">vehicleROI = outView - [<span class="number">-1</span>, <span class="number">2</span>, <span class="number">-3</span>, <span class="number">3</span>]; <span class="comment">% look 3 meters to left and right, ... </span></span><br><span class="line">and <span class="number">4</span> meters ahead of the sensor</span><br><span class="line">approxLaneMarkerWidthVehicle = <span class="number">0.25</span>; <span class="comment">% 25 centimeters</span></span><br><span class="line"></span><br><span class="line"><span class="comment">% Detect lane features</span></span><br><span class="line">laneSensitivity = <span class="number">0.25</span>;</span><br><span class="line">birdsEyeViewBW = segmentLaneMarkerRidge(birdsEyeImage, birdsEyeConfig, approxLaneMarkerWidthVehicle,...</span><br><span class="line">    ‘ROI’, vehicleROI, ‘Sensitivity’, laneSensitivity);</span><br><span class="line"></span><br><span class="line"><span class="built_in">figure</span></span><br><span class="line">imshow(birdsEyeViewBW)</span><br></pre></td></tr></table></figure>
+
+<p>适用于车辆路径上的车道标记。穿过道路的道路标记或涂在沥青上的道路标志标记不了。</p>
+<h2 id="确定道路的边界"><a href="#确定道路的边界" class="headerlink" title="确定道路的边界"></a>确定道路的边界</h2><p>上一步中找到的一些曲线可能仍然无效。 例如，当曲线适合人行横道标记时。 使用额外的启发式来回避许多这样的曲线。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% Establish criteria for rejecting boundaries based on their length</span></span><br><span class="line">maxPossibleXLength = diff(vehicleROI(<span class="number">1</span>:<span class="number">2</span>));</span><br><span class="line">minXLength = maxPossibleXLength * <span class="number">0.60</span>; <span class="comment">% establish a threshold</span></span><br><span class="line"></span><br><span class="line"><span class="comment">% Reject short boundaries 回避短线</span></span><br><span class="line">isOfMinLength = arrayfun(@(b)diff(b.XExtent) &gt; minXLength, boundaries); </span><br><span class="line">boundaries = boundaries(isOfMinLength);</span><br></pre></td></tr></table></figure>
+
+<p>根据 <code>findParabolicLaneBoundaries</code> 函数计算的强度指标移除其他边界。根据ROI和图像大小设置车道强度阈值。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% To compute the maximum strength, assume all image pixels within the ROI </span></span><br><span class="line"><span class="comment">% are lane candidate points</span></span><br><span class="line">birdsImageROI = vehicleToImageROI(birdsEyeConfig, vehicleROI); </span><br><span class="line">[laneImageX,laneImageY] = <span class="built_in">meshgrid</span>(birdsImageROI(<span class="number">1</span>):birdsImageROI(<span class="number">2</span>),birdsImageROI(<span class="number">3</span>):birdsImageROI(<span class="number">4</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">% Convert the image points to vehicle points</span></span><br><span class="line">vehiclePoints = imageToVehicle(birdsEyeConfig,[laneImageX(:),laneImageY(:)]);</span><br><span class="line"></span><br><span class="line"><span class="comment">% Find the maximum number of unique x-axis locations possible for any lane </span></span><br><span class="line"><span class="comment">% boundary</span></span><br><span class="line">maxPointsInOneLane = <span class="built_in">numel</span>(unique(vehiclePoints(:,<span class="number">1</span>)));</span><br><span class="line"></span><br><span class="line"><span class="comment">% Set the maximum length of a lane boundary to the ROI length</span></span><br><span class="line">maxLaneLength = diff(vehicleROI(<span class="number">1</span>:<span class="number">2</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">% Compute the maximum possible lane strength for this image size/ROI size </span></span><br><span class="line"><span class="comment">% specification</span></span><br><span class="line">maxStrength = maxPointsInOneLane/maxLaneLength;</span><br><span class="line"></span><br><span class="line"><span class="comment">% Reject weak boundaries</span></span><br><span class="line">isStrong = [boundaries.Strength] &gt; <span class="number">0.4</span>*maxStrength; </span><br><span class="line">boundaries = boundaries(isStrong);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>将车道标记类型分为单/双、实线/虚线的启发式方法包含在本例底部列出的辅助函数中。<br>了解车道标记类型对于自动驾驶车辆至关重要。如：禁止车辆穿过双实线。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% Locate two ego lanes if they are present</span></span><br><span class="line">xOffset = <span class="number">0</span>; <span class="comment">% 0 meters from the sensor </span></span><br><span class="line">distanceToBoundaries = boundaries.computeBoundaryModel(xOffset);</span><br><span class="line"></span><br><span class="line"><span class="comment">% Find candidate ego boundaries</span></span><br><span class="line">leftEgoBoundaryIndex = [];</span><br><span class="line">rightEgoBoundaryIndex = [];</span><br><span class="line">minLDistance = <span class="built_in">min</span>(distanceToBoundaries(distanceToBoundaries&gt;<span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">minRDistance = <span class="built_in">max</span>(distanceToBoundaries(distanceToBoundaries&lt;=<span class="number">0</span>)); </span><br><span class="line"><span class="keyword">if</span> ~<span class="built_in">isempty</span>(minLDistance)</span><br><span class="line">  leftEgoBoundaryIndex = distanceToBoundaries == minLDistance;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">if</span> ~<span class="built_in">isempty</span>(minRDistance)</span><br><span class="line">  rightEgoBoundaryIndex = distanceToBoundaries == minRDistance;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">leftEgoBoundary = boundaries(leftEgoBoundaryIndex); </span><br><span class="line">rightEgoBoundary = boundaries(rightEgoBoundaryIndex);</span><br></pre></td></tr></table></figure>
+<p>在鸟瞰图像和常规视图中显示检测到的车道标记。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">xVehiclePoints = bottomOffset:distAheadOfSensor;</span><br><span class="line">birdsEyeWithEgoLane = insertLaneBoundary(birdsEyeImage, leftEgoBoundary , birdsEy Config, xVehiclePoints, ‘Color’,’Red’);</span><br><span class="line">birdsEyeWithEgoLane = insertLaneBoundary(birdsEyeWithEgoLane, rightEgoBoundary, birdsEyeConfig, xVehiclePoints, ‘Color’,’Green’);</span><br><span class="line"></span><br><span class="line">frameWithEgoLane = insertLaneBoundary(frame, leftEgoBoundary, sensor, xVehiclePoints, ‘Color’,’Red’);</span><br><span class="line">frameWithEgoLane = insertLaneBoundary(frameWithEgoLane, rightEgoBoundary, sensor, xVehiclePoints, ‘Color’,’Green’);</span><br><span class="line"></span><br><span class="line"><span class="built_in">figure</span></span><br><span class="line">subplot(‘Position’, [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0.5</span>, <span class="number">1.0</span>]) <span class="comment">% [left, bottom, width, height] in normalized units</span></span><br><span class="line">imshow(birdsEyeWithEgoLane)</span><br><span class="line">subplot(‘Position’, [<span class="number">0.5</span>, <span class="number">0</span>, <span class="number">0.5</span>, <span class="number">1.0</span>])</span><br><span class="line">imshow(frameWithEgoLane)</span><br></pre></td></tr></table></figure>
+<h2 id="在车辆坐标中查找车辆"><a href="#在车辆坐标中查找车辆" class="headerlink" title="在车辆坐标中查找车辆"></a>在车辆坐标中查找车辆</h2><p>在前方碰撞警告（FCW,front collision warning）和自动紧急制动（AEB,automated emergency braking）系统中，检测和跟踪车辆至关重要。</p>
+<p>加载经过预训练的聚集信道特征（ACF,aggregate channel features）检测器，以检测车辆的前部和后部。 像这样的探测器可以处理发出碰撞警告的场景。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">detector = vehicleDetectorACF();</span><br><span class="line"><span class="comment">% Width of a common vehicles is between 1.5 to 2.5 meters</span></span><br><span class="line">vehicleWidth = [<span class="number">1.5</span>, <span class="number">2.5</span>];</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>configureDetectorMonoCamer</code> 函数来专用通用ACF检测器，以考虑典型汽车应用的几何结构。 通过在这个摄像头进行配置，新探测器只搜索道路表面的车辆，因为没有点能在高于消失点的地方寻找车辆。这节省了计算时间并减少了误报的数量。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">monoDetector = configureDetectorMonoCamera(detector, sensor, vehicleWidth); </span><br><span class="line">[bboxes, scores] = detect(monoDetector, frame);</span><br></pre></td></tr></table></figure>
+
+<p>上述处理单个帧，追踪请看：<br><a target="_blank" rel="noopener" href="https://www.mathworks.com/help/driving/examples/track-multiple-vehicles-using-a-camera.html">Tracking Multiple Vehicles From a Camera example</a></p>
+<p>接下来，将车辆检测转换为车辆坐标。 </p>
+<p><code>computeVehicleLocations</code> 函数包含在本例最后，它给出了一个由图像坐标中的检测算法返回的边界框在车辆坐标系中的车辆位置，返回车辆坐标中边界框底部的中心位置。</p>
+<p>由于我们使用的是单眼相机传感器和简单的单应矩阵，因此只有<strong>沿道路表面的距离</strong>才能精确计算。计算三维空间中的任意位置需要使用立体相机或其他能够进行三角测量的传感器。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">locations = computeVehicleLocations(bboxes, sensor);</span><br><span class="line"></span><br><span class="line"><span class="comment">% Overlay the detections on the video frame 追踪多辆车</span></span><br><span class="line">imgOut = insertVehicleDetections(frame, locations, bboxes); </span><br><span class="line"><span class="built_in">figure</span>;</span><br><span class="line">imshow(imgOut);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="用视频输入模拟完整的传感器"><a href="#用视频输入模拟完整的传感器" class="headerlink" title="用视频输入模拟完整的传感器"></a>用视频输入模拟完整的传感器</h2><p>将视频倒回到开头，然后处理视频。下面的代码缩短了，因为所有关键参数都是在前面的步骤中定义的。 。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">videoReader.CurrentTime = <span class="number">0</span>;</span><br><span class="line">isPlayerOpen = <span class="built_in">true</span>;</span><br><span class="line">snapshot = [];</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> hasFrame(videoReader) &amp;&amp; isPlayerOpen</span><br><span class="line">  <span class="comment">% Grab a frame of video</span></span><br><span class="line">  frame = readFrame(videoReader);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">% Compute birdsEyeView image</span></span><br><span class="line">  birdsEyeImage = transformImage(birdsEyeConfig, frame); </span><br><span class="line">  birdsEyeImage = rgb2gray(birdsEyeImage);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">% Detect lane boundary features</span></span><br><span class="line">  birdsEyeViewBW = segmentLaneMarkerRidge(birdsEyeImage, birdsEyeConfig, ... </span><br><span class="line">    approxLaneMarkerWidthVehicle, ‘ROI’, vehicleROI, ...</span><br><span class="line">    ‘Sensitivity’, laneSensitivity);</span><br><span class="line">    </span><br><span class="line">  <span class="comment">% Obtain lane candidate points in vehicle coordinates</span></span><br><span class="line">  [imageX, imageY] = <span class="built_in">find</span>(birdsEyeViewBW);</span><br><span class="line">  xyBoundaryPoints = imageToVehicle(birdsEyeConfig, [imageY, imageX]);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">% Find lane boundary candidates</span></span><br><span class="line">  [boundaries, boundaryPoints] = findParabolicLaneBoundaries(xyBoundarPoints,boundaryWidth, ...</span><br><span class="line">    ‘MaxNumBoundaries’, maxLanes, ‘validateBoundaryFcn’, @validateBoundaryFcn);</span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  <span class="comment">% Reject boundaries based on their length and strength</span></span><br><span class="line">  isOfMinLength = arrayfun(@(b)diff(b.XExtent) &gt; minXLength, boundaries);</span><br><span class="line">  boundaries = boundaries(isOfMinLength);</span><br><span class="line">  isStrong = [boundaries.Strength] &gt; <span class="number">0.2</span>*maxStrength; </span><br><span class="line">  boundaries = boundaries(isStrong);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">% Classify lane marker type</span></span><br><span class="line">  boundaries = classifyLaneTypes(boundaries, boundaryPoints);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">% Find ego lanes</span></span><br><span class="line">  xOffset = <span class="number">0</span>; </span><br><span class="line">  <span class="comment">% 0 meters from the sensor </span></span><br><span class="line">  distanceToBoundaries = boundaries.computeBoundaryModel(xOffset); </span><br><span class="line">  <span class="comment">% Find candidate ego boundaries</span></span><br><span class="line">  </span><br><span class="line">  leftEgoBoundaryIndex = [];</span><br><span class="line">  rightEgoBoundaryIndex = [];</span><br><span class="line">  minLDistance = <span class="built_in">min</span>(distanceToBoundaries(distanceToBoundaries&gt;<span class="number">0</span>)); </span><br><span class="line">  minRDistance = <span class="built_in">max</span>(distanceToBoundaries(distanceToBoundaries&lt;=<span class="number">0</span>)); </span><br><span class="line">  <span class="keyword">if</span> ~<span class="built_in">isempty</span>(minLDistance)</span><br><span class="line">    leftEgoBoundaryIndex = distanceToBoundaries == minLDistance;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">if</span> ~<span class="built_in">isempty</span>(minRDistance)</span><br><span class="line">    rightEgoBoundaryIndex = distanceToBoundaries == minRDistance;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  leftEgoBoundary = boundaries(leftEgoBoundaryIndex); </span><br><span class="line">  rightEgoBoundary = boundaries(rightEgoBoundaryIndex);</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">  <span class="comment">% Detect vehicles</span></span><br><span class="line">  [bboxes, scores] = detect(monoDetector, frame); </span><br><span class="line">  locations = computeVehicleLocations(bboxes, sensor);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">% Visualize sensor outputs and intermediate results. Pack the core </span></span><br><span class="line">  <span class="comment">% sensor outputs into a struct.</span></span><br><span class="line">  sensorOut.leftEgoBoundary = leftEgoBoundary; </span><br><span class="line">  sensorOut.rightEgoBoundary = rightEgoBoundary; </span><br><span class="line">  sensorOut.vehicleLocations = locations;</span><br><span class="line">  </span><br><span class="line">  sensorOut.xVehiclePoints = bottomOffset:distAheadOfSensor; </span><br><span class="line">  sensorOut.vehicleBoxes = bboxes;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">% Pack additional visualization data, including intermediate results</span></span><br><span class="line">  intOut.birdsEyeImage = birdsEyeImage; </span><br><span class="line">  intOut.birdsEyeConfig = birdsEyeConfig;</span><br><span class="line">  intOut.vehicleScores = scores;</span><br><span class="line">  intOut.vehicleROI = vehicleROI;</span><br><span class="line">  intOut.birdsEyeBW = birdsEyeViewBW;</span><br><span class="line">  </span><br><span class="line">  closePlayers = ~hasFrame(videoReader);</span><br><span class="line">  isPlayerOpen = visualizeSensorResults(frame, sensor, sensorOut, ...</span><br><span class="line">    intOut, closePlayers);</span><br><span class="line">    </span><br><span class="line">  timeStamp = <span class="number">7.5333</span>; <span class="comment">% take snapshot for publishing at timeStamp seconds </span></span><br><span class="line">  <span class="keyword">if</span> <span class="built_in">abs</span>(videoReader.CurrentTime - timeStamp) &lt; <span class="number">0.01</span></span><br><span class="line">    snapshot = takeSnapshot(frame, sensor, sensorOut);</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>显示视频帧,在timeStamp秒处拍摄快照。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ~<span class="built_in">isempty</span>(snapshot) </span><br><span class="line">  <span class="built_in">figure</span></span><br><span class="line">  imshow(snapshot)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h2 id="在不同的视频上尝试传感器设计"><a href="#在不同的视频上尝试传感器设计" class="headerlink" title="在不同的视频上尝试传感器设计"></a>在不同的视频上尝试传感器设计</h2><p><code>helperMonoSensor</code> 类将安装程序和所有必要的步骤组装到一起，以将单眼相机传感器模拟为可应用于任何视频的完整套件。由于传感器设计所使用的大多数参数均基于世界单位，因此该设计对于相机参数（包括图像尺寸）的变化具有很强的鲁棒性。请注意，辅助MonoSensor类中的代码与前一节中的循环不同，后者用于说明基本概念。</p>
+<p>除了提供新视频之外，您还必须提供与该视频相对应的摄像机配置。该过程如下所示。试试你自己的视频。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% Sensor configuration</span></span><br><span class="line">focalLength = [<span class="number">309.4362</span>, <span class="number">344.2161</span>]; </span><br><span class="line">principalPoint = [<span class="number">318.9034</span>, <span class="number">257.5352</span>];</span><br><span class="line">imageSize = [<span class="number">480</span>, <span class="number">640</span>];</span><br><span class="line">height = <span class="number">2.1798</span>; <span class="comment">% mounting height in meters from the ground </span></span><br><span class="line">pitch = <span class="number">14</span>; <span class="comment">% pitch of the camera in degrees</span></span><br><span class="line"></span><br><span class="line">camIntrinsics = cameraIntrinsics(focalLength, principalPoint, imageSize); </span><br><span class="line">sensor = monoCamera(camIntrinsics, height, ‘Pitch’, pitch);</span><br><span class="line">videoReader = VideoReader(‘caltech _ washington1.avi’);</span><br></pre></td></tr></table></figure>
+
+<p>创建 <code>helperMonoSensor</code> 对象并将其应用于视频。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">monoSensor = helperMonoSensor(sensor);</span><br><span class="line">monoSensor.LaneXExtentThreshold = <span class="number">0.5</span>;</span><br><span class="line"><span class="comment">% To remove false detections from shadows in this video, we only return </span></span><br><span class="line"><span class="comment">% vehicle detections with higher scores. </span></span><br><span class="line">monoSensor.VehicleDetectionThreshold = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line">isPlayerOpen = <span class="built_in">true</span>;</span><br><span class="line">snapshot = [];</span><br><span class="line"><span class="keyword">while</span> hasFrame(videoReader) &amp;&amp; isPlayerOpen</span><br><span class="line">  frame = readFrame(videoReader); <span class="comment">% get a frame</span></span><br><span class="line">  sensorOut = processFrame(monoSensor, frame);</span><br><span class="line">  closePlayers = ~hasFrame(videoReader);</span><br><span class="line">  isPlayerOpen = displaySensorOutputs(monoSensor, frame, sensorOut, closePlayers);</span><br><span class="line">  timeStamp = <span class="number">11.1333</span>; <span class="comment">% take snapshot for publishing at timeStamp seconds </span></span><br><span class="line">  <span class="keyword">if</span> <span class="built_in">abs</span>(videoReader.CurrentTime - timeStamp) &lt; <span class="number">0.01</span></span><br><span class="line">    snapshot = takeSnapshot(frame, sensor, sensorOut);</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h2 id="支持功能"><a href="#支持功能" class="headerlink" title="支持功能"></a>支持功能</h2><p><code>visualizeSensorResults</code> 显示单眼相机传感器模拟的核心信息和中间结果。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isPlayerOpen</span> = <span class="title">visualizeSensorResults</span><span class="params">(frame, sensor, sensorOut,...</span></span></span><br><span class="line"><span class="params"><span class="function">  intOut, closePlayers)</span></span></span><br><span class="line">  <span class="comment">% Unpack the main inputs</span></span><br><span class="line">  leftEgoBoundary = sensorOut.leftEgoBoundary; </span><br><span class="line">  rightEgoBoundary = sensorOut.rightEgoBoundary; </span><br><span class="line">  locations = sensorOut.vehicleLocations;</span><br><span class="line">  </span><br><span class="line">  xVehiclePoints = sensorOut.xVehiclePoints; </span><br><span class="line">  bboxes = sensorOut.vehicleBoxes;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">% Unpack additional intermediate data</span></span><br><span class="line">  birdsEyeViewImage = intOut.birdsEyeImage;</span><br><span class="line">  birdsEyeConfig = intOut.birdsEyeConfig; </span><br><span class="line">  vehicleROI = intOut.vehicleROI;</span><br><span class="line">  birdsEyeViewBW = intOut.birdsEyeBW;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">% Visualize left and right ego-lane boundaries in bird’s-eye view</span></span><br><span class="line">  birdsEyeWithOverlays = insertLaneBoundary(birdsEyeViewImage, leftEgoBoundary , birdsEyeConfig, xVehiclePoints, ‘Color’,’Red’);</span><br><span class="line">  birdsEyeWithOverlays = insertLaneBoundary(birdsEyeWithOverlays, rightEgoBoundary, birdsEyeConfig, xVehiclePoints, ‘Color’,’Green’);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">% Visualize ego-lane boundaries in camera view</span></span><br><span class="line">  frameWithOverlays = insertLaneBoundary(frame, leftEgoBoundary, sensor, xVehicl Points, ‘Color’,’Red’);</span><br><span class="line">  frameWithOverlays = insertLaneBoundary(frameWithOverlays, rightEgoBoundary, sensor, xVehiclePoints, ‘Color’,’Green’);</span><br><span class="line">  </span><br><span class="line">  frameWithOverlays = insertVehicleDetections(frameWithOverlays, locations, bboxes);</span><br><span class="line">  imageROI = vehicleToImageROI(birdsEyeConfig, vehicleROI);</span><br><span class="line">  ROI = [imageROI(<span class="number">1</span>) imageROI(<span class="number">3</span>) imageROI(<span class="number">2</span>)-imageROI(<span class="number">1</span>) imageROI(<span class="number">4</span>)-imageROI(<span class="number">3</span>)];</span><br><span class="line">  </span><br><span class="line">  <span class="comment">% Highlight candidate lane points that include outliers</span></span><br><span class="line">  birdsEyeViewImage = insertShape(birdsEyeViewImage, ‘rectangle’, ROI); <span class="comment">% show detection ROI</span></span><br><span class="line">  birdsEyeViewImage = imoverlay(birdsEyeViewImage, birdsEyeViewBW, ‘blue’);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">% Display the results</span></span><br><span class="line">  frames = &#123;frameWithOverlays, birdsEyeViewImage, birdsEyeWithOverlays&#125;;</span><br><span class="line">  <span class="keyword">persistent</span> players; </span><br><span class="line">  <span class="keyword">if</span> <span class="built_in">isempty</span>(players)</span><br><span class="line">    frameNames = &#123;‘Lane marker and vehicle detections’, ‘Raw segmentation’, ‘Lane marker detections’&#125;;</span><br><span class="line">    players = helperVideoPlayerSet(frames, frameNames);</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  update(players, frames);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">% Terminate the loop when the first player is closed</span></span><br><span class="line">  isPlayerOpen = isOpen(players, <span class="number">1</span>);</span><br><span class="line">  <span class="keyword">if</span> (~isPlayerOpen || closePlayers) <span class="comment">% close down the other players </span></span><br><span class="line">    clear players;</span><br><span class="line">  <span class="keyword">end</span> </span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p><code>computeVehicleLocations</code>计算车辆在车辆坐标中的位置，给定由图像坐标中的检测算法返回的边界框。它返回车辆坐标中边界框底部的中心位置。<br>由于使用单眼相机传感器和简单的单应矩阵，因此只能计算沿道路表面的距离。计算三维空间中的任意位置需要使用立体相机或其他能够进行三角测量的传感器。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">locations</span> = <span class="title">computeVehicleLocations</span><span class="params">(bboxes, sensor)</span> <span class="title">locations</span> = <span class="title">zeros</span><span class="params">(size(bboxes,1)</span>,2);</span></span><br><span class="line">  <span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:<span class="built_in">size</span>(bboxes, <span class="number">1</span>)</span><br><span class="line">    bbox = bboxes(<span class="built_in">i</span>, :);</span><br><span class="line">    <span class="comment">% Get [x,y] location of the center of the lower portion of the</span></span><br><span class="line">    <span class="comment">% detection bounding box in meters. bbox is [x, y, width, height] in </span></span><br><span class="line">    <span class="comment">% image coordinates, where [x,y] represents upper-left corner. </span></span><br><span class="line">    yBottom = bbox(<span class="number">2</span>) + bbox(<span class="number">4</span>) - <span class="number">1</span>;</span><br><span class="line">    xCenter = bbox(<span class="number">1</span>) + (bbox(<span class="number">3</span>)<span class="number">-1</span>)/<span class="number">2</span>; <span class="comment">% approximate center</span></span><br><span class="line">    </span><br><span class="line">    locations(<span class="built_in">i</span>,:) = imageToVehicle(sensor, [xCenter, yBottom]);</span><br><span class="line">  <span class="keyword">end</span> </span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><code>insertVehicleDetections</code> 插入边界框并显示与返回车辆检测相对应的[x，y]位置。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">imgOut</span> = <span class="title">insertVehicleDetections</span><span class="params">(imgIn, locations, bboxes)</span></span></span><br><span class="line">  imgOut = imgIn;</span><br><span class="line">  <span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:<span class="built_in">size</span>(locations, <span class="number">1</span>) </span><br><span class="line">    location = locations(<span class="built_in">i</span>, :); </span><br><span class="line">    bbox = bboxes(<span class="built_in">i</span>, :);</span><br><span class="line">    </span><br><span class="line">    label = sprintf(‘X=<span class="comment">%0.2f, Y=%0.2f’, location(1), location(2));</span></span><br><span class="line">    imgOut = insertObjectAnnotation(imgOut, ... </span><br><span class="line">      ‘rectangle’, bbox, label, ‘Color’,’g’);</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p><code>vehicleToImageROI</code> 将车辆坐标中的ROI转换为鸟瞰图像中的图像坐标。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">imageROI</span> = <span class="title">vehicleToImageROI</span><span class="params">(birdsEyeConfig, vehicleROI)</span></span></span><br><span class="line">  vehicleROI = double(vehicleROI);</span><br><span class="line">  loc2 = <span class="built_in">abs</span>(vehicleToImage(birdsEyeConfig, [vehicleROI(<span class="number">2</span>) vehicleROI(<span class="number">4</span>)])); </span><br><span class="line">  loc1 = <span class="built_in">abs</span>(vehicleToImage(birdsEyeConfig, [vehicleROI(<span class="number">1</span>) vehicleROI(<span class="number">4</span>)])); </span><br><span class="line">  loc4 = vehicleToImage(birdsEyeConfig, [vehicleROI(<span class="number">1</span>) vehicleROI(<span class="number">4</span>)]); </span><br><span class="line">  loc3 = vehicleToImage(birdsEyeConfig, [vehicleROI(<span class="number">1</span>) vehicleROI(<span class="number">3</span>)]);</span><br><span class="line">  </span><br><span class="line">  [minRoiX, maxRoiX, minRoiY, maxRoiY] = deal(loc4(<span class="number">1</span>), loc3(<span class="number">1</span>), loc2(<span class="number">2</span>), loc1(<span class="number">2</span>)); </span><br><span class="line">  imageROI = <span class="built_in">round</span>([minRoiX, maxRoiX, minRoiY, maxRoiY]);</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p><code>validateBoundaryFcn</code> 拒绝使用RANSAC算法计算出的一些车道边界曲线。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isGood</span> = <span class="title">validateBoundaryFcn</span><span class="params">(params)</span> </span></span><br><span class="line">  <span class="keyword">if</span> ~<span class="built_in">isempty</span>(params)</span><br><span class="line">    a = params(<span class="number">1</span>);</span><br><span class="line">    <span class="comment">% Reject any curve with a small ‘a’ coefficient, which makes it highly</span></span><br><span class="line">    <span class="comment">% curved.</span></span><br><span class="line">    isGood = <span class="built_in">abs</span>(a) &lt; <span class="number">0.003</span>; <span class="comment">% a from ax^2+bx+c</span></span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    isGood = <span class="built_in">false</span>;</span><br><span class="line">  <span class="keyword">end</span> </span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>classifyLaneTypes determines lane marker types as solid, dashed, etc.</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">boundaries</span> = <span class="title">classifyLaneTypes</span><span class="params">(boundaries, boundaryPoints)</span></span></span><br><span class="line">  <span class="keyword">for</span> bInd = <span class="number">1</span> : <span class="built_in">numel</span>(boundaries)</span><br><span class="line">    vehiclePoints = boundaryPoints&#123;bInd&#125;;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">% Sort by x</span></span><br><span class="line">    vehiclePoints = <span class="built_in">sortrows</span>(vehiclePoints, <span class="number">1</span>);</span><br><span class="line">    xVehicle = vehiclePoints(:,<span class="number">1</span>); </span><br><span class="line">    xVehicleUnique = unique(xVehicle);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">% Dashed vs solid</span></span><br><span class="line">    xdiff = diff(xVehicleUnique);</span><br><span class="line">    <span class="comment">% Sufficiently large threshold to remove spaces between points of a </span></span><br><span class="line">    <span class="comment">% solid line, but not large enough to remove spaces between dashes </span></span><br><span class="line">    xdifft = <span class="built_in">mean</span>(xdiff) + <span class="number">3</span>*std(xdiff);</span><br><span class="line">    largeGaps = xdiff(xdiff &gt; xdifft);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">% Safe default</span></span><br><span class="line">    boundaries(bInd).BoundaryType= LaneBoundaryType.Solid; </span><br><span class="line">    <span class="keyword">if</span> largeGaps&gt;<span class="number">2</span></span><br><span class="line">      <span class="comment">% Ideally, these gaps should be consistent, but you cannot rely</span></span><br><span class="line">      <span class="comment">% on that unless you know that the ROI extent includes at least 3 dashes. </span></span><br><span class="line">      boundaries(bInd).BoundaryType = LaneBoundaryType.Dashed;</span><br><span class="line">    <span class="keyword">end</span> </span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>用<code>takeSnapshot</code> 捕获HTML发布报告的输出。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">I</span> = <span class="title">takeSnapshot</span><span class="params">(frame, sensor, sensorOut)</span></span></span><br><span class="line">  <span class="comment">% Unpack the inputs</span></span><br><span class="line">  leftEgoBoundary = sensorOut.leftEgoBoundary; rightEgoBoundary = sensorOut.rightEgoBoundary;</span><br><span class="line">  locations = sensorOut.vehicleLocations; </span><br><span class="line">  xVehiclePoints = sensorOut.xVehiclePoints;</span><br><span class="line">  bboxes = sensorOut.vehicleBoxes;</span><br><span class="line">  </span><br><span class="line">  frameWithOverlays = insertLaneBoundary(frame, leftEgoBoundary, sensor, xVehicle Points, ‘Color’,’Red’);</span><br><span class="line">  frameWithOverlays = insertLaneBoundary(frameWithOverlays, rightEgoBoundary, sensor, xVehiclePoints, ‘Color’,’Green’);</span><br><span class="line">  frameWithOverlays = insertVehicleDetections(frameWithOverlays, locations, bboxes);</span><br><span class="line">  I = frameWithOverlays;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><p>运行 /Applications/MATLAB_R2017b.app/toolbox/driving/drivingdemos/ 下的 MonoCameraExample.m</p>
+<p>程序首先设置了相机参数以及相机相对汽车的位置，导入视频caltech_cordova1.avi，截取一帧得到下图：</p>
+<p><img src="/images/ADAS_VisualPerceptionUsingMonocularCamera/8B0AC551304894E1B042876F3D2E5DCE.jpg" alt="IMAGE"></p>
+<p>然后将原图转换为鸟瞰图：</p>
+<p><img src="/images/ADAS_VisualPerceptionUsingMonocularCamera/B525B730D2235B93AC65A2061922C87E.jpg" alt="IMAGE"></p>
+<p>在二进制鸟瞰图中找出车道：</p>
+<p><img src="/images/ADAS_VisualPerceptionUsingMonocularCamera/E2B16EEAF6367D72A6CCAE237F31A3F6.jpg" alt="IMAGE"></p>
+<p>区分出左右两条车道：</p>
+<p><img src="/images/ADAS_VisualPerceptionUsingMonocularCamera/F53B95EA034F12E20A580B149FE09413.jpg" alt="IMAGE"></p>
+<p>标记汽车，x代表行车方向，y代表汽车左侧：</p>
+<p><img src="/images/ADAS_VisualPerceptionUsingMonocularCamera/FE913FC0F560E17D42B2CE342CB41B0B.jpg" alt="IMAGE"></p>
+<p>从头放映视频，并实时标记出车道和汽车：</p>
+<p><img src="/images/ADAS_VisualPerceptionUsingMonocularCamera/946852F1410E1EB0163453C4D3EED636.jpg" alt="IMAGE"></p>
+<p><img src="/images/ADAS_VisualPerceptionUsingMonocularCamera/339330D8C2CBB830FD868D04B17B2108.jpg" alt="IMAGE"></p>
+<p><img src="/images/ADAS_VisualPerceptionUsingMonocularCamera/81CDCECCC3A36FDA5DDD6F1BD33D10CE.jpg" alt="IMAGE"></p>
+<p>快照：</p>
+<p><img src="/images/ADAS_VisualPerceptionUsingMonocularCamera/4C6D4DCA6AC3CC4F2DC92592C0C57A7E.jpg" alt="IMAGE"></p>
+<p>另一个视频做实验：</p>
+<p><img src="/images/ADAS_VisualPerceptionUsingMonocularCamera/E98E990E0104C238BAEA845B794BC961.jpg" alt="IMAGE"></p>
+<p><img src="/images/ADAS_VisualPerceptionUsingMonocularCamera/056B4F0CE8CEF9CF21D2AD172D86DA24.jpg" alt="IMAGE"></p>
+<p>快照：</p>
+<p><img src="/images/ADAS_VisualPerceptionUsingMonocularCamera/D1558F50A4E5B85F7BD53F3243A4B5EE.jpg" alt="IMAGE"></p>
+<h1 id="附"><a href="#附" class="headerlink" title="附"></a>附</h1><p>monocular [mɒ’nɒkjʊlə]<br>adj. 单眼的;单眼用的;单目镜的;单筒的<br>monocular camera sensor</p>
+<p>tailor<br>n. 裁缝，成衣工<br>vi.做裁缝<br>vt.调整使适应;为…裁制衣服;为…做衣服;剪裁，制作</p>
+<p>pedestrian 英 [pəˈdestriən]   美 [pəˈdɛstriən]<br>n.行人;步行者<br>adj.徒步的;平淡无奇的;一般的</p>
+<p>calibration<br>英 [ˌkælɪˈbreɪʃn]   美 [ˌkæləˈbreʃən]<br>n.校准，标准化;刻度，标度;测量口径<br>calibration parameters</p>
+<p>departure<br>英 [dɪˈpɑ:tʃə(r)]   美 [dɪˈpɑ:rtʃə(r)]<br>n.背离;离开，离去;起程;东西距离<br>issue lane departure warnings 发出车道偏离警告</p>
+<p>distortion<br>英 [dɪ’stɔ:ʃn]   美 [dɪˈstɔrʃən]<br>n.扭曲，变形;失真，畸变;[心理学] 扭转<br>lens distortion 镜头失真</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CATARC/" rel="tag"># CATARC</a>
+              <a href="/tags/Matlab/" rel="tag"># Matlab</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/05/07/ADAS_HIL/" rel="prev" title="【ADAS】Hardware in the Loop">
+      <i class="fa fa-chevron-left"></i> 【ADAS】Hardware in the Loop
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/05/09/ADAS_CameraInLoop/" rel="next" title="【ADAS】Camera in the Loop">
+      【ADAS】Camera in the Loop <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%B5%81%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">代码流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E6%91%84%E5%83%8F%E5%A4%B4%E9%85%8D%E7%BD%AE"><span class="nav-number">2.1.</span> <span class="nav-text">定义摄像头配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E7%9B%B8%E6%9C%BA%E6%9C%AC%E8%BA%AB%E6%A0%A1%E5%87%86%E5%8F%82%E6%95%B0"><span class="nav-number">2.1.1.</span> <span class="nav-text">定义相机本身校准参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E7%9B%B8%E5%AF%B9%E4%BA%8E%E8%BD%A6%E8%BE%86%E5%BA%95%E7%9B%98%E7%9A%84%E6%91%84%E5%83%8F%E6%9C%BA%E6%96%B9%E5%90%91"><span class="nav-number">2.1.2.</span> <span class="nav-text">定义相对于车辆底盘的摄像机方向</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD%E4%B8%80%E5%B8%A7%E8%A7%86%E9%A2%91"><span class="nav-number">2.2.</span> <span class="nav-text">加载一帧视频</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E9%B8%9F%E7%9E%B0%E8%A7%86%E8%A7%92%E5%9B%BE"><span class="nav-number">2.3.</span> <span class="nav-text">建立鸟瞰视角图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E8%BD%A6%E8%BE%86%E5%9D%90%E6%A0%87%E4%B8%AD%E6%9F%A5%E6%89%BE%E8%BD%A6%E9%81%93%E6%A0%87%E8%AE%B0"><span class="nav-number">2.4.</span> <span class="nav-text">在车辆坐标中查找车道标记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A1%AE%E5%AE%9A%E9%81%93%E8%B7%AF%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="nav-number">2.5.</span> <span class="nav-text">确定道路的边界</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E8%BD%A6%E8%BE%86%E5%9D%90%E6%A0%87%E4%B8%AD%E6%9F%A5%E6%89%BE%E8%BD%A6%E8%BE%86"><span class="nav-number">2.6.</span> <span class="nav-text">在车辆坐标中查找车辆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E8%A7%86%E9%A2%91%E8%BE%93%E5%85%A5%E6%A8%A1%E6%8B%9F%E5%AE%8C%E6%95%B4%E7%9A%84%E4%BC%A0%E6%84%9F%E5%99%A8"><span class="nav-number">2.7.</span> <span class="nav-text">用视频输入模拟完整的传感器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E4%B8%8D%E5%90%8C%E7%9A%84%E8%A7%86%E9%A2%91%E4%B8%8A%E5%B0%9D%E8%AF%95%E4%BC%A0%E6%84%9F%E5%99%A8%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.8.</span> <span class="nav-text">在不同的视频上尝试传感器设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E5%8A%9F%E8%83%BD"><span class="nav-number">2.9.</span> <span class="nav-text">支持功能</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E8%B7%B5"><span class="nav-number">3.</span> <span class="nav-text">实践</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84"><span class="nav-number">4.</span> <span class="nav-text">附</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="VikingWang"
+      src="/images/avatar.JPG">
+  <p class="site-author-name" itemprop="name">VikingWang</p>
+  <div class="site-description" itemprop="description">这是一个需要耐心等着加载的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VikingWang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

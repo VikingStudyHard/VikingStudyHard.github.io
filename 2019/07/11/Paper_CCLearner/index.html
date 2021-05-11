@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vikingstudyhard.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="第一个使用深度学习的基于token的克隆检测方法：CCLearner">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【论文精读】CCLearner：A Deep Learning-Based Clone Detection Approach">
+<meta property="og:url" content="https://vikingstudyhard.github.io/2019/07/11/Paper_CCLearner/index.html">
+<meta property="og:site_name" content="加载起来特别特别慢的小博客">
+<meta property="og:description" content="第一个使用深度学习的基于token的克隆检测方法：CCLearner">
+<meta property="og:locale">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/Paper_CCLearner/FD8228EC68B832B18CF8D88EEB40CFBD.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/Paper_CCLearner/7363CFA91ACDA6D8E7D26EF7F20ECB44.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/Paper_CCLearner/917DE7F8BA61CF7F1BEA151DA877B24E.jpg">
+<meta property="article:published_time" content="2019-07-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-05-11T06:56:58.519Z">
+<meta property="article:author" content="VikingWang">
+<meta property="article:tag" content="Code Clone">
+<meta property="article:tag" content="论文精读">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vikingstudyhard.github.io/images/Paper_CCLearner/FD8228EC68B832B18CF8D88EEB40CFBD.jpg">
+
+<link rel="canonical" href="https://vikingstudyhard.github.io/2019/07/11/Paper_CCLearner/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>【论文精读】CCLearner：A Deep Learning-Based Clone Detection Approach | 加载起来特别特别慢的小博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">加载起来特别特别慢的小博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">图片墙第一弹第二弹欢迎惠顾！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-photo">
+
+    <a href="/photo/" rel="section"><i class="fa fa-camera fa-fw"></i>photo</a>
+
+  </li>
+        <li class="menu-item menu-item-photo2">
+
+    <a href="/photo2/" rel="section"><i class="fa fa-camera fa-fw"></i>photo2</a>
+
+  </li>
+        <li class="menu-item menu-item-friends">
+
+    <a href="/friends/" rel="section"><i class="fa fa-rocket fa-fw"></i>friends</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://vikingstudyhard.github.io/2019/07/11/Paper_CCLearner/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.JPG">
+      <meta itemprop="name" content="VikingWang">
+      <meta itemprop="description" content="这是一个需要耐心等着加载的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="加载起来特别特别慢的小博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【论文精读】CCLearner：A Deep Learning-Based Clone Detection Approach
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-07-11 00:00:00" itemprop="dateCreated datePublished" datetime="2019-07-11T00:00:00+08:00">2019-07-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-11 14:56:58" itemprop="dateModified" datetime="2021-05-11T14:56:58+08:00">2021-05-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E5%85%8B%E9%9A%86/" itemprop="url" rel="index"><span itemprop="name">代码克隆</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">第一个使用深度学习的基于token的克隆检测方法：CCLearner</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>Li L, Feng H, Zhuang W, et al. Cclearner: A deep learning-based clone detection approach[C]//2017 IEEE International Conference on Software Maintenance and Evolution (ICSME). IEEE, 2017: 249-260.</p>
+</blockquote>
+<h1 id="做什么"><a href="#做什么" class="headerlink" title="做什么"></a>做什么</h1><p>CCLEARNER 是第一个使用深度学习的基于token的克隆检测方法。</p>
+<h1 id="怎么做"><a href="#怎么做" class="headerlink" title="怎么做"></a>怎么做</h1><img src="https://vikingstudyhard.github.io/images/Paper_CCLearner/FD8228EC68B832B18CF8D88EEB40CFBD.jpg" class="" width="771">
+
+<h2 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h2><p>对于每个给定的方法对 $(method_A，method_B)$ ，首先使用 ANTLR lexer 对代码进行令牌化，以识别每种方法中使用的所有 token，然后记录每个 token 的出现次数，组成&lt;key, value&gt;对。将&lt;key, value&gt;对的序列作为每个方法的 token-frequency list，表示为方法 A 的 token_freq_listA 和方法 B 的 token_freq_listB。最后将token进行分类并计算特征作为 token 使用的相似性得分。</p>
+<p>CCLEARNER将 token 分为八类：</p>
+<img src="https://vikingstudyhard.github.io/images/Paper_CCLearner/7363CFA91ACDA6D8E7D26EF7F20ECB44.jpg" class="" width="435">
+<h3 id="特征提取"><a href="#特征提取" class="headerlink" title="特征提取"></a>特征提取</h3><h4 id="C1-C3——ANTLR-词法分析器"><a href="#C1-C3——ANTLR-词法分析器" class="headerlink" title="C1-C3——ANTLR 词法分析器"></a>C1-C3——ANTLR 词法分析器</h4><p>由于一型克隆到三型克隆几乎总是具有相同的程序句法结构，可能包含稍微不同的算术或逻辑运算。所以C1-C3的 token-frequency list 可以很容易地从 ANTLR 词法分析器中输出构建。但对于C4-C8 token，ANTLR并不能总是精确地<strong>识别</strong>出token或清楚地<strong>区分</strong>出各种类型的token。（如：-1只能识别出1；不能判断标识符foo表示的是类型还是变量）</p>
+<h4 id="C4-C8——Eclipse-ASTParser"><a href="#C4-C8——Eclipse-ASTParser" class="headerlink" title="C4-C8——Eclipse ASTParser"></a>C4-C8——Eclipse ASTParser</h4><p>为了精确识别C4-C8，CCLEARNER 还使用 Eclipse ASTParser 为每个方法创建<strong>抽象语法树</strong>（AST），并通过访问某些类型的AST节点实施独立的ASTVisitors，以提取不同类型的 token。</p>
+<img src="https://vikingstudyhard.github.io/images/Paper_CCLearner/917DE7F8BA61CF7F1BEA151DA877B24E.jpg" class="" width="451">
+
+<p>但是 ASTParser 不会代替 CCLEARNER 中的 ANTLR，因为 ASTParser 无法显示 ANTLR 检测到的所有 token。</p>
+<p>为了识别常量（Literals，即C4 token），使用 ASTVisitor 访问所有常量 AST节点（例如，BooleanLiteral 和 CharacterLiteral），并在 token-frequency list 中为每个唯一常量创建条目。对于图3中的 AST，当访问NumberLiteral <code>1</code>时，CCLEARNER 进一步检查文字是否是负数的子表达式（即-1）；如果是，则提取负数。通过这种方式区分正数和负数。</p>
+<p>对于类型标识符（Type identifiers，即C5 token），使用 ASTVisitor 访问所有与类型相关的AST节点，如 PrimitiveType，TypeLiteral 等。对于图3中的 AST，当访问 PrimitiveType <code>int</code>时，CCLEARNER 为类型名称创建一个条目，然后计算名称的出现次数。</p>
+<p>为了提取方法标识符（Method identifiers，即 C6 token），使用 ASTVisitor 访问所有与方法相关的AST节点，例如 MethodDeclaration 和 MethodInvocation，可以精确地识别方法实现中使用的所有方法名称。对于图3中的 AST，有一个MethodInvocation元素，因此 CCLEARNER 提取方法名称<code>foo</code>。</p>
+<p>限定名称（Qualified names，即C7 token）是特殊 token，创建一个 ASTVisitor 来特别处理所有 QualifiedName 节点。给定像<code>Foo.Goo.Bar</code>这样的限定名称，我们可以将其解析为类型标识符或变量标识符，我们也可以将名称的一部分<code>Foo.Goo</code>解析为类型或变量。使用从方法的AST派生的有限程序句法信息，我们不总能精确地确定限定名称是否代表类型。虽然我们可以在限定名称上调用<code>resolveBinding()</code>API，但调用并不总是有助于解析名称绑定。为了避免对类型或变量标识符进行任何不准确的分类，我们因此简单地将限定名称视为单独的标记类别。对于图3中的示例，<code>a.b</code>被提取为限定名称，虽然我们不知道它表示类型还是变量。</p>
+<p>变量标识符（Variable identifiers，即C8 token）比上面的令牌更难提取，因为没有固定的AST节点类型集可能在特定位置包含这样的标识符。因此，创建了一个 ASTVisitor 来访问所有 SimpleName 节点，并排除属于上述任何类别的标记所涵盖的SimpleName。在示例AST中，有四个SimpleName元素：<code>v</code>，<code>a</code>，<code>b</code>和<code>foo</code>。由于<code>a</code>和<code>b</code>被限定名称<code>a.b</code>覆盖，而<code>foo</code>已被识别为方法名称，因此CCLEARNER最终以这种方式识别一个变量标识符<code>v</code>。</p>
+<h3 id="创建向量"><a href="#创建向量" class="headerlink" title="创建向量"></a>创建向量</h3><p>如下图所示，在提取每个方法分类后的token后，CCLEARNER创建了 token-frequency lists 的向量，表示为 $[token\<em>freq\_cat</em>{A1} ,…,token\<em>freq\_cat</em>{A8}]$用于方法A，$[token\<em>freq\_cat</em>{B1} ,…,token\<em>freq\_cat</em>{B8}]$用于方法B。</p>
+<h3 id="计算相似性得分"><a href="#计算相似性得分" class="headerlink" title="计算相似性得分"></a>计算相似性得分</h3><p>两种方法被表征为令牌频率列表的向量时，我们认为向量之间的相似性应该反映其方法的相似性。直觉上，两个矢量越相似，这两种方法相互克隆的可能性就越大。相应地，如果两种方法不相似，则它们的向量是不同的。因此，对于每个方法对，CCLEARNER 计算每个标记类别的 token-frequency list 之间的相似性得分，然后构造八个值的相似性向量以表征方法对关系。</p>
+<p>形式上，对于类别 $C_i(1\leq i\leq 8)$，如果将两个术语频率列表表示为 $L_{A_i}$ 和 $L_{B_i}$，则相似性得分 $sim\<em>score_i$ 计算如下：<br>$$<br>sim_score</em>{i}=1-\frac{\sum_{x}\left|freq\left(L_{A i}, x\right)-freq\left(L_{B i}, x\right)\right|}{\sum_{x}\left(freq \left(L_{A i}, x\right)+freq\left(L_{B i}, x\right)\right)},<br>$$</p>
+<p>$$<br>\text{where }x \in tokens\left(L_{A i}\right) \cup tokens\left(L_{B i}\right).<br>$$<br>直觉上，我们枚举了两个列表中任何一个中包含的所有token。对于每个枚举的token $x$，我们计算其<strong>绝对频率差值</strong> $(\left|freq\left(L_{A i}, x\right)-freq\left(L_{B i}, x\right)\right|)$和<strong>频率和</strong>$\left(freq \left(L_{A i}, x\right)+freq\left(L_{B i},x\right)\right)$。接下来，我们分别对所有<strong>绝对频率差值</strong>和所有<strong>频率和</strong>进行求和以计算比率，从1中减去该比率以获得相似性得分。根据该公式，相似度得分范围为$[0,1]$。</p>
+<p>我们的相似度计算公式很有意义。当两种方法相同且具有完全相同的token-frequency list 时，<strong>绝对频率差和</strong>与<strong>频率和</strong>的比率始终为0，因此每个类别的相似度得分为1。当两种方法完全不同且不共享token时，相应的比率为1，而相似性得分为0。</p>
+<p>假设我们有两个token-frequency list：$L_A = {\langle a,3 \rangle,\langle b,4 \rangle,\langle c,5 \rangle}$ 和 $L_B = {\langle b,3 \rangle,\langle c,6 \rangle,\langle d,2 \rangle}$。相似度得分计算为$1-(|3-0| + |4-3 |+ |5-6| +| 0-2 |)/((3 + 0)+(4 + 3)+(5+ 6)+(0 + 2))= 0.70$。一般来说，列表之间共享的token越多，每个token的频率差越小，我们可以得出的相似度得分越高。请注意，如果两个方法没有特定类别的token（例如关键字），我们默认将相应的相似性分数设置为0.5。</p>
+<h2 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h2><p>为了训练克隆检测二分类器，我们需要克隆关系的正面和负面示例的特征数据。正例是从克隆方法对中提取的特征向量，而负例是从非克隆对中得到的向量。在我们的训练数据中，每个数据点具有以下格式：$\langle similarity\_vector,label\rangle$，其中similarity_vector是有八个相似性得分的向量，$label$取值1或0，1表示“CLONE”，0表示“NON_CLONE”。为了避免由小克隆方法引起的任何噪声，有意过滤掉包含少于6个LOC（lines of code）的方法来构建训练数据。</p>
+<p>使用DNN的开源库 DeepLearning4j 来训练分类器。由于定义了八个特征，我们为输入层配置了八个节点，每个节点独立地接受一个特征值。由于分类任务有两个标签：“CLONE”和“NON_CLONE”，输出层包含两个节点以显示DNN的分类结果。</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>给定代码库，CCLEARNER首先使用 Eclipse ASTParser 从源代码文件中提取方法，然后枚举所有可能的方法对。 CCLEARNER 将每个枚举的方法对提供给训练的分类器，以确定方法是否为克隆。如果两种方法被判断为克隆，则 CCLEARNER 会相应地报告它们。</p>
+<p>输出层有两个节点分别预测克隆和非克隆的可能性：$l_c$和 $l_{nc}$，其中$l_{c} + l_{nc} = 1$.为了将连续似然值映射到“CLONE”或“NON_CLONE”离散分类，我们要求$l_{nc} \leq0.98$以精确检测克隆而不会产生许多误报。</p>
+<h1 id="评估方法"><a href="#评估方法" class="headerlink" title="评估方法"></a>评估方法</h1><p>数据集：BigCloneBench<br>真实克隆的类别：T1, T2, VST3 (Very Strong Type 3), ST3 (Strong Type 3), MT3 (Moderately Type 3), or WT3/4 (Weak Type 3 or Type 4)</p>
+<p>为了评估 CCLEARNER 克隆检测的有效性，将我们的方法与三种流行的克隆检测工具进行了比较：SourcererCC，NiCad 和 Deckard。三个工具都是在 CCLEARNER 的测试数据上使用默认参数配置执行的。与CCLEARNER一样，SourcererCC 根据从源代码中提取的 token 检测克隆。 NiCad 规范化代码并逐行比较代码。 Deckard 比较代码的 AST 以报告具有相似树结构的克隆。我们选择这些工具是因为它们被广泛使用，并且可以很好地代表主流类型的克隆检测方法：基于 token 和基于树。</p>
+<p>从四个方面对所有工具进行了比较：Recall，Precision，C score 和 Time Cost。</p>
+<p>与现有的基于token的方法相比，CCLEARNER 检测到更多样化的克隆，具有高精度和召回率。与基于树的方法相比，CCLEARNER 有效地检测到具有高精度的克隆。</p>
+<h1 id="局限性"><a href="#局限性" class="headerlink" title="局限性"></a>局限性</h1><p>与Deckard相比，CCLEARNER 有效检测到更多的T1-ST3克隆，但未能报告许多MT3和WT3/4克隆。<br>首先，CCLEARNER 依赖于在不同方法中使用的完全相同的术语来计算相似性向量。当两个克隆方法共享很少的标识符并包含显着不同的程序结构时，CCLEARNER 无法检测克隆关系。其次，根据 BigCloneBench 论文，在每个WT3/T4克隆对中，这两种方法共享不到50％的共同语句。在没有对语法不同但语义等效的代码段进行推理的情况下，对于任何基于token的方法来检测这样的克隆是非常具有挑战性的。将来，我们计划为这些专家克隆设计一些补充技术。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Code-Clone/" rel="tag"># Code Clone</a>
+              <a href="/tags/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/" rel="tag"># 论文精读</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/07/10/Mac_pytorch/" rel="prev" title="【Mac】用Anaconda配置pyTorch的环境">
+      <i class="fa fa-chevron-left"></i> 【Mac】用Anaconda配置pyTorch的环境
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/07/12/MachineLearning_CNN/" rel="next" title="卷积神经网络">
+      卷积神经网络 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">做什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A"><span class="nav-number">2.</span> <span class="nav-text">怎么做</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81"><span class="nav-number">2.1.</span> <span class="nav-text">特征</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96"><span class="nav-number">2.1.1.</span> <span class="nav-text">特征提取</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#C1-C3%E2%80%94%E2%80%94ANTLR-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">C1-C3——ANTLR 词法分析器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C4-C8%E2%80%94%E2%80%94Eclipse-ASTParser"><span class="nav-number">2.1.1.2.</span> <span class="nav-text">C4-C8——Eclipse ASTParser</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%90%91%E9%87%8F"><span class="nav-number">2.1.2.</span> <span class="nav-text">创建向量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E7%9B%B8%E4%BC%BC%E6%80%A7%E5%BE%97%E5%88%86"><span class="nav-number">2.1.3.</span> <span class="nav-text">计算相似性得分</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83"><span class="nav-number">2.2.</span> <span class="nav-text">训练</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95"><span class="nav-number">2.3.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%84%E4%BC%B0%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">评估方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">4.</span> <span class="nav-text">局限性</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="VikingWang"
+      src="/images/avatar.JPG">
+  <p class="site-author-name" itemprop="name">VikingWang</p>
+  <div class="site-description" itemprop="description">这是一个需要耐心等着加载的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VikingWang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

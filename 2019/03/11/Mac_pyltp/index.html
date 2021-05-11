@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vikingstudyhard.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文提供了在MacOS 10.13上相对简便没有坑的Pyltp的安装方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Mac】安装 Pyltp">
+<meta property="og:url" content="https://vikingstudyhard.github.io/2019/03/11/Mac_pyltp/index.html">
+<meta property="og:site_name" content="加载起来特别特别慢的小博客">
+<meta property="og:description" content="本文提供了在MacOS 10.13上相对简便没有坑的Pyltp的安装方法">
+<meta property="og:locale">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/Mac_pyltp/4C5544312BE5791D791C2B7C93562104.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/Mac_pyltp/5470DC78C00B829F68218D9D2CA61002.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/Mac_pyltp/B60396087CD20B9ECCCBA5F550086D6D.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/Mac_pyltp/746EFCF95C23CAF02082DB703CAC3155.jpg">
+<meta property="article:published_time" content="2019-03-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-05-11T06:56:58.520Z">
+<meta property="article:author" content="VikingWang">
+<meta property="article:tag" content="Mac">
+<meta property="article:tag" content="Pycharm">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="NLP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vikingstudyhard.github.io/images/Mac_pyltp/4C5544312BE5791D791C2B7C93562104.jpg">
+
+<link rel="canonical" href="https://vikingstudyhard.github.io/2019/03/11/Mac_pyltp/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>【Mac】安装 Pyltp | 加载起来特别特别慢的小博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">加载起来特别特别慢的小博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">图片墙第一弹第二弹欢迎惠顾！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-photo">
+
+    <a href="/photo/" rel="section"><i class="fa fa-camera fa-fw"></i>photo</a>
+
+  </li>
+        <li class="menu-item menu-item-photo2">
+
+    <a href="/photo2/" rel="section"><i class="fa fa-camera fa-fw"></i>photo2</a>
+
+  </li>
+        <li class="menu-item menu-item-friends">
+
+    <a href="/friends/" rel="section"><i class="fa fa-rocket fa-fw"></i>friends</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://vikingstudyhard.github.io/2019/03/11/Mac_pyltp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.JPG">
+      <meta itemprop="name" content="VikingWang">
+      <meta itemprop="description" content="这是一个需要耐心等着加载的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="加载起来特别特别慢的小博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【Mac】安装 Pyltp
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-03-11 00:00:00" itemprop="dateCreated datePublished" datetime="2019-03-11T00:00:00+08:00">2019-03-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-11 14:56:58" itemprop="dateModified" datetime="2021-05-11T14:56:58+08:00">2021-05-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" itemprop="url" rel="index"><span itemprop="name">环境配置</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">本文提供了在MacOS 10.13上相对简便没有坑的Pyltp的安装方法</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在MacOS 10.13上安装pyltp，pip的方法报错，<a target="_blank" rel="noopener" href="https://blog.csdn.net/huacha__/article/details/83721399">从源代码编译安装</a>到了install的步骤时也出现<code>command &#39;clang++&#39; failed with exit status 1</code>的报错。<br>本文提供了在MacOS 10.13上相对简便没有坑的Pyltp的安装方法。</p>
+<h1 id="pyltp介绍"><a href="#pyltp介绍" class="headerlink" title="pyltp介绍"></a>pyltp介绍</h1><p>pyltp 是 LTP 的 Python 封装，提供了分词，词性标注，命名实体识别，依存句法分析，语义角色标注的功能。</p>
+<p>github网址： <a target="_blank" rel="noopener" href="https://github.com/HIT-SCIR/pyltp">https://github.com/HIT-SCIR/pyltp</a><br>在线文档： <a target="_blank" rel="noopener" href="https://pyltp.readthedocs.io/zh_CN/latest/api.html">https://pyltp.readthedocs.io/zh_CN/latest/api.html</a></p>
+<h1 id="操作环境"><a href="#操作环境" class="headerlink" title="操作环境"></a>操作环境</h1><p>操作平台：Mac OS 10.13<br>python版本：python 3.6.3</p>
+<h1 id="Mac-10-13-下安装-Pyltp"><a href="#Mac-10-13-下安装-Pyltp" class="headerlink" title="Mac 10.13 下安装 Pyltp"></a>Mac 10.13 下安装 Pyltp</h1><p>1.打开<a target="_blank" rel="noopener" href="https://pypi.org/project/pyltp/#files">https://pypi.org/project/pyltp/#files</a>，下载<a target="_blank" rel="noopener" href="https://files.pythonhosted.org/packages/aa/72/2d88c54618cf4d8916832950374a6f265e12289fa9870aeb340800a28a62/pyltp-0.2.1.tar.gz">pyltp-0.2.1.tar.gz </a>。<br>解压后文件结构为：</p>
+<img src="https://vikingstudyhard.github.io/images/Mac_pyltp/4C5544312BE5791D791C2B7C93562104.jpg" class="" width="207">
+
+<p>2.修改setup.py的第121行</p>
+<figure class="highlight python"><figcaption><span>setup.py</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> <span class="string">&#x27;MACOSX_DEPLOYMENT_TARGET&#x27;</span> <span class="keyword">in</span> os.environ:</span><br><span class="line">    os.environ[<span class="string">&#x27;MACOSX_DEPLOYMENT_TARGET&#x27;</span>] = <span class="string">&#x27;10.12&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>将 10.12 改成 10.13</p>
+<p>3.开始安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo python setup.py install</span><br></pre></td></tr></table></figure>
+<p>出现类似于下图所示说明，即为安装成功。</p>
+<img src="https://vikingstudyhard.github.io/images/Mac_pyltp/5470DC78C00B829F68218D9D2CA61002.jpg" class="" width="1700">
+
+<p>因为该pyltp-0.2.1.tar.gz的ltp文件夹是完整的，所以不用再单独下载。</p>
+<p>4.添加到 external libraries 里，最终的文件结构如下图所示：</p>
+<img src="https://vikingstudyhard.github.io/images/Mac_pyltp/B60396087CD20B9ECCCBA5F550086D6D.jpg" class="" width="475">
+
+
+<p>5.下载模型文件 ltp_data_v3.4.0.zip</p>
+<p>下载地址： <a target="_blank" rel="noopener" href="http://ltp.ai/download.html">http://ltp.ai/download.html</a></p>
+<img src="https://vikingstudyhard.github.io/images/Mac_pyltp/746EFCF95C23CAF02082DB703CAC3155.jpg" class="" width="238">
+
+
+<p>设置ltp模型目录的路径，就能用了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LTP_DATA_DIR = &#x27;./ltp_data_v3.4.0&#x27;</span><br></pre></td></tr></table></figure>
+<h1 id="检查安装是否成功"><a href="#检查安装是否成功" class="headerlink" title="检查安装是否成功"></a>检查安装是否成功</h1><p>可以在python中输入<code>from pyltp import SentenceSplitter</code>看看有没有报错</p>
+<h1 id="依存句法分析"><a href="#依存句法分析" class="headerlink" title="依存句法分析"></a>依存句法分析</h1><p>使用 pyltp 进行依存句法分析示例如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">LTP_DATA_DIR = <span class="string">&#x27;/path/to/your/ltp_data&#x27;</span>  <span class="comment"># ltp模型目录的路径</span></span><br><span class="line">par_model_path = os.path.join(LTP_DATA_DIR, <span class="string">&#x27;parser.model&#x27;</span>)  <span class="comment"># 依存句法分析模型路径，模型名称为`parser.model`</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pyltp <span class="keyword">import</span> Parser</span><br><span class="line">parser = Parser() <span class="comment"># 初始化实例</span></span><br><span class="line">parser.load(par_model_path)  <span class="comment"># 加载模型</span></span><br><span class="line"></span><br><span class="line">words = [<span class="string">&#x27;元芳&#x27;</span>, <span class="string">&#x27;你&#x27;</span>, <span class="string">&#x27;怎么&#x27;</span>, <span class="string">&#x27;看&#x27;</span>]</span><br><span class="line">postags = [<span class="string">&#x27;nh&#x27;</span>, <span class="string">&#x27;r&#x27;</span>, <span class="string">&#x27;r&#x27;</span>, <span class="string">&#x27;v&#x27;</span>]</span><br><span class="line">arcs = parser.parse(words, postags)  <span class="comment"># 句法分析</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;\t&quot;</span>.join(<span class="string">&quot;%d:%s&quot;</span> % (arc.head, arc.relation) <span class="keyword">for</span> arc <span class="keyword">in</span> arcs)</span><br><span class="line">parser.release()  <span class="comment"># 释放模型</span></span><br></pre></td></tr></table></figure>
+<p>其中，words 和 postags 分别为分词和词性标注的结果。同样支持Python原生的list类型。</p>
+<p>结果如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">4</span>:SBV       <span class="number">4</span>:SBV   <span class="number">4</span>:ADV   <span class="number">0</span>:HED</span><br></pre></td></tr></table></figure>
+<p><code>arc.head</code> 表示依存弧的父节点词的索引。ROOT节点的索引是0，第一个词开始的索引依次为1、2、3…</p>
+<p><code>arc.relation</code> 表示依存弧的关系。</p>
+<p><code>arc.head</code> 表示依存弧的父节点词的索引，<code>arc.relation</code> 表示依存弧的关系。</p>
+<p>标注集请参考<a target="_blank" rel="noopener" href="https://ltp.readthedocs.io/zh_CN/latest/appendix.html#id5">依存句法关系</a>。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/huacha__/article/details/83721399">https://blog.csdn.net/huacha__/article/details/83721399</a><br><a target="_blank" rel="noopener" href="https://pyltp.readthedocs.io/zh_CN/latest/api.html">https://pyltp.readthedocs.io/zh_CN/latest/api.html</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Mac/" rel="tag"># Mac</a>
+              <a href="/tags/Pycharm/" rel="tag"># Pycharm</a>
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/NLP/" rel="tag"># NLP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/03/08/Paper_TowardsCraftingTextAdversarialSamples/" rel="prev" title="【论文略读】Towards Crafting Text Adversarial Samples">
+      <i class="fa fa-chevron-left"></i> 【论文略读】Towards Crafting Text Adversarial Samples
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/04/06/Paper_AutomatingTestAutomation/" rel="next" title="【论文精读】Automating Test Automation">
+      【论文精读】Automating Test Automation <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#pyltp%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">pyltp介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%8E%AF%E5%A2%83"><span class="nav-number">2.</span> <span class="nav-text">操作环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Mac-10-13-%E4%B8%8B%E5%AE%89%E8%A3%85-Pyltp"><span class="nav-number">3.</span> <span class="nav-text">Mac 10.13 下安装 Pyltp</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E5%AE%89%E8%A3%85%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F"><span class="nav-number">4.</span> <span class="nav-text">检查安装是否成功</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BE%9D%E5%AD%98%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90"><span class="nav-number">5.</span> <span class="nav-text">依存句法分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="VikingWang"
+      src="/images/avatar.JPG">
+  <p class="site-author-name" itemprop="name">VikingWang</p>
+  <div class="site-description" itemprop="description">这是一个需要耐心等着加载的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VikingWang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

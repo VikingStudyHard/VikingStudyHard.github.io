@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vikingstudyhard.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Find and report the division by zero in the following program with Java Pathfinder (JPF)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【软件测试上机】4 Java PathFinder">
+<meta property="og:url" content="https://vikingstudyhard.github.io/2018/05/03/ST_Lab4JPF/index.html">
+<meta property="og:site_name" content="加载起来特别特别慢的小博客">
+<meta property="og:description" content="Find and report the division by zero in the following program with Java Pathfinder (JPF)">
+<meta property="og:locale">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab4JPF/E66C856E495A9CB98F34DCAF04E68CCE.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab4JPF/ECDF2A301B772D299B8C1736C135B497.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab4JPF/90F26580297A213B4F82BF4DFE37D680.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab4JPF/730F61C717A5966E8E1E042E63E438C6.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab4JPF/B175B5737113D134AAA15FABA1085B20.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab4JPF/920C902DB9464C3ADE1273C1AE0A81B7.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab4JPF/64907401A44CD77A28091436929124D3.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab4JPF/7F5606082735DCEED5284797371BBB3F.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab4JPF/A7157371BDE9D70DB8E02464F4CA32B2.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab4JPF/08BEA7AD0120B60299F6F4B900B9607B.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab4JPF/A6F47596B5198CA8D3841F1A08DDCC9A.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab4JPF/D4C208B49778E12A4F5E1C5F8788ABD1.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab4JPF/E476F31B88F2D70F83D140B68764FB8C.jpg">
+<meta property="article:published_time" content="2018-05-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-05-11T06:56:58.514Z">
+<meta property="article:author" content="VikingWang">
+<meta property="article:tag" content="SoftwareTest">
+<meta property="article:tag" content="软件测试上机">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vikingstudyhard.github.io/images/ST_Lab4JPF/E66C856E495A9CB98F34DCAF04E68CCE.jpg">
+
+<link rel="canonical" href="https://vikingstudyhard.github.io/2018/05/03/ST_Lab4JPF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>【软件测试上机】4 Java PathFinder | 加载起来特别特别慢的小博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">加载起来特别特别慢的小博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">图片墙第一弹第二弹欢迎惠顾！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-photo">
+
+    <a href="/photo/" rel="section"><i class="fa fa-camera fa-fw"></i>photo</a>
+
+  </li>
+        <li class="menu-item menu-item-photo2">
+
+    <a href="/photo2/" rel="section"><i class="fa fa-camera fa-fw"></i>photo2</a>
+
+  </li>
+        <li class="menu-item menu-item-friends">
+
+    <a href="/friends/" rel="section"><i class="fa fa-rocket fa-fw"></i>friends</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://vikingstudyhard.github.io/2018/05/03/ST_Lab4JPF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.JPG">
+      <meta itemprop="name" content="VikingWang">
+      <meta itemprop="description" content="这是一个需要耐心等着加载的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="加载起来特别特别慢的小博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【软件测试上机】4 Java PathFinder
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-05-03 00:00:00" itemprop="dateCreated datePublished" datetime="2018-05-03T00:00:00+08:00">2018-05-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-11 14:56:58" itemprop="dateModified" datetime="2021-05-11T14:56:58+08:00">2021-05-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">软件测试</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/%E6%9C%AC%E7%A7%91%E8%AF%BE%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">本科课程</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">Find and report the division by zero in the following program with Java Pathfinder (JPF)</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="要求"><a href="#要求" class="headerlink" title="要求"></a>要求</h1><p>• Find and report the division by zero in the following program with Java Pathfinder (JPF)<br>• Reference<br> 参考：<a target="_blank" rel="noopener" href="http://babelfish.arc.nasa.gov/trac/jpf/wiki">http://babelfish.arc.nasa.gov/trac/jpf/wiki</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Racer</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123; </span><br><span class="line">  <span class="keyword">int</span> d = <span class="number">42</span>;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    doSomething(<span class="number">1001</span>);</span><br><span class="line">    d = <span class="number">0</span>; <span class="comment">// (1) </span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span> <span class="params">(String[] args)</span></span>&#123; </span><br><span class="line">    Racer racer = <span class="keyword">new</span> Racer(); </span><br><span class="line">    Thread t = <span class="keyword">new</span> Thread(racer); </span><br><span class="line">    t.start();</span><br><span class="line">    </span><br><span class="line">    doSomething(<span class="number">1000</span>);</span><br><span class="line">    <span class="keyword">int</span> c = <span class="number">420</span> / racer.d; <span class="comment">// (2) </span></span><br><span class="line">    System.out.println(c);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">doSomething</span> <span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123; </span><br><span class="line">      Thread.sleep(n);</span><br><span class="line">    &#125; <span class="keyword">catch</span>(InterruptedException ix) &#123;&#125; </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>完成形式:<br>• 分组Presentation，每组不超过3个人<br>• 文档，不低于2000字的文档报告 </p>
+<p>展示日期:<br>  2018.5.1-5.5</p>
+<p>其它要求:<br>• 阅读相关领域的文章<br>• 进行实证研究<br>• 有可能的话申报大创项目和软件工程相关的重要比赛</p>
+<h1 id="JPF"><a href="#JPF" class="headerlink" title="JPF"></a>JPF</h1><p>参考：<br><a target="_blank" rel="noopener" href="http://babelfish.arc.nasa.gov/trac/jpf/wiki/intro/what_is_jpf">what is jpf</a><br><a target="_blank" rel="noopener" href="http://javapathfinder.sourceforge.net/">jpf</a></p>
+<p>JPF是一个Java虚拟机，它和普通的虚拟机一样会执行程序，在理论上还会通过各种可能的路径，检查在所有潜在的执行路径上的死锁或未处理的异常。如果发现了一个error，JPF会报告导致error的整个执行情况。与普通的调试器不同，JPF会跟踪每一步。Java PathFinder 特别适合在多线程的程序中发现很难测试的并发缺陷。</p>
+<h2 id="JPF功能"><a href="#JPF功能" class="headerlink" title="JPF功能"></a>JPF功能</h2><p>JPF可以从程序中辨认执行方式可能不同的点，然后系统地探索所有点。也就是说，JPF（理论上）执行程序中的所有路径，不仅仅是像普通VM那样。典型的选择是不同的调度序列或随机值，但JPF也允许您引入您自己的选择类型，如用户输入或状态机事件。</p>
+<p>路径的数量可以且通常会无限增长，这就是软件模型检查调用状态爆炸问题的原因。JPF采用的第一道防线是状态匹配：每次JPF到达一个选择点时，它检查它是否已经看到了一个类似的程序状态，在这种情况下，它可以放心地放弃这条路径，回溯到之前的仍有其他未被探索的选择的选择点，并从那里开始继续执行。JPF可以恢复程序状态，就像告诉调试器“返回100条指令”一样。</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>参考： <a target="_blank" rel="noopener" href="http://babelfish.arc.nasa.gov/trac/jpf/wiki/install/requirements">http://babelfish.arc.nasa.gov/trac/jpf/wiki/install/requirements</a> </p>
+<h3 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h3><p>VMware Fusion专业版10.0.1<br>CentOS Linux 7</p>
+<h3 id="Mercurial"><a href="#Mercurial" class="headerlink" title="Mercurial"></a>Mercurial</h3><p>参考： <a target="_blank" rel="noopener" href="https://www.mercurial-scm.org/wiki/ChineseTutorial">https://www.mercurial-scm.org/wiki/ChineseTutorial</a><br>如果要下载JPF的相关组件，必须要使用一个名叫Mercurial的分布式版本控制系统。<br><code>sudo yum install mercurial</code></p>
+<h3 id="Ant"><a href="#Ant" class="headerlink" title="Ant"></a>Ant</h3><p>Ant是一个将软件编译、测试、部署等步骤联系在一起加以自动化的一个工具，大多用于Java环境中的软件开发。ant的创始人James Duncan Davidson说，ant代表：”Another Neat Tool”。同样的，ant在英文中是“蚂蚁“的意思，这又代表着它有建筑本领高超和身躯虽小，但功能却极其强大。通过Ant我们就可以用命令行进行操作，否则，就要使用NetBeans 或者 Eclipse 。</p>
+<p>执行 <code>sudo yum install ant</code> ，这时$ANT_HOME的路径就已经配置好了。</p>
+<h3 id="jdk"><a href="#jdk" class="headerlink" title="jdk"></a>jdk</h3><p>查看JDK版本，JDK已安装。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[Viking@localhost ~]$ java -version</span><br><span class="line">openjdk version &quot;1.8.0_161&quot;</span><br><span class="line">OpenJDK Runtime Environment (build 1.8.0_161-b14)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 25.161-b14, mixed mode)</span><br></pre></td></tr></table></figure>
+
+<h3 id="jpf-core"><a href="#jpf-core" class="headerlink" title="jpf-core"></a>jpf-core</h3><p>使用Mercuial下载jpf-core的仓库，执行下列命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hg clone http://babelfish.arc.nasa.gov/hg/jpf/jpf-core</span><br><span class="line">$ cd jpf-core</span><br><span class="line">$ ant test</span><br></pre></td></tr></table></figure>
+
+<p>出现报错</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">BUILD FAILED</span><br><span class="line">/home/Viking/jpf-core/build.xml:422: Problem: failed to create task or type junit</span><br><span class="line">Cause: the class org.apache.tools.ant.taskdefs.optional.junit.JUnitTask was not found.</span><br><span class="line">        This looks like one of Ant&#x27;s optional components.</span><br><span class="line">Action: Check that the appropriate optional JAR exists in</span><br><span class="line">        -/usr/share/ant/lib</span><br><span class="line">        -/home/Viking/.ant/lib</span><br><span class="line">        -a directory added on the command line with the -lib argument</span><br><span class="line"></span><br><span class="line">Do not panic, this is a common problem.</span><br><span class="line">The commonest cause is a missing JAR.</span><br><span class="line"></span><br><span class="line">This is not a bug; it is a configuration problem</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Total time: 16 seconds</span><br></pre></td></tr></table></figure>
+
+<p>解决方法：<br>运行 <code>sudo yum install ant-junit</code></p>
+<p>继续出现报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BUILD FAILED</span><br><span class="line">/home/Viking/jpf-core/build.xml:422: /home/Viking/jpf-core/$&#123;env.JUNIT_HOME&#125; does not exist.</span><br></pre></td></tr></table></figure>
+<p>问题原因：缺少junit.jar文件</p>
+<h3 id="JUnit"><a href="#JUnit" class="headerlink" title="JUnit"></a>JUnit</h3><p>把junit-4.12.jar放入/home/Viking/lib里，设置环境变量。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ sudo vi /etc/provile</span><br><span class="line">export JUNIT_HOME=/home/Viking/lib</span><br><span class="line">export CLASSPATH=$CLASSPATH:$JUNIT_HOME/junit-4.12.jar:.</span><br><span class="line">$ source /etc/provile</span><br></pre></td></tr></table></figure>
+<p>再到jpf-core下执行 <code>ant test</code><br>得到下图<br><img src="/images/ST_Lab4JPF/E66C856E495A9CB98F34DCAF04E68CCE.jpg" alt="jpf1.jpg"></p>
+<h2 id="编辑并运行相关代码"><a href="#编辑并运行相关代码" class="headerlink" title="编辑并运行相关代码"></a>编辑并运行相关代码</h2><p>参考： <a target="_blank" rel="noopener" href="http://babelfish.arc.nasa.gov/trac/jpf/wiki/user/run">http://babelfish.arc.nasa.gov/trac/jpf/wiki/user/run</a></p>
+<h3 id="配置jpf"><a href="#配置jpf" class="headerlink" title="配置jpf"></a>配置jpf</h3><p>在jpf-core下新建Racer.jpf</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">target=Racer</span><br><span class="line">listener=gov.nasa.jpf.listener.PreciseRaceDetector</span><br><span class="line">report.console.property_violation=error,trace</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="在jpf-core下新建Racer-java"><a href="#在jpf-core下新建Racer-java" class="headerlink" title="在jpf-core下新建Racer.java"></a>在jpf-core下新建Racer.java</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Racer</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123; </span><br><span class="line">  <span class="keyword">int</span> d = <span class="number">42</span>;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    doSomething(<span class="number">1001</span>); <span class="comment">// (1) </span></span><br><span class="line">    d = <span class="number">0</span>; <span class="comment">// (2) </span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span> <span class="params">(String[] args)</span></span>&#123; </span><br><span class="line">    Racer racer = <span class="keyword">new</span> Racer(); </span><br><span class="line">    Thread t = <span class="keyword">new</span> Thread(racer); </span><br><span class="line">    t.start();</span><br><span class="line">    </span><br><span class="line">    doSomething(<span class="number">1000</span>); <span class="comment">// (3) </span></span><br><span class="line">    <span class="keyword">int</span> c = <span class="number">420</span> / racer.d; <span class="comment">// (4) </span></span><br><span class="line">    System.out.println(c);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">doSomething</span> <span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123; </span><br><span class="line">      Thread.sleep(n);</span><br><span class="line">    &#125; <span class="keyword">catch</span>(InterruptedException ix) &#123;&#125; </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="运行jpf"><a href="#运行jpf" class="headerlink" title="运行jpf"></a>运行jpf</h3><p>执行 <code>~/jpf-core/bin/jpf Racer.jpf</code> 或 <code>java  -jar /build/RunJPF.jar Racer.jpf</code></p>
+<p>##jpf输出<br>jpf有三种输出：</p>
+<ul>
+<li>应用程序的输出：应用在做什么？</li>
+<li>JPF logging：JPF在做什么？</li>
+<li>JPF 报告：JPF的运行结果是什么？</li>
+</ul>
+<p>其中JPF报告如下图所示：<br><img src="/images/ST_Lab4JPF/ECDF2A301B772D299B8C1736C135B497.jpg" alt="jpf2.jpg"><br>具体为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">JavaPathfinder core system v8.0 (rev 32) - (C) 2005-2014 United States Government. All rights reserved.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">====================================================== system under test</span><br><span class="line">Racer.main()</span><br><span class="line"></span><br><span class="line">====================================================== search started: 18-4-24 下午10:56</span><br><span class="line">10</span><br><span class="line">10</span><br><span class="line"></span><br><span class="line">====================================================== error 1</span><br><span class="line">gov.nasa.jpf.listener.PreciseRaceDetector</span><br><span class="line">race for field Racer@15b.d</span><br><span class="line">  main at Racer.main(Racer.java:35)</span><br><span class="line">		&quot;int c = 420 / racer.d;               // (4)&quot;  READ:  getfield Racer.d</span><br><span class="line">  Thread-1 at Racer.run(Racer.java:26)</span><br><span class="line">		&quot;d = 0;                               // (2)&quot;  WRITE: putfield Racer.d</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">====================================================== trace #1</span><br><span class="line">------------------------------------------------------ transition #0 thread: 0</span><br><span class="line">gov.nasa.jpf.vm.choice.ThreadChoiceFromSet &#123;id:&quot;ROOT&quot; ,1/1,isCascaded:false&#125;</span><br><span class="line">      [3157 insn w/o sources]</span><br><span class="line">  Racer.java:30                  : Racer racer = new Racer();</span><br><span class="line">  Racer.java:19                  : public class Racer implements Runnable &#123;</span><br><span class="line">      [1 insn w/o sources]</span><br><span class="line">  Racer.java:21                  : int d = 42;</span><br><span class="line">  Racer.java:30                  : Racer racer = new Racer();</span><br><span class="line">  Racer.java:31                  : Thread t = new Thread(racer);</span><br><span class="line">      [145 insn w/o sources]</span><br><span class="line">  Racer.java:31                  : Thread t = new Thread(racer);</span><br><span class="line">  Racer.java:32                  : t.start();</span><br><span class="line">      [1 insn w/o sources]</span><br><span class="line">------------------------------------------------------ transition #1 thread: 0</span><br><span class="line">gov.nasa.jpf.vm.choice.ThreadChoiceFromSet &#123;id:&quot;START&quot; ,1/2,isCascaded:false&#125;</span><br><span class="line">      [2 insn w/o sources]</span><br><span class="line">  Racer.java:34                  : doSomething(1000);                   // (3)</span><br><span class="line">  Racer.java:41                  : try &#123; Thread.sleep(n); &#125; catch (InterruptedException ix) &#123;&#125;</span><br><span class="line">      [4 insn w/o sources]</span><br><span class="line">------------------------------------------------------ transition #2 thread: 1</span><br><span class="line">gov.nasa.jpf.vm.choice.ThreadChoiceFromSet &#123;id:&quot;SLEEP&quot; ,2/2,isCascaded:false&#125;</span><br><span class="line">      [1 insn w/o sources]</span><br><span class="line">  Racer.java:1                   : /*</span><br><span class="line">  Racer.java:25                  : doSomething(1001);                   // (1)</span><br><span class="line">  Racer.java:41                  : try &#123; Thread.sleep(n); &#125; catch (InterruptedException ix) &#123;&#125;</span><br><span class="line">      [4 insn w/o sources]</span><br><span class="line">------------------------------------------------------ transition #3 thread: 1</span><br><span class="line">gov.nasa.jpf.vm.choice.ThreadChoiceFromSet &#123;id:&quot;SLEEP&quot; ,2/2,isCascaded:false&#125;</span><br><span class="line">      [3 insn w/o sources]</span><br><span class="line">  Racer.java:41                  : try &#123; Thread.sleep(n); &#125; catch (InterruptedException ix) &#123;&#125;</span><br><span class="line">  Racer.java:42                  : &#125;</span><br><span class="line">  Racer.java:26                  : d = 0;                               // (2)</span><br><span class="line">------------------------------------------------------ transition #4 thread: 0</span><br><span class="line">gov.nasa.jpf.vm.choice.ThreadChoiceFromSet &#123;id:&quot;SHARED_OBJECT&quot; ,1/2,isCascaded:false&#125;</span><br><span class="line">      [3 insn w/o sources]</span><br><span class="line">  Racer.java:41                  : try &#123; Thread.sleep(n); &#125; catch (InterruptedException ix) &#123;&#125;</span><br><span class="line">  Racer.java:42                  : &#125;</span><br><span class="line">  Racer.java:35                  : int c = 420 / racer.d;               // (4)</span><br><span class="line">------------------------------------------------------ transition #5 thread: 0</span><br><span class="line">gov.nasa.jpf.vm.choice.ThreadChoiceFromSet &#123;id:&quot;SHARED_OBJECT&quot; ,1/2,isCascaded:false&#125;</span><br><span class="line">  Racer.java:35                  : int c = 420 / racer.d;               // (4)</span><br><span class="line"></span><br><span class="line">====================================================== results</span><br><span class="line">error #1: gov.nasa.jpf.listener.PreciseRaceDetector &quot;race for field Racer@15b.d   main at Racer.main(Ra...&quot;</span><br><span class="line"></span><br><span class="line">====================================================== statistics</span><br><span class="line">elapsed time:       00:00:00</span><br><span class="line">states:             new=9,visited=1,backtracked=4,end=2</span><br><span class="line">search:             maxDepth=6,constraints=0</span><br><span class="line">choice generators:  thread=8 (signal=0,lock=1,sharedRef=2,threadApi=3,reschedule=2), data=0</span><br><span class="line">heap:               new=362,released=33,maxLive=357,gcCycles=7</span><br><span class="line">instructions:       3424</span><br><span class="line">max memory:         15MB</span><br><span class="line">loaded code:        classes=62,methods=1477</span><br><span class="line"></span><br><span class="line">====================================================== search finished: 18-4-24 下午10:56</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p>error 抢占资源的类型和详细信息<br>trace 程序导致这种抢占资源的踪迹<br>statistics 性能统计信息</p>
+<h2 id="相关知识"><a href="#相关知识" class="headerlink" title="相关知识"></a>相关知识</h2><h3 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h3><p>状态图<br><img src="/images/ST_Lab4JPF/90F26580297A213B4F82BF4DFE37D680.jpg" alt="jpfthread.jpg"></p>
+<p>说明：<br>线程共包括以下5种状态。</p>
+<ol>
+<li>新建状态(New): 线程对象被创建后，就进入了新建状态。例如，Thread thread = new Thread()。</li>
+<li>就绪状态(Runnable): 也被称为“可执行状态”。线程对象被创建后，其它线程调用了该对象的start()方法，从而来启动该线程。例如，thread.start()。处于就绪状态的线程，随时可能被CPU调度执行。</li>
+<li>运行状态(Running) : 线程获取CPU权限进行执行。需要注意的是，线程只能从就绪状态进入到运行状态。</li>
+<li>阻塞状态(Blocked)  : 阻塞状态是线程因为某种原因放弃CPU使用权，暂时停止运行。直到线程进入就绪状态，才有机会转到运行状态。阻塞的情况分三种：<br> (01) 等待阻塞 – 通过调用线程的wait()方法，让线程等待某工作的完成。<br> (02) 同步阻塞 – 线程在获取synchronized同步锁失败(因为锁被其它线程所占用)，它会进入同步阻塞状态。<br> (03) 其他阻塞 – 通过调用线程的sleep()或join()或发出了I/O请求时，线程会进入到阻塞状态。当sleep()状态超时、join()等待线程终止或者超时、或者I/O处理完毕时，线程重新转入就绪状态。</li>
+<li>死亡状态(Dead)    : 线程执行完了或者因异常退出了run()方法，该线程结束生命周期。</li>
+</ol>
+<h3 id="Thread和Runnable"><a href="#Thread和Runnable" class="headerlink" title="Thread和Runnable"></a>Thread和Runnable</h3><p>参考：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/skywang12345/p/3479063.html#part01">http://www.cnblogs.com/skywang12345/p/3479063.html#part01</a><br>常用的实现多线程的2种方式：Thread 和 Runnable。</p>
+<h4 id="Thread-和-Runnable-的不同点"><a href="#Thread-和-Runnable-的不同点" class="headerlink" title="Thread 和 Runnable 的不同点"></a>Thread 和 Runnable 的不同点</h4><p>Thread 是类，而Runnable是接口；Thread本身是实现了Runnable接口的类。我们知道“一个类只能有一个父类，但是却能实现多个接口”，因此Runnable具有更好的扩展性。<br>此外，Runnable还可以用于“资源的共享”。即，多个线程都是基于某一个Runnable对象建立的，它们会共享Runnable对象上的资源。<br>通常，建议通过“Runnable”实现多线程。</p>
+<h4 id="Thread的多线程示例"><a href="#Thread的多线程示例" class="headerlink" title="Thread的多线程示例"></a>Thread的多线程示例</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ThreadTest.java 源码</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> ticket=<span class="number">10</span>;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">20</span>;i++)&#123; </span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">this</span>.ticket&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                System.out.println(<span class="keyword">this</span>.getName()+<span class="string">&quot; 卖票：ticket&quot;</span>+<span class="keyword">this</span>.ticket--);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; </span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadTest</span> </span>&#123;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;  </span><br><span class="line">        <span class="comment">// 启动3个线程t1,t2,t3；每个线程各卖10张票！</span></span><br><span class="line">        MyThread t1=<span class="keyword">new</span> MyThread();</span><br><span class="line">        MyThread t2=<span class="keyword">new</span> MyThread();</span><br><span class="line">        MyThread t3=<span class="keyword">new</span> MyThread();</span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line">        t3.start();</span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个程序的输出结果是</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">Thread-<span class="number">0</span> 卖票：ticket10</span><br><span class="line">Thread-<span class="number">1</span> 卖票：ticket10</span><br><span class="line">Thread-<span class="number">2</span> 卖票：ticket10</span><br><span class="line">Thread-<span class="number">1</span> 卖票：ticket9</span><br><span class="line">Thread-<span class="number">0</span> 卖票：ticket9</span><br><span class="line">Thread-<span class="number">1</span> 卖票：ticket8</span><br><span class="line">Thread-<span class="number">2</span> 卖票：ticket9</span><br><span class="line">Thread-<span class="number">1</span> 卖票：ticket7</span><br><span class="line">Thread-<span class="number">0</span> 卖票：ticket8</span><br><span class="line">Thread-<span class="number">1</span> 卖票：ticket6</span><br><span class="line">Thread-<span class="number">2</span> 卖票：ticket8</span><br><span class="line">Thread-<span class="number">1</span> 卖票：ticket5</span><br><span class="line">Thread-<span class="number">0</span> 卖票：ticket7</span><br><span class="line">Thread-<span class="number">1</span> 卖票：ticket4</span><br><span class="line">Thread-<span class="number">2</span> 卖票：ticket7</span><br><span class="line">Thread-<span class="number">1</span> 卖票：ticket3</span><br><span class="line">Thread-<span class="number">0</span> 卖票：ticket6</span><br><span class="line">Thread-<span class="number">1</span> 卖票：ticket2</span><br><span class="line">Thread-<span class="number">2</span> 卖票：ticket6</span><br><span class="line">Thread-<span class="number">2</span> 卖票：ticket5</span><br><span class="line">Thread-<span class="number">2</span> 卖票：ticket4</span><br><span class="line">Thread-<span class="number">1</span> 卖票：ticket1</span><br><span class="line">Thread-<span class="number">0</span> 卖票：ticket5</span><br><span class="line">Thread-<span class="number">2</span> 卖票：ticket3</span><br><span class="line">Thread-<span class="number">0</span> 卖票：ticket4</span><br><span class="line">Thread-<span class="number">2</span> 卖票：ticket2</span><br><span class="line">Thread-<span class="number">0</span> 卖票：ticket3</span><br><span class="line">Thread-<span class="number">2</span> 卖票：ticket1</span><br><span class="line">Thread-<span class="number">0</span> 卖票：ticket2</span><br><span class="line">Thread-<span class="number">0</span> 卖票：ticket1</span><br></pre></td></tr></table></figure>
+<p>MyThread继承于Thread，它是自定义个线程。每个MyThread都会卖出10张票。主线程main创建并启动3个MyThread子线程。每个子线程都各自卖出了10张票。</p>
+<h4 id="Runnable的多线程示例"><a href="#Runnable的多线程示例" class="headerlink" title="Runnable的多线程示例"></a>Runnable的多线程示例</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// RunnableTest.java 源码</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> ticket=<span class="number">10</span>;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">20</span>;i++)&#123; </span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">this</span>.ticket&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName()+<span class="string">&quot; 卖票：ticket&quot;</span>+<span class="keyword">this</span>.ticket--);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; </span><br><span class="line">&#125;; </span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RunnableTest</span> </span>&#123;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;  </span><br><span class="line">        MyThread mt=<span class="keyword">new</span> MyThread();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 启动3个线程t1,t2,t3(它们共用一个Runnable对象)，这3个线程一共卖10张票！</span></span><br><span class="line">        Thread t1=<span class="keyword">new</span> Thread(mt);</span><br><span class="line">        Thread t2=<span class="keyword">new</span> Thread(mt);</span><br><span class="line">        Thread t3=<span class="keyword">new</span> Thread(mt);</span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line">        t3.start();</span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个程序的输出结果是：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Thread-<span class="number">0</span> 卖票：ticket10</span><br><span class="line">Thread-<span class="number">2</span> 卖票：ticket8</span><br><span class="line">Thread-<span class="number">1</span> 卖票：ticket9</span><br><span class="line">Thread-<span class="number">2</span> 卖票：ticket6</span><br><span class="line">Thread-<span class="number">0</span> 卖票：ticket7</span><br><span class="line">Thread-<span class="number">2</span> 卖票：ticket4</span><br><span class="line">Thread-<span class="number">1</span> 卖票：ticket5</span><br><span class="line">Thread-<span class="number">2</span> 卖票：ticket2</span><br><span class="line">Thread-<span class="number">0</span> 卖票：ticket3</span><br><span class="line">Thread-<span class="number">1</span> 卖票：ticket1</span><br></pre></td></tr></table></figure>
+<p>和上面“MyThread继承于Thread”不同；这里的MyThread实现了Thread接口。主线程main创建并启动3个子线程，而且这3个子线程都是基于“mt这个Runnable对象”而创建的。运行结果是这3个子线程一共卖出了10张票。这说明它们是共享了MyThread接口的。但是如果没有设置多线程对ticket这个竞争资源的互斥访问，这个例子有可能不止卖出10个票，有可能线程同时访问一个资源。</p>
+<h4 id="本题程序"><a href="#本题程序" class="headerlink" title="本题程序"></a>本题程序</h4><p>本项目中通过Runnable实现一个接口，从而实现多线程。</p>
+<h3 id="Thread的-start-和-run"><a href="#Thread的-start-和-run" class="headerlink" title="Thread的 start 和 run"></a>Thread的 start 和 run</h3><p>start()会启动一个新线程，并在新线程中运行run()方法。而run()则会直接在当前线程中运行run()方法，并不会启动一个新线程来运行run()。</p>
+<p>start()源码(基于JDK1.7.0_40)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="comment">// 如果线程不是&quot;就绪状态&quot;，则抛出异常！</span></span><br><span class="line">	<span class="keyword">if</span>(threadStatus != <span class="number">0</span>)</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> IllegalThreadStateException();</span><br><span class="line">	<span class="comment">// 将线程添加到ThreadGroup中</span></span><br><span class="line">	group.add(<span class="keyword">this</span>);</span><br><span class="line">	<span class="keyword">boolean</span> started = <span class="keyword">false</span>;</span><br><span class="line">	<span class="keyword">try</span>&#123;</span><br><span class="line">		<span class="comment">// 通过start0()启动线程,新线程会调用run()方法</span></span><br><span class="line">		start0();</span><br><span class="line">		<span class="comment">// 设置started标记=true</span></span><br><span class="line">		started = <span class="keyword">true</span>;</span><br><span class="line">	&#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">		<span class="keyword">try</span>&#123;</span><br><span class="line">			<span class="keyword">if</span>(!started)&#123;</span><br><span class="line">				group.threadStartFailed(<span class="keyword">this</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">catch</span>(Throwable ignore)&#123;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>run() 源码(基于JDK1.7.0_40)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(target != <span class="keyword">null</span>)&#123;</span><br><span class="line">        target.run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>用start方法来启动线程，真正实现了多线程运行，这时无需等待run方法体代码执行完毕而直接继续执行下面的代码。通过调用Thread类的start()方法来启动一个线程，这时此线程处于就绪（可运行）状态，并没有运行，一旦得到cpu时间片，就开始执行run()方法，这里方法run()称为线程体，它包含了要执行的这个线程的内容，Run方法运行结束，此线程随即终止。start()不能被重复调用。</p>
+<p>run()方法只是类的一个普通方法而已，如果直接调用Run方法，程序中依然只有主线程这一个线程，其程序执行路径还是只有一条，还是要顺序执行，还是要等待run方法体执行完毕后才可继续执行下面的代码，这样就没有达到写线程的目的。</p>
+<p>总结：调用start方法方可启动线程，而run方法只是thread的一个普通方法调用，还是在主线程里执行。</p>
+<p>把需要并行处理的代码放在run()方法中，start()方法启动线程将自动调用run()方法，这是由jvm的内存机制规定的。并且run()方法必须是public访问权限，返回值类型为void。</p>
+<h3 id="sleep-介绍"><a href="#sleep-介绍" class="headerlink" title="sleep()介绍"></a>sleep()介绍</h3><p>sleep() 定义在Thread.java中。<br>sleep() 的作用是让当前线程休眠，即当前线程会从“运行状态”进入到“休眠(阻塞)状态”。sleep()会指定休眠时间，线程休眠的时间会大于/等于该休眠时间；在线程重新被唤醒时，它会由“阻塞状态”变成“就绪状态”，从而等待cpu的调度执行。</p>
+<h1 id="结果分析"><a href="#结果分析" class="headerlink" title="结果分析"></a>结果分析</h1><p>正常情况下，最开始d值为42， <code>t.start();</code> 会启动一个用于运行run()方法的新线程，之后直接继续执行下面的代码，无需等待run方法体代码执行完毕，也就是直接继续执行 <code>doSomething(1000);</code> ，等待1000毫秒后运行 <code>420/d</code>并输出结果；而另一边run函数一旦得到cpu时间片，就开始执行run()方法，也就是说在大于等于1001毫秒后，将会把d赋值为0。也就是理论上，“d赋值为0”会在“420/d”之后执行，所以在正常情况下应该输出10。<br>也就是这样：<br><img src="/images/ST_Lab4JPF/730F61C717A5966E8E1E042E63E438C6.jpg" alt="jpf3.jpg"></p>
+<p>但是jpf就是用于并发程序的模型检验，发现数据竞争和死锁等缺陷(defects)。</p>
+<p>如果程序的运行过程中，在start()之后的 <code>doSomething(1000);</code> 出现了异常，实际的运行时间变得更长，就会使“d赋值为0”优先于“420/d”执行，这样就会出现除以0的异常。<br>也就是下图所示，在该句加上断点后再执行就会报错。<br><img src="/images/ST_Lab4JPF/B175B5737113D134AAA15FABA1085B20.jpg" alt="jpf4.jpg"></p>
+<p>也就是说，这是该程序的一个缺陷，在实际操作中会有很大的风险。</p>
+<h1 id="论文研究"><a href="#论文研究" class="headerlink" title="论文研究"></a>论文研究</h1><blockquote>
+<p>【篇名】基于符号执行和数据挖掘的路径可达性检测<br>【作者】范彧<br>【学位类型】硕士<br>【授予单位】上海交通大学<br>【导师】赵建军<br>【年份】2012<br>【页数】87</p>
+</blockquote>
+<p>主要内容：基于符号执行和数据挖掘的方法来检测路径的可达性。<br>文中介绍了限定深度的符号执行算法，并描述了字节码插桩及获取动态运行数据的过程，最后说明了如何从动态数据中挖掘不可达路径。</p>
+<p><img src="/images/ST_Lab4JPF/920C902DB9464C3ADE1273C1AE0A81B7.jpg" alt="jpfpaper.jpg"><br>上图展示了基于特殊符号执行和数据挖掘方法的大致流程。</p>
+<p>首先，对待测的源程序进行限定深度的符号执行。在这种特殊的符号执行下，方法的返回值将作为一种特殊的符号变量处理，称为可疑符号变量，路径条件中带有可疑符号变量的路径称为可疑路径。限定深度的符号执行可以用来获得一部分不可达路径以及一部分可疑路径的信息。随后，利用约束求解器提供的额外信息，一组相关的测试数据被生成。通过大量地重复执行插桩过的程序，动态的路径信息被获得。这些信息包含了程序在不同输入下的执行路径。利用关联规则挖掘技术可以从动态路径信息中挖掘出路径条件中的相互关联，从而最终从可疑路径中找出真正不可达的。</p>
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><h3 id="代码插桩"><a href="#代码插桩" class="headerlink" title="代码插桩"></a>代码插桩</h3><p>通过在程序代码中插入额外的语句来<strong>监视程序中感兴趣的变量的状态</strong>，可以帮助程序员更好地找到软件中的缺陷。<br>具体为：在保持源程序逻辑不变的情况下<strong>插入探针</strong>，通过执行探针来抛出源程序的<strong>特征数据</strong>。通过分析这些数据，可以获得程序的控制流和数据流信息，对程序进行进一步的分析。</p>
+<h3 id="符号执行"><a href="#符号执行" class="headerlink" title="符号执行"></a>符号执行</h3><p>符号执行的主要思想是使用<strong>符号值</strong>代替实际数据作为程序的<strong>输入</strong>，使用<strong>符号表达式</strong>来表示<strong>程序变量</strong>。因此，程序执行的输出是一个<strong>关于输入符号值的函数</strong>。这里的符号值是一个<strong>固定</strong>的值，只是不知道取值是多少。这需要和程序中的变量严格区分开来，后者是会在程序执行过程中不断变化的。符号执行是普通程序执行的一种自然拓展，使用这种方式可以系统地遍历程序所有可能的执行路径。值得一提的是，这里的输入是指任何来自方法外部的数据，并不限于方法形参，同时还包括全局变量等。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> x, y;</span><br><span class="line">L1: <span class="keyword">if</span> (x &gt; y) &#123;</span><br><span class="line">L2:    x = x + y;</span><br><span class="line">L3:    y = x ‐ y;</span><br><span class="line">L4:    x = x ‐ y;</span><br><span class="line">L5:    <span class="keyword">if</span> (x ‐ y &gt; <span class="number">0</span>)</span><br><span class="line">L6:      assert (<span class="literal">false</span>);</span><br><span class="line">L7: &#125;</span><br></pre></td></tr></table></figure>
+<p>是当 x &gt; y 时将两者交换， x &lt;= y 时什么都不做。</p>
+<p>下图为符号执行树：<br><img src="/images/ST_Lab4JPF/64907401A44CD77A28091436929124D3.jpg" alt="jpfpaper1.jpg"></p>
+<ul>
+<li>IP 是一个<strong>指令指针</strong>（Instruction Pointer），指向下一条将要执行的指令。</li>
+<li>PC <strong>路径条件</strong>（Path Condition）是由输入的符号变量组成的布尔表达式，用来表示使得程序沿着这条路径执行的<strong>约束条件</strong>。</li>
+<li>V 是一组有序对的集合。每一组有序对表示一个<strong>程序变量到符号表达式的映射</strong>，记作&lt;variable, expression&gt;。</li>
+</ul>
+<p>因此，符号状态记作SymbolicState=&lt;IP,PC,V&gt; 。</p>
+<p>其中带阴影的部分，路径条件不存在，所以这一步骤只输出一个新的符号状态S7</p>
+<p>Symbolic PathFinder集成了符号执行和模型检测，可以用来完成代码的检测以及自动化测试用例生成。利用 Symbolic PathFinder 可以生成高覆盖率的结构化测试代码。<br>与一般的符号检测工具不同，Symbolic PathFinder并不依赖代码插桩，而是利用JPF的拓展接口实现了非标准的字节码解释，在执行被测代码的同时系统地生成和执行符号执行树。</p>
+<h1 id="JPF的符号执行（根据论文进行拓展）"><a href="#JPF的符号执行（根据论文进行拓展）" class="headerlink" title="JPF的符号执行（根据论文进行拓展）"></a>JPF的符号执行（根据论文进行拓展）</h1><p>参考：<br><a target="_blank" rel="noopener" href="http://babelfish.arc.nasa.gov/trac/jpf/wiki/projects/jpf-symbc">http://babelfish.arc.nasa.gov/trac/jpf/wiki/projects/jpf-symbc</a><br><a target="_blank" rel="noopener" href="http://babelfish.arc.nasa.gov/trac/jpf/wiki/projects/jpf-symbc/doc">http://babelfish.arc.nasa.gov/trac/jpf/wiki/projects/jpf-symbc/doc</a></p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><h3 id="jpf-symbc"><a href="#jpf-symbc" class="headerlink" title="jpf-symbc"></a>jpf-symbc</h3><p>使用Mercuial下载jpf-symbc的仓库，执行下列命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hg clone http://babelfish.arc.nasa.gov/hg/jpf/jpf-symbc</span><br><span class="line">$ cd jpf-symbc</span><br><span class="line">$ ant test</span><br></pre></td></tr></table></figure>
+<p><img src="/images/ST_Lab4JPF/7F5606082735DCEED5284797371BBB3F.jpg" alt="jpfs.jpg"></p>
+<h3 id="配置site-properties文件"><a href="#配置site-properties文件" class="headerlink" title="配置site.properties文件"></a>配置site.properties文件</h3><p>在家目录下新建.jpf文件夹，在该目录下新建site.properties文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"># can only expand system properties</span><br><span class="line">jpf-core = $&#123;user.home&#125;/jpf-core</span><br><span class="line"></span><br><span class="line"># annotation properties extension</span><br><span class="line">jpf-aprop = $&#123;jpf.home&#125;/jpf-aprop</span><br><span class="line">extensions+=,$&#123;jpf-aprop&#125;</span><br><span class="line"></span><br><span class="line"># numeric extension</span><br><span class="line">jpf-numeric = $&#123;jpf.home&#125;/jpf-numeric</span><br><span class="line">extensions+=,$&#123;jpf-numeric&#125;</span><br><span class="line"></span><br><span class="line"># symbolic extension</span><br><span class="line">jpf-symbc = $&#123;jpf.home&#125;/jpf-symbc</span><br><span class="line">extensions+=,$&#123;jpf-symbc&#125;</span><br><span class="line"></span><br><span class="line"># concurrent extension</span><br><span class="line">#jpf-concurrent = $&#123;jpf.home&#125;/jpf-concurrent</span><br><span class="line">#extensions+=,$&#123;jpf-concurrent&#125;</span><br><span class="line"></span><br><span class="line">jpf-shell = $&#123;jpf.home&#125;/jpf-shell</span><br><span class="line">extensions+=,$&#123;jpf-shell&#125;</span><br><span class="line"></span><br><span class="line">jpf-awt = $&#123;jpf.home&#125;/jpf-awt</span><br><span class="line">extensions+=,$&#123;jpf-awt&#125;</span><br><span class="line"></span><br><span class="line">jpf-awt-shell = $&#123;jpf.home&#125;/jpf-awt-shels</span><br><span class="line">extensions+=,$&#123;jpf-awt-shell&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="编译并运行"><a href="#编译并运行" class="headerlink" title="编译并运行"></a>编译并运行</h2><p>成功后在jpf-symbc文件夹下新建srcExample文件夹，新建java文件和jpf文件：<br>MyClass.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">myMethod</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">		<span class="keyword">int</span> z = x + y;</span><br><span class="line">		<span class="keyword">if</span> (z &gt; <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">if</span>(y&gt;<span class="number">0</span>)&#123;</span><br><span class="line">				z = <span class="number">1</span>;</span><br><span class="line">			&#125; <span class="keyword">else</span>&#123;</span><br><span class="line">				z = -<span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println(<span class="string">&quot;path 1 explored&quot;</span>);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="keyword">if</span>(x&gt;<span class="number">0</span>)&#123;</span><br><span class="line">				z = z - x;</span><br><span class="line">			&#125; <span class="keyword">else</span>&#123;</span><br><span class="line">				z = z + x;</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println(<span class="string">&quot;path 2 explored&quot;</span>);</span><br><span class="line">		&#125;			</span><br><span class="line">		z = <span class="number">2</span> * z;</span><br><span class="line">		<span class="keyword">return</span> z;</span><br><span class="line">	&#125;</span><br><span class="line">																											</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		MyClass mc = <span class="keyword">new</span> MyClass();</span><br><span class="line">		mc.myMethod(<span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>MyClass.jpf</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">target=MyClass</span><br><span class="line">classpath=$&#123;jpf-symbc&#125;/buildExample</span><br><span class="line">sourcepath=$&#123;jpf-symbc&#125;/srcExample</span><br><span class="line">symbolic.method=MyClass.myMethod(sym#sym)</span><br></pre></td></tr></table></figure>
+
+
+<p>要debug运行得到MyClass.class: <code>javac -g MyClass.java</code></p>
+<p>在jpf-symbc文件夹下新建buildExample文件夹，将MyClass.class移动到文件夹内，运行后可以看到输出：</p>
+<p><img src="/images/ST_Lab4JPF/A7157371BDE9D70DB8E02464F4CA32B2.jpg" alt="jpfs11.jpg"></p>
+<p>然后返回srcExample文件夹下，执行  <code>~/jpf-core/bin/jpf MyClass.jpf</code><br>得到下图所示结果：</p>
+<p><img src="/images/ST_Lab4JPF/08BEA7AD0120B60299F6F4B900B9607B.jpg" alt="jpfs12.jpg"></p>
+<p>同理论文中的程序也进行一次操作:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClass1</span></span>&#123;																								</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">myMethod</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (x &gt; y) &#123;</span><br><span class="line">			x = x + y;</span><br><span class="line">			y = x - y;</span><br><span class="line">			x = x - y;</span><br><span class="line">			<span class="keyword">if</span> (x - y &gt; <span class="number">0</span>)</span><br><span class="line">				<span class="keyword">assert</span>(<span class="keyword">false</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		MyClass1 mc1 = <span class="keyword">new</span> MyClass1();</span><br><span class="line">		mc1.myMethod(<span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>执行结果如图所示：</p>
+<p><img src="/images/ST_Lab4JPF/A6F47596B5198CA8D3841F1A08DDCC9A.jpg" alt="jpfs21.jpg"></p>
+<h1 id="出现的问题"><a href="#出现的问题" class="headerlink" title="出现的问题"></a>出现的问题</h1><h2 id="CentOS虚拟机无法联网"><a href="#CentOS虚拟机无法联网" class="headerlink" title="CentOS虚拟机无法联网"></a>CentOS虚拟机无法联网</h2><p><img src="/images/ST_Lab4JPF/D4C208B49778E12A4F5E1C5F8788ABD1.jpg" alt="jpfqq1.jpg"><br>解决方法：<br>参考后面的网站进行操作，修改Centos7中ifcfg-xxx文件。需要修改添加的有以下几行，这个是例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">BOOTPROTO=static  #设置静态Ip</span><br><span class="line">ONBOOT=yes  #这里如果为no的话就改为yes，表示网卡设备自动启动</span><br><span class="line">GATEWAY=192.168.10.155  #这里的网关地址就是mac下cat /Library/Preferences/VMware Fusion/vmnet8/nat.conf中#NAT gateway address这一行下面的ip地址</span><br><span class="line">IPADDR=192.168.10.150  #配置ip，在上一步已经设GATEWAY处于192.168.10.xxx这个范围，我就随便设为150了，只要不和网关相同均可</span><br><span class="line">NETMASK=255.255.255.0#子网掩码</span><br><span class="line">DNS1=202.96.128.86#dns服务器1，填写你所在的网络可用的dns服务器地址即可</span><br><span class="line">DNS2=223.5.5.5#dns服器2</span><br></pre></td></tr></table></figure>
+
+<p>最后执行 <code>service network restart</code> ，ping下百度的域名<br><img src="/images/ST_Lab4JPF/E476F31B88F2D70F83D140B68764FB8C.jpg" alt="jpfqq2.jpg"><br>参考：<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qiuqurenkong/article/details/78598650">https://blog.csdn.net/qiuqurenkong/article/details/78598650</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/a785975139/article/details/53023590">https://blog.csdn.net/a785975139/article/details/53023590</a></p>
+<h2 id="jpf-symbc-报错-SEVERE-cannot-load-application-class-某class"><a href="#jpf-symbc-报错-SEVERE-cannot-load-application-class-某class" class="headerlink" title="jpf-symbc 报错 [SEVERE] cannot load application class 某class"></a>jpf-symbc 报错 [SEVERE] cannot load application class 某class</h2><p>错误原因：<br>jpf中需要设置两个路径，classpath用来放置生成了所有调试信息的class文件，sourcepath用来放置Java文件和jpf文件。<br>因此需要<code>javac -g</code>来执行，并且把这三个文件放到相应的位置，并在jpf中配置好路径。</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>[1]范彧.基于符号执行和数据挖掘的路径可达性检测[D].上海交通大学,2012.</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SoftwareTest/" rel="tag"># SoftwareTest</a>
+              <a href="/tags/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E4%B8%8A%E6%9C%BA/" rel="tag"># 软件测试上机</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/04/18/ST_Lab3JMeter/" rel="prev" title="【软件测试上机】3 JMeter压力测试">
+      <i class="fa fa-chevron-left"></i> 【软件测试上机】3 JMeter压力测试
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/05/07/ADAS_HIL/" rel="next" title="【ADAS】Hardware in the Loop">
+      【ADAS】Hardware in the Loop <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A6%81%E6%B1%82"><span class="nav-number">1.</span> <span class="nav-text">要求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JPF"><span class="nav-number">2.</span> <span class="nav-text">JPF</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JPF%E5%8A%9F%E8%83%BD"><span class="nav-number">2.1.</span> <span class="nav-text">JPF功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-number">2.2.</span> <span class="nav-text">准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83"><span class="nav-number">2.2.1.</span> <span class="nav-text">配置环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mercurial"><span class="nav-number">2.2.2.</span> <span class="nav-text">Mercurial</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ant"><span class="nav-number">2.2.3.</span> <span class="nav-text">Ant</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jdk"><span class="nav-number">2.2.4.</span> <span class="nav-text">jdk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jpf-core"><span class="nav-number">2.2.5.</span> <span class="nav-text">jpf-core</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JUnit"><span class="nav-number">2.2.6.</span> <span class="nav-text">JUnit</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E5%B9%B6%E8%BF%90%E8%A1%8C%E7%9B%B8%E5%85%B3%E4%BB%A3%E7%A0%81"><span class="nav-number">2.3.</span> <span class="nav-text">编辑并运行相关代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEjpf"><span class="nav-number">2.3.1.</span> <span class="nav-text">配置jpf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8jpf-core%E4%B8%8B%E6%96%B0%E5%BB%BARacer-java"><span class="nav-number">2.3.2.</span> <span class="nav-text">在jpf-core下新建Racer.java</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8Cjpf"><span class="nav-number">2.3.3.</span> <span class="nav-text">运行jpf</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86"><span class="nav-number">2.4.</span> <span class="nav-text">相关知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="nav-number">2.4.1.</span> <span class="nav-text">多线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thread%E5%92%8CRunnable"><span class="nav-number">2.4.2.</span> <span class="nav-text">Thread和Runnable</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread-%E5%92%8C-Runnable-%E7%9A%84%E4%B8%8D%E5%90%8C%E7%82%B9"><span class="nav-number">2.4.2.1.</span> <span class="nav-text">Thread 和 Runnable 的不同点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.4.2.2.</span> <span class="nav-text">Thread的多线程示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Runnable%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.4.2.3.</span> <span class="nav-text">Runnable的多线程示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%AC%E9%A2%98%E7%A8%8B%E5%BA%8F"><span class="nav-number">2.4.2.4.</span> <span class="nav-text">本题程序</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thread%E7%9A%84-start-%E5%92%8C-run"><span class="nav-number">2.4.3.</span> <span class="nav-text">Thread的 start 和 run</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sleep-%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.4.4.</span> <span class="nav-text">sleep()介绍</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">结果分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E7%A0%94%E7%A9%B6"><span class="nav-number">4.</span> <span class="nav-text">论文研究</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-number">4.1.</span> <span class="nav-text">知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%8F%92%E6%A1%A9"><span class="nav-number">4.1.1.</span> <span class="nav-text">代码插桩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%A6%E5%8F%B7%E6%89%A7%E8%A1%8C"><span class="nav-number">4.1.2.</span> <span class="nav-text">符号执行</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JPF%E7%9A%84%E7%AC%A6%E5%8F%B7%E6%89%A7%E8%A1%8C%EF%BC%88%E6%A0%B9%E6%8D%AE%E8%AE%BA%E6%96%87%E8%BF%9B%E8%A1%8C%E6%8B%93%E5%B1%95%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">JPF的符号执行（根据论文进行拓展）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%86%E5%A4%87"><span class="nav-number">5.1.</span> <span class="nav-text">准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jpf-symbc"><span class="nav-number">5.1.1.</span> <span class="nav-text">jpf-symbc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEsite-properties%E6%96%87%E4%BB%B6"><span class="nav-number">5.1.2.</span> <span class="nav-text">配置site.properties文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%B9%B6%E8%BF%90%E8%A1%8C"><span class="nav-number">5.2.</span> <span class="nav-text">编译并运行</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">6.</span> <span class="nav-text">出现的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CentOS%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%97%A0%E6%B3%95%E8%81%94%E7%BD%91"><span class="nav-number">6.1.</span> <span class="nav-text">CentOS虚拟机无法联网</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jpf-symbc-%E6%8A%A5%E9%94%99-SEVERE-cannot-load-application-class-%E6%9F%90class"><span class="nav-number">6.2.</span> <span class="nav-text">jpf-symbc 报错 [SEVERE] cannot load application class 某class</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">7.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="VikingWang"
+      src="/images/avatar.JPG">
+  <p class="site-author-name" itemprop="name">VikingWang</p>
+  <div class="site-description" itemprop="description">这是一个需要耐心等着加载的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VikingWang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

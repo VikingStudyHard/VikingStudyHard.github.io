@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vikingstudyhard.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="第一章 Introdution">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Andrew Ng】Machine Learning | 1 Introdution">
+<meta property="og:url" content="https://vikingstudyhard.github.io/2019/01/17/MachineLearning_AndrewNg_1/index.html">
+<meta property="og:site_name" content="加载起来特别特别慢的小博客">
+<meta property="og:description" content="第一章 Introdution">
+<meta property="og:locale">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/MachineLearning_AndrewNg_1/57B79169D505B8A4E710FCCEB2AD727F.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/MachineLearning_AndrewNg_1/0FCF2D68D024909A779EFDAB56330E49.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/MachineLearning_AndrewNg_1/CBB42C25D71FA9C7D343D669761F339A.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/MachineLearning_AndrewNg_1/57EA0645F0A341B8811334B7C20F2F39.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/MachineLearning_AndrewNg_1/B25E10F961C5121737CD6FF79A32DFCE.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/MachineLearning_AndrewNg_1/36503A8D917F4A5B4159BB647FD2BAB6.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/MachineLearning_AndrewNg_1/9E82A8CAA51B6E338C6935C48780E54F.jpg">
+<meta property="article:published_time" content="2019-01-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-05-11T06:56:58.523Z">
+<meta property="article:author" content="VikingWang">
+<meta property="article:tag" content="Andrew Ng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vikingstudyhard.github.io/images/MachineLearning_AndrewNg_1/57B79169D505B8A4E710FCCEB2AD727F.jpg">
+
+<link rel="canonical" href="https://vikingstudyhard.github.io/2019/01/17/MachineLearning_AndrewNg_1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>【Andrew Ng】Machine Learning | 1 Introdution | 加载起来特别特别慢的小博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">加载起来特别特别慢的小博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">图片墙第一弹第二弹欢迎惠顾！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-photo">
+
+    <a href="/photo/" rel="section"><i class="fa fa-camera fa-fw"></i>photo</a>
+
+  </li>
+        <li class="menu-item menu-item-photo2">
+
+    <a href="/photo2/" rel="section"><i class="fa fa-camera fa-fw"></i>photo2</a>
+
+  </li>
+        <li class="menu-item menu-item-friends">
+
+    <a href="/friends/" rel="section"><i class="fa fa-rocket fa-fw"></i>friends</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://vikingstudyhard.github.io/2019/01/17/MachineLearning_AndrewNg_1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.JPG">
+      <meta itemprop="name" content="VikingWang">
+      <meta itemprop="description" content="这是一个需要耐心等着加载的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="加载起来特别特别慢的小博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【Andrew Ng】Machine Learning | 1 Introdution
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-01-17 00:00:00" itemprop="dateCreated datePublished" datetime="2019-01-17T00:00:00+08:00">2019-01-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-11 14:56:58" itemprop="dateModified" datetime="2021-05-11T14:56:58+08:00">2021-05-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Machine-learning/" itemprop="url" rel="index"><span itemprop="name">Machine learning</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">第一章 Introdution</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a target="_blank" rel="noopener" href="https://study.163.com/course/introduction.htm?courseId=1004570029&_trace_c_p_k2_=704facdf4abd4d84ba87211ab3d65a2d">吴恩达机器学习_网易云课堂</a></p>
+<p>第一章 Introdution 绪论：初识机器学习</p>
+<h1 id="1-Welcome"><a href="#1-Welcome" class="headerlink" title="1 Welcome"></a>1 Welcome</h1><p>Machine Learning</p>
+<ul>
+<li>Grew out of work in AI</li>
+<li>New capability for computers<br>Examples:</li>
+<li>Database mining 数据挖掘<br>Large datasets from growth of automation/web.<br>E.g., Web click data, medical records, biology, engineering</li>
+<li>Applications can’t program by hand. 无法手动编程，让计算机自己学习<br>E.g., Autonomous helicopter, handwriting recognition, most of Natural Language Processing (NLP), Computer Vision.</li>
+<li>Self-customizing programs 个性化推荐<br>E.g., Amazon, Netflix product recommendations</li>
+<li>Understanding human learning (brain, real AI).理解人类的学习过程和大脑</li>
+</ul>
+<h1 id="2-What-is-Machine-learning"><a href="#2-What-is-Machine-learning" class="headerlink" title="2 What is Machine learning?"></a>2 What is Machine learning?</h1><h2 id="Machine-Learning-definition"><a href="#Machine-Learning-definition" class="headerlink" title="Machine Learning definition"></a>Machine Learning definition</h2><ul>
+<li>Arthur Samuel (1959). 让计算机和自己下几万次棋，观察怎么布局能赢怎么会输，来提高能力。<br>Machine Learning: Field of study that gives computers the ability to learn without being explicitly programmed. (an older, informal definition)</li>
+<li>Tom Mitchell (1998)<br>Well-posed Learning Problem: A computer program is said to learn from experience E with respect to some task T and some performance measure P, if its performance on T, as measured by P, improves with experience E. (a more modern definition)<ul>
+<li>E 经验：程序和自己下几万次棋</li>
+<li>T 任务：下棋</li>
+<li>P 性能度量：与新对手下棋时赢的概率</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>e.g. Suppose your email program watches which emails you do or do not mark as spam(垃圾邮件), and based on that learns how to better filter spam. What is the task T in this setting?<br>    - T:Classifying emails as spam or not spam.<br>    - E:Watching you label emails as spam or not spam.<br>    - P:The number (or fraction) of emails correctly classified as spam/not spam.</p>
+</blockquote>
+<h2 id="Machine-learning-algorithms"><a href="#Machine-learning-algorithms" class="headerlink" title="Machine learning algorithms"></a>Machine learning algorithms</h2><ul>
+<li>Supervised learning 监督学习：我们教机器学习</li>
+<li>Unsupervised learning 无监督学习：让机器自己学习</li>
+</ul>
+<p>Others: Reinforcement learning 强化学习, recommender systems 推荐系统.<br>Also talk about: Practical advice for applying learning algorithms.</p>
+<h1 id="3-Supervised-Learning"><a href="#3-Supervised-Learning" class="headerlink" title="3 Supervised Learning"></a>3 Supervised Learning</h1><h2 id="Regression"><a href="#Regression" class="headerlink" title="Regression"></a>Regression</h2><p>Example:<br><img src="/images/MachineLearning_AndrewNg_1/57B79169D505B8A4E710FCCEB2AD727F.jpg" alt="IMAGE"><br>fit a straight line to the data, or fit the quadratic function(二次函数) to the data<br><img src="/images/MachineLearning_AndrewNg_1/0FCF2D68D024909A779EFDAB56330E49.jpg" alt="IMAGE"></p>
+<p>In supervised learning, we are given a data set and already know what our correct output should look like, having the idea that there is a relationship between the input and the output.</p>
+<p>监督学习：给出“正确答案”。即，给出房屋大小的数据集，以及每个样本对应的实际价格。算法目的是给出更多正确答案，比如给新房子估价。</p>
+<p>这种称作<strong>回归问题 Regression：预测连续的输出值。</strong></p>
+<h2 id="Classification"><a href="#Classification" class="headerlink" title="Classification"></a>Classification</h2><p>Example:<br>乳腺癌肿瘤大小–恶性or良性</p>
+<p><img src="/images/MachineLearning_AndrewNg_1/CBB42C25D71FA9C7D343D669761F339A.jpg" alt="IMAGE"><br>对应到数轴上，用O表示benign，用X表示malignant。<br>这种称作<strong>分类 Classification：预测离散的输出值（如 0 or 1）</strong></p>
+<p>对于多重features：肿瘤大小和年龄等</p>
+<div align=center>
+  <img width=300 src="https://vikingstudyhard.github.io/images/MachineLearning_AndrewNg_1/57EA0645F0A341B8811334B7C20F2F39.jpg" >
+</div>
+
+<p>处理无穷多的属性，在电脑中存储，避免内存溢出：支持向量机 Support Vector Machine</p>
+<h2 id="监督学习"><a href="#监督学习" class="headerlink" title="监督学习"></a>监督学习</h2><p>Supervised learning problems are categorized into “regression” and “classification” problems. </p>
+<p>In a regression problem, we are trying to predict results within a continuous output, meaning that we are trying to map input variables to some continuous function. </p>
+<p>In a classification problem, we are instead trying to predict results in a discrete output. In other words, we are trying to map input variables into discrete categories.</p>
+<blockquote>
+<p>e.g. You’re running a company, and you want to develop learning algorithms to address each of two problems.<br>Problem 1: You have a large inventory of identical items. You want to predict how many of these items will sell over the next 3 months.(对同一货物有大量库存，预测接下来三个月能卖多少)<br>Problem 2: You’d like software to examine individual customer accounts, and for each account decide if it has been hacked/compromised.(用软件来检查每一个客户的账户是否被入侵)<br>Should you treat these as classification or as regression problems?<br>Treat problem 1 as a regression problem, problem 2 as a classification problem.</p>
+</blockquote>
+<h1 id="3-Unsupervised-Learning"><a href="#3-Unsupervised-Learning" class="headerlink" title="3 Unsupervised Learning"></a>3 Unsupervised Learning</h1><p>有监督学习：</p>
+<div align=center>
+  <img width=300 src="https://vikingstudyhard.github.io/images/MachineLearning_AndrewNg_1/B25E10F961C5121737CD6FF79A32DFCE.jpg" >
+</div>
+无监督学习：没有label
+<div align=center>
+  <img width=300 src="https://vikingstudyhard.github.io/images/MachineLearning_AndrewNg_1/36503A8D917F4A5B4159BB647FD2BAB6.jpg" >
+</div>
+
+<p>只能从中找到两个不同的簇(cluster)</p>
+<div align=center>
+  <img width=300 src="https://vikingstudyhard.github.io/images/MachineLearning_AndrewNg_1/9E82A8CAA51B6E338C6935C48780E54F.jpg" >
+</div>
+
+
+<h2 id="聚类算法-clustering-algorithm"><a href="#聚类算法-clustering-algorithm" class="headerlink" title="聚类算法 clustering algorithm"></a>聚类算法 clustering algorithm</h2><p>把一堆数据集按照某个标准或者特征，对相似数据划分为一个类别<br>如：</p>
+<ul>
+<li>新闻网站搜集新闻，自动分到不同的新闻专题</li>
+<li>DNA 检测特定基因，分类不同人群</li>
+<li>大型计算机集群</li>
+<li>社交圈分析</li>
+<li>市场分割，将客户细分到不同的市场</li>
+<li>天文学数据分析</li>
+</ul>
+<h2 id="非聚类算法"><a href="#非聚类算法" class="headerlink" title="非聚类算法"></a>非聚类算法</h2><p>从数据集一堆数据中发现相同数据结构<br>Cocktail party problem<br>两个话筒同时接收两个不同位置的音源，然后算法进行聚类，提取出每个单独的音源。<br><code>[W,s,v] = svd((repmat(sum(x.* x,1),size(x,1),1).*x)*x&#39;);</code><br>svd函数：Singular Value Decmposition 奇异值分解</p>
+<blockquote>
+<p> e.g. Of the following examples, which would you address using an unsupervised learning algorithm? </p>
+</blockquote>
+<ul>
+<li>Given email labeled as spam/not spam, learn a spam filter.（垃圾过滤——有监督学习）</li>
+<li>Given a set of news articles found on the web, group them into set of articles about the same story.（新闻聚类——无监督学习）</li>
+<li>Given a database of customer data, automatically discover market segments and group customers into different market segments.（自动发现细分市场——无监督学习）</li>
+<li>Given a dataset of patients diagnosed as either having diabetes or not, learn to classify new patients as having diabetes or not.（分类是否糖尿病——有监督学习）</li>
+</ul>
+<h2 id="无监督学习"><a href="#无监督学习" class="headerlink" title="无监督学习"></a>无监督学习</h2><p>Unsupervised learning allows us to approach problems with little or no idea what our results<br>should look like. We can derive structure from data where we don’t necessarily know the<br>effect of the variables.（不太知道分哪几类）</p>
+<p>We can derive this structure by clustering the data based on relationships among the variables<br>in the data.</p>
+<p>With unsupervised learning there is no feedback based on the prediction results.</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Andrew-Ng/" rel="tag"># Andrew Ng</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/12/10/Mac_jdk/" rel="prev" title="【Mac】配置IntelliJ IDEA的JDK环境">
+      <i class="fa fa-chevron-left"></i> 【Mac】配置IntelliJ IDEA的JDK环境
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/01/18/MachineLearning_AndrewNg_2/" rel="next" title="【Andrew Ng】Machine Learning | 2 Linear regression with one variable">
+      【Andrew Ng】Machine Learning | 2 Linear regression with one variable <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Welcome"><span class="nav-number">1.</span> <span class="nav-text">1 Welcome</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-What-is-Machine-learning"><span class="nav-number">2.</span> <span class="nav-text">2 What is Machine learning?</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Machine-Learning-definition"><span class="nav-number">2.1.</span> <span class="nav-text">Machine Learning definition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Machine-learning-algorithms"><span class="nav-number">2.2.</span> <span class="nav-text">Machine learning algorithms</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Supervised-Learning"><span class="nav-number">3.</span> <span class="nav-text">3 Supervised Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Regression"><span class="nav-number">3.1.</span> <span class="nav-text">Regression</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Classification"><span class="nav-number">3.2.</span> <span class="nav-text">Classification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0"><span class="nav-number">3.3.</span> <span class="nav-text">监督学习</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Unsupervised-Learning"><span class="nav-number">4.</span> <span class="nav-text">3 Unsupervised Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95-clustering-algorithm"><span class="nav-number">4.1.</span> <span class="nav-text">聚类算法 clustering algorithm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95"><span class="nav-number">4.2.</span> <span class="nav-text">非聚类算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0"><span class="nav-number">4.3.</span> <span class="nav-text">无监督学习</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="VikingWang"
+      src="/images/avatar.JPG">
+  <p class="site-author-name" itemprop="name">VikingWang</p>
+  <div class="site-description" itemprop="description">这是一个需要耐心等着加载的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VikingWang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

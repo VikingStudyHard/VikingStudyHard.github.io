@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vikingstudyhard.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="第一个基于神经网络的方法来生成binary function的embedding">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【论文精读】Neural Network-based Graph Embedding for Cross-Platform Binary Code Similarity Detection">
+<meta property="og:url" content="https://vikingstudyhard.github.io/2019/07/14/Paper_Gemini/index.html">
+<meta property="og:site_name" content="加载起来特别特别慢的小博客">
+<meta property="og:description" content="第一个基于神经网络的方法来生成binary function的embedding">
+<meta property="og:locale">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/Paper_Gemini/A6263719B36DC7F1C7CC27EEB1B0A574.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/Paper_Gemini/8F8B21724102F8297A5BBE578C657703.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/Paper_Gemini/E2BA6B1F9B72CA0F6DD77A5C7503C073.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/Paper_Gemini/1A0DAAFCFCF2E262B7C10A0044A48A83.jpg">
+<meta property="article:published_time" content="2019-07-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-05-11T06:56:58.513Z">
+<meta property="article:author" content="VikingWang">
+<meta property="article:tag" content="Code Clone">
+<meta property="article:tag" content="论文精读">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vikingstudyhard.github.io/images/Paper_Gemini/A6263719B36DC7F1C7CC27EEB1B0A574.jpg">
+
+<link rel="canonical" href="https://vikingstudyhard.github.io/2019/07/14/Paper_Gemini/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>【论文精读】Neural Network-based Graph Embedding for Cross-Platform Binary Code Similarity Detection | 加载起来特别特别慢的小博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">加载起来特别特别慢的小博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">图片墙第一弹第二弹欢迎惠顾！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-photo">
+
+    <a href="/photo/" rel="section"><i class="fa fa-camera fa-fw"></i>photo</a>
+
+  </li>
+        <li class="menu-item menu-item-photo2">
+
+    <a href="/photo2/" rel="section"><i class="fa fa-camera fa-fw"></i>photo2</a>
+
+  </li>
+        <li class="menu-item menu-item-friends">
+
+    <a href="/friends/" rel="section"><i class="fa fa-rocket fa-fw"></i>friends</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://vikingstudyhard.github.io/2019/07/14/Paper_Gemini/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.JPG">
+      <meta itemprop="name" content="VikingWang">
+      <meta itemprop="description" content="这是一个需要耐心等着加载的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="加载起来特别特别慢的小博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【论文精读】Neural Network-based Graph Embedding for Cross-Platform Binary Code Similarity Detection
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-07-14 00:00:00" itemprop="dateCreated datePublished" datetime="2019-07-14T00:00:00+08:00">2019-07-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-11 14:56:58" itemprop="dateModified" datetime="2021-05-11T14:56:58+08:00">2021-05-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BB%A3%E7%A0%81%E5%85%8B%E9%9A%86/" itemprop="url" rel="index"><span itemprop="name">代码克隆</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">第一个基于神经网络的方法来生成binary function的embedding</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>Xu X, Liu C, Feng Q, et al. Neural network-based graph embedding for cross-platform binary code similarity detection[C]//Proceedings of the 2017 ACM SIGSAC Conference on Computer and Communications Security. ACM, 2017: 363-376.</p>
+</blockquote>
+<h1 id="做什么"><a href="#做什么" class="headerlink" title="做什么"></a>做什么</h1><p>跨平台二进制代码相似性检测。基于深度神经网络的方法来生成用于相似性检测的二进制函数的embedding</p>
+<h1 id="怎么做"><a href="#怎么做" class="headerlink" title="怎么做"></a>怎么做</h1><p>提出了一种新的基于神经网络的方法来计算embedding，即数值向量，基于每个二元函数的控制流图，然后可以通过测量两个函数的embedding之间的距离，有效地进行相似性检测。</p>
+<p>基于神经网络的嵌入生成：使用神经网络将ACFG转换为嵌入，以克服先前基于图匹配的方法的局限性。<br>带有属性的控制流图(attributed control flow graph, ACFG)</p>
+<h2 id="代码相似度嵌入问题"><a href="#代码相似度嵌入问题" class="headerlink" title="代码相似度嵌入问题"></a>代码相似度嵌入问题</h2><p>我们假设存在一个$oracle$ $\pi$确定已知任务的代码相似性度量。已知两个二进制程序函数$f_1$，$f_ 2$，$\pi(f_1,f_2)= 1$表示它们相似;否则，$π(f_1,f_2)=-1$表示它们不相似。</p>
+<p>代码相似性嵌入问题的目的是找到映射$\phi$，将函数$f$的 ACFG 映射到矢量表示$\mu$。给定易于计算的相似度函数 $Sim(·,·)$和两个二进制程序函数$f_1$，$f_ 2$，当$π(f_1,f_2)=-1$，$\operatorname{Sim}\left(\phi\left(f_{1}\right), \phi\left(f_{2}\right)\right)$很大。</p>
+<p>方法 $f$的二进制代码用$ACFG$ $g$表示，embedding mapping $\phi$是神经网络，输入是$ACFG$，训练 graph embedding network 用于相似性检测问题，即训练$\phi$使其在区分两个输入的ACFG之间的相似性方面做得好。</p>
+<p>Siamese架构将两个方法作为输入，并将相似性得分作为输出。Siamese架构嵌入了graph embedding network：Structure2vec。即输入为graph对$g1$和$g2$，输出为$\pi\left(f_{1}, f_{2}\right)$</p>
+<h2 id="graph-embedding-network"><a href="#graph-embedding-network" class="headerlink" title="graph embedding network"></a>graph embedding network</h2><h3 id="Structure2vec"><a href="#Structure2vec" class="headerlink" title="Structure2vec"></a>Structure2vec</h3><p>将ACFG表示为$g=\langle\mathcal{V}, \mathcal{E}\rangle$，其中$\mathcal{V}$和$\mathcal{E}$分别是顶点和边的集合;此外，图中的每个顶点$v$具有对应于ACFG中的  basic-block 特征的附加特征$x_v$。图形嵌入网络将首先计算每个顶点$v \in \mathcal{V}$的$p$维特征$\mu_{v}$，然后将$g$的嵌入向量$\mu_{g}$计算为这些顶点embedding的聚合。即$\mu_{g} :=A_{v \in \mathcal{V}}\left(\mu_{v}\right)$，其中$A$是聚合函数，即求和或平均值。在这项工作中，我们选择$\mu_{g}=\sum_{v \in \mathcal{V}}\left(\mu_{v}\right)$。</p>
+<h4 id="Basic-Structure2vec-Approach"><a href="#Basic-Structure2vec-Approach" class="headerlink" title="Basic Structure2vec Approach"></a>Basic Structure2vec Approach</h4><p>Structure2vec受图形模型推理算法的启发，其中顶点的特定特征$x_v$根据图形拓扑$g$结构递归地聚合。<br>$\mathcal{N}(v)$ 表示在图中顶点的所有相邻节点的集合。</p>
+<p>Structure2vec网络的一个变体将每个顶点处的embedding $\mu_{v}^{(0)}$ 初始化为 $0$，并在每次迭代时将 embedding 更新为：<br>$$<br>\mu_{v}^{(t+1)}=\mathcal{F}\left(x_{v}, \sum_{u \in \mathcal{N}(v)} \mu_{u}^{(t)}\right), \forall v \in \mathcal{V}<br>$$</p>
+<p>$\mathcal{F}$是一个通用的非线性映射。embedding的更新过程是基于图形拓扑，并以同步的方式进行。只有在上一轮的所有顶点的 embedding 更新完成后，才会开始扫描顶点做新一轮嵌入。顶点特征$x_v$通过非线性传播函数 $\mathcal{F}$ 传播到其他顶点。此外，执行更新的迭代越多，顶点特征将传播到远距离顶点，并在远端顶点非线性聚合。最后，如果在$T$次迭代之后终止更新过程，则每个顶点嵌入 $\mu_{v}^{(T)}$ 将包含关于它的T-hop邻域的信息，这些信息是由图拓扑和所涉及顶点的特征确定的。</p>
+<h3 id="mathcal-F-的参数化"><a href="#mathcal-F-的参数化" class="headerlink" title="$\mathcal{F}$的参数化"></a>$\mathcal{F}$的参数化</h3><img src="https://vikingstudyhard.github.io/images/Paper_Gemini/A6263719B36DC7F1C7CC27EEB1B0A574.jpg" class="" width="280">
+<p>$\mathcal{F}$的公式如下：<br>$$<br>\mathcal{F}\left(x_{v}, \sum_{u \in \mathcal{N}(v)} \mu_{u}\right)=\tanh \left(W_{1} x_{v}+\sigma\left(\sum_{u \in \mathcal{N}(v)} \mu_{u}\right)\right)<br>$$<br>其中 $x_v$ 是用于图节点（或basic-block）级特征的d维向量，$W_1$是$d\times p$矩阵，并且$p$是如上所述的嵌入大小。为了使非线性变换 $\sigma(\cdot)$ 更强大，我们将$\sigma$本身定义为n层全连通神经网络：<br>$$<br>\sigma(l)=\underbrace{P_{1} \times \operatorname{ReLU}\left(P_{2} \times \ldots \operatorname{ReLU}\left(P_{n} l\right)\right)}_{n \text { levels }}<br>$$<br>其中$P_i(i = 1,…,n)$是 $p\times p$ 矩阵。我们将$n$称为嵌入深度embedding depth。这里，ReLU是rectified linear unit，即 $ReLU(x)=max{0，x}$。</p>
+<p>我们对更新函数$\mathcal{F}$的新颖参数化以及第3.5节中描述的迭代更新方案完成了ACFG的嵌入网络。</p>
+<p>在算法1中总结了用于为每个ACFG生成嵌入的整体算法。在该算法中，$W_2$ 是另一个用于变换嵌入向量的 $p\times p$ 矩阵。我们将其输出表示为 $\phi(g)$。</p>
+<img src="https://vikingstudyhard.github.io/images/Paper_Gemini/8F8B21724102F8297A5BBE578C657703.jpg" class="" width="460">
+
+
+
+<img src="https://vikingstudyhard.github.io/images/Paper_Gemini/E2BA6B1F9B72CA0F6DD77A5C7503C073.jpg" class="" width="546">
+
+<h2 id="使用Siamese架构学习参数"><a href="#使用Siamese架构学习参数" class="headerlink" title="使用Siamese架构学习参数"></a>使用Siamese架构学习参数</h2><p>Siamese架构使用两个相同的图形嵌入网络，即Structure2vec，它们在顶部连接。每个图形嵌入网络将采用一个ACFG $g_i(i = 1,2)$作为其输入，并输出嵌入 $\phi\left(g_{i}\right)$。Siamese架构的最终输出是两个嵌入的余弦距离。此外，两个嵌入网络共享同一组参数，因此在训练期间两个网络保持相同。整体架构如图4所示。</p>
+<img src="https://vikingstudyhard.github.io/images/Paper_Gemini/1A0DAAFCFCF2E262B7C10A0044A48A83.jpg" class="" width="298"> 
+
+<p>给定一组$K$对ACFG $\left\langle g_{i}, g_{i}^{\prime}\right\rangle$，具有基础真值(ground truth)配对信息$y_{i} \in{+1,-1}$，其中$y_{i} = +1$表示 $ g_{i}$ 和 $g_{i}^{\prime}$ 相似，即 $\pi\left(g_{i}, g_{i}^{\prime}\right)=1$，否则为 $y_i = -1$。我们将每对的Siamese网络输出定义为：<br>$$<br>\operatorname{Sim}\left(g, g^{\prime}\right)=\cos \left(\phi(g), \phi\left(g^{\prime}\right)\right)=\frac{\left\langle\phi(g), \phi\left(g^{\prime}\right)\right\rangle}{|\phi(g)| \cdot\left|\phi\left(g^{\prime}\right)\right|}<br>$$</p>
+<p>其中$\phi(g)$由算法1产生。然后训练模型参数$W_1，P_1，…，P_n$和$W_2$，我们将优化以下目标函数:<br>$$<br>\min <em>{W</em>{1}, P_{1}, \ldots, P_{n}, W_{2}} \sum_{i=1}^{K}\left(\operatorname{Sim}\left(g_{i}, g_{i}^{\prime}\right)-y_{i}\right)^{2}<br>$$</p>
+<p>我们可以用随机梯度下降来优化上述公式。根据图形拓扑递归地计算参数的梯度。最后，一旦Siamese网络可以实现良好的性能（例如，使用AUC作为度量），训练过程终止，并且训练的图形嵌入网络可以将输入图形转换为可用于相似性检测的有效嵌入。</p>
+<h1 id="两种图形嵌入"><a href="#两种图形嵌入" class="headerlink" title="两种图形嵌入"></a>两种图形嵌入</h1><p>graph embedding</p>
+<p>1.embed the nodes of a graph: find a map from the nodes to a vector space, so that the structural information of the graph is preserved<br>2.find a embedding vector that represents the whole graph</p>
+<h1 id="三篇论文比较"><a href="#三篇论文比较" class="headerlink" title="三篇论文比较"></a>三篇论文比较</h1><blockquote>
+</blockquote>
+<p>Li L, Feng H, Zhuang W, et al. Cclearner: A deep learning-based clone detection approach[C]//2017 IEEE International Conference on Software Maintenance and Evolution (ICSME). IEEE, 2017: 249-260.<br>White M, Tufano M, Vendome C, et al. Deep learning code fragments for code clone detection[C]//Proceedings of the 31st IEEE/ACM International Conference on Automated Software Engineering. ACM, 2016: 87-98.<br>Xu X, Liu C, Feng Q, et al. Neural network-based graph embedding for cross-platform binary code similarity detection[C]//Proceedings of the 2017 ACM SIGSAC Conference on Computer and Communications Security. ACM, 2017: 363-376.</p>
+<p>共同点：都是基于深度学习的克隆检测工具</p>
+<p>不同点：</p>
+<ul>
+<li>原理上：<ul>
+<li>CCLEARNER：第一个使用深度学习的基于token的克隆检测方法。通过ANTLR lexer 和 Eclipse ASTParser 得到token，将出现的token和每个 token 的出现次数组成 token-frequency list，将token分为八类并创建 token-frequency lists 的向量，用向量之间的相似性来反映相似性。</li>
+<li>White：第一个为克隆检测提出语言模型和embedding。与基于token不同，此方法将term映射到特征空间中的连续值向量，并用距离衡量相似性，同时将 AST 转化为 full 二叉树，根据叶子结点对identifiers和literal types进行操作，从词法和句法两个层面提取代码特征。（extract source code features at both lexical and syntax levels.）</li>
+<li>Gemini：第一个基于神经网络的方法来生成binary function的embedding。将方法的二进制代码用ACFG表示，通过graph embedding network，基于图形拓扑迭代更新，最终得到嵌入向量。相似性得分用两个方法的embedding的余弦距离来表示。</li>
+</ul>
+</li>
+<li>神经网络的使用：<ul>
+<li>CCLEARNER：DNN。输入为有八个相似性得分的向量。输出为Clone和NONClone两种标签。</li>
+<li>White：RNN。输入为每个term的embedding矩阵与句法特征组合得到的repr属性。输出也是克隆和非克隆，并不能区别克隆类型。</li>
+<li>Gemini：全连接神经网络。输入为 attributed control flow graph, ACFG ，输出为embedding network。</li>
+</ul>
+</li>
+<li>评估：<ul>
+<li>CCLEARNER：SourcererCC，NiCad 和 Deckard</li>
+<li>White：Deckard</li>
+<li>Gemini：BGM和Genius</li>
+</ul>
+</li>
+<li>效果：<ul>
+<li>CCLEARNER：在三型和四型克隆上效果不佳。因为CCLEARNER依赖于在不同方法中使用的完全相同的术语来计算相似性向量。当两个克隆方法共享很少的标识符并包含显着不同的程序结构时，CCLEARNER 无法检测克隆关系。</li>
+<li>White：（这个是一篇论文里提到的 Guo C, Huang D, Dong N, et al. Deep Review Sharing[C]//2019 IEEE 26th International Conference on Software Analysis, Evolution and Reengineering (SANER). IEEE, 2019: 61-72. ）召回率和f1分数方面检测性能比较差。</li>
+<li>Gemini：Gemini在大图和小图上都优于BGM和Genius。在相似性检测精度、嵌入生成时间和整体训练时间等方面优先于Genius。</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Code-Clone/" rel="tag"># Code Clone</a>
+              <a href="/tags/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/" rel="tag"># 论文精读</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/07/13/NLP_TextCNN/" rel="prev" title="CNN 文本分类">
+      <i class="fa fa-chevron-left"></i> CNN 文本分类
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/07/31/Paper_ASTNN/" rel="next" title="【论文精读】A Novel Neural Source Code Representation based on Abstract Syntax Tree">
+      【论文精读】A Novel Neural Source Code Representation based on Abstract Syntax Tree <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">做什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A"><span class="nav-number">2.</span> <span class="nav-text">怎么做</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E7%9B%B8%E4%BC%BC%E5%BA%A6%E5%B5%8C%E5%85%A5%E9%97%AE%E9%A2%98"><span class="nav-number">2.1.</span> <span class="nav-text">代码相似度嵌入问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#graph-embedding-network"><span class="nav-number">2.2.</span> <span class="nav-text">graph embedding network</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Structure2vec"><span class="nav-number">2.2.1.</span> <span class="nav-text">Structure2vec</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Basic-Structure2vec-Approach"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">Basic Structure2vec Approach</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mathcal-F-%E7%9A%84%E5%8F%82%E6%95%B0%E5%8C%96"><span class="nav-number">2.2.2.</span> <span class="nav-text">$\mathcal{F}$的参数化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Siamese%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0%E5%8F%82%E6%95%B0"><span class="nav-number">2.3.</span> <span class="nav-text">使用Siamese架构学习参数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E5%9B%BE%E5%BD%A2%E5%B5%8C%E5%85%A5"><span class="nav-number">3.</span> <span class="nav-text">两种图形嵌入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E7%AF%87%E8%AE%BA%E6%96%87%E6%AF%94%E8%BE%83"><span class="nav-number">4.</span> <span class="nav-text">三篇论文比较</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="VikingWang"
+      src="/images/avatar.JPG">
+  <p class="site-author-name" itemprop="name">VikingWang</p>
+  <div class="site-description" itemprop="description">这是一个需要耐心等着加载的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VikingWang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

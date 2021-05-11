@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vikingstudyhard.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Waymo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【ADAS】国外成熟项目调研 —— Waymo">
+<meta property="og:url" content="https://vikingstudyhard.github.io/2018/06/01/ADAS_Waymo/index.html">
+<meta property="og:site_name" content="加载起来特别特别慢的小博客">
+<meta property="og:description" content="Waymo">
+<meta property="og:locale">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_Waymo/5B3E9165BB4CC23F9A7C48337829C1EA.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_Waymo/0B28709DB13A28F301E469F3942577F1.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_Waymo/E5212B23F772D454992990C170257AAB.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_Waymo/5289E6E85268C30137E1F8997BE25D72.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_Waymo/45E73101E28FD28BD47D3AD3B0290E33.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_Waymo/66DC88045E32EF2FDB976FB5836ED1D5.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_Waymo/A67E9F0D7D623C38082A836CDE2B5A90.jpg">
+<meta property="article:published_time" content="2018-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-05-11T06:56:58.511Z">
+<meta property="article:author" content="VikingWang">
+<meta property="article:tag" content="CATARC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vikingstudyhard.github.io/images/ADAS_Waymo/5B3E9165BB4CC23F9A7C48337829C1EA.jpg">
+
+<link rel="canonical" href="https://vikingstudyhard.github.io/2018/06/01/ADAS_Waymo/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>【ADAS】国外成熟项目调研 —— Waymo | 加载起来特别特别慢的小博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">加载起来特别特别慢的小博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">图片墙第一弹第二弹欢迎惠顾！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-photo">
+
+    <a href="/photo/" rel="section"><i class="fa fa-camera fa-fw"></i>photo</a>
+
+  </li>
+        <li class="menu-item menu-item-photo2">
+
+    <a href="/photo2/" rel="section"><i class="fa fa-camera fa-fw"></i>photo2</a>
+
+  </li>
+        <li class="menu-item menu-item-friends">
+
+    <a href="/friends/" rel="section"><i class="fa fa-rocket fa-fw"></i>friends</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://vikingstudyhard.github.io/2018/06/01/ADAS_Waymo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.JPG">
+      <meta itemprop="name" content="VikingWang">
+      <meta itemprop="description" content="这是一个需要耐心等着加载的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="加载起来特别特别慢的小博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【ADAS】国外成熟项目调研 —— Waymo
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-06-01 00:00:00" itemprop="dateCreated datePublished" datetime="2018-06-01T00:00:00+08:00">2018-06-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-11 14:56:58" itemprop="dateModified" datetime="2021-05-11T14:56:58+08:00">2021-05-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E4%BB%BF%E7%9C%9F%E6%B5%8B%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">自动驾驶仿真测试</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">Waymo</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="项目背景、目的"><a href="#项目背景、目的" class="headerlink" title="项目背景、目的"></a>项目背景、目的</h1><p>Waymo 自动驾驶汽车公司<br>前身：谷歌汽车自驾车项目<br>所属公司：Google, Inc(2009–2016)     Alphabet, Inc.(2016–present)</p>
+<p>“Waymo”这个公司名所代表的是“A new way forward in mobility”（未来新的机动方式）</p>
+<p>2018年3月3日消息，据《福布斯》网站报道，Waymo表示公司的测试车队已在公路上以自动驾驶模式行驶了500万英里（约合800万公里）</p>
+<p>Waymo自动驾驶系统的开发则基于无人参与，在国际汽车工程师学会（SAE International）的定义上来看，属于自动驾驶系统的Level 4级别，可在任何系统故障的情况下，给车辆安全制停的能力，而无需人类驾驶员接管。</p>
+<h1 id="一、传感器"><a href="#一、传感器" class="headerlink" title="一、传感器"></a>一、传感器</h1><p><img src="/images/ADAS_Waymo/5B3E9165BB4CC23F9A7C48337829C1EA.jpg" alt="IMAGE"></p>
+<h2 id="1-LiDAR（激光雷达）系统"><a href="#1-LiDAR（激光雷达）系统" class="headerlink" title="1 LiDAR（激光雷达）系统"></a>1 LiDAR（激光雷达）系统</h2><p>（测距）LiDAR 可在每秒内输出数百万个360°的激光脉冲，测量反射到表面并返回车辆所需的时间，可生成详细的环境3D图。该车将激光测量与高分辨率地图相结合，生成不同类型的数据模型，使其能够避开障碍物并遵守交通法规地行驶。</p>
+<p>三种类型激光雷达：</p>
+<ol>
+<li>短程激光雷达可以让车辆持续不断地观察和监控；</li>
+<li>高分辨率的中程激光雷达；</li>
+<li>新一代功能强大的长距离激光雷达，视线面积可达三个足球场。</li>
+</ol>
+<h2 id="2-视觉（照相机）系统"><a href="#2-视觉（照相机）系统" class="headerlink" title="2 视觉（照相机）系统"></a>2 视觉（照相机）系统</h2><p>（视野开阔）具有360°视野<br>（辨别指示灯颜色）由于Waymo的高分辨率视觉系统能检测到色彩，它可以帮助系统发现交通指示灯、施工区、校车和应急车辆的灯光。<br>（多相机组合）Waymo的视觉系统由多套高分辨率相机组成，以便在长距离、日光和低亮度的情况下也能很好的工作。</p>
+<h2 id="3-雷达系统"><a href="#3-雷达系统" class="headerlink" title="3 雷达系统"></a>3 雷达系统</h2><p>（极端天气下也能感知物体和运动）雷达使用波长来感知物体和运动。这些波长能够在诸如雨滴等物体的周围进行传播，从而可以让雷达在雨、雾、雪天气中都发挥效果。<br>（视野开阔）Waymo的雷达系统具有连续的360°视野，可以跟踪车辆的前后方和两侧过路车辆的行驶速度。</p>
+<h2 id="4-补充传感器"><a href="#4-补充传感器" class="headerlink" title="4 补充传感器"></a>4 补充传感器</h2><p>（检测警报声）音频检测系统：可以听到数百英尺远的警车和紧急车辆发出的警报声。<br>（精确地理位置）GPS：可以补充车辆对其地理位置的了解。</p>
+<h1 id="二、3种自动驾驶软件测试"><a href="#二、3种自动驾驶软件测试" class="headerlink" title="二、3种自动驾驶软件测试"></a>二、3种自动驾驶软件测试</h1><p>每次更新都会经过模拟测试，封闭路段测试和公共道路测试。</p>
+<h2 id="1-模拟测试"><a href="#1-模拟测试" class="headerlink" title="1 模拟测试"></a>1 模拟测试</h2><p>自动驾驶模拟系统 Carcraft，取义自著名的网络游戏World of Warcraft（魔兽世界）。</p>
+<p>流程：</p>
+<ol>
+<li>搭建场景<br>专注于最具挑战性的路口而不是单一的高速公路，比如闪着黄灯的左转路口、犯错的司机和不按规则出牌的自行车。<br><img src="/images/ADAS_Waymo/0B28709DB13A28F301E469F3942577F1.jpg" alt="IMAGE"></li>
+<li>进行驾驶<br>可以让车队中不同的车辆在相同的驾驶条件下多次通过同一个路口。<br>在Carcraft中创建的合成场景：<br><img src="/images/ADAS_Waymo/E5212B23F772D454992990C170257AAB.jpg" alt="IMAGE"><br>正在Xview中模拟的场景：<br><img src="/images/ADAS_Waymo/5289E6E85268C30137E1F8997BE25D72.jpg" alt="IMAGE"></li>
+<li>探索无数种可能性<br><img src="/images/ADAS_Waymo/45E73101E28FD28BD47D3AD3B0290E33.jpg" alt="IMAGE"><br>通过“模糊（fuzzing）”过程，可以改变这些虚拟街道上各种物体的速度、轨迹和位置。<br>例子：<br>在环形十字路口，你可能想要测试各类汽车、行人和骑自行车的人的到达时间，他们多久会停下来，以及他们移动的速度，或者任何其他方面。他们只要为这些物体设置一个合理的值，该软件就能为其创建并运行这些场景的所有组合。他们将其称为“模糊”，在这种情况下，这个十字路口会产生800个场景。</li>
+<li>验证和迭代</li>
+</ol>
+<p>Carcraft建立虚拟场景的数据，有一些来自路测，更多则来自Waymo的测试基地Castle。</p>
+<h2 id="2-封闭路段测试"><a href="#2-封闭路段测试" class="headerlink" title="2 封闭路段测试"></a>2 封闭路段测试</h2><p>Castle基地，位于美国加州中央山谷地区的小城默塞德附近，是占地91英亩的私有封闭式测试设施。在Castle之中，有可移动的建筑物模型，圆顶的仓库，还有各种各样的无人车。</p>
+<h2 id="3-公共道路测试"><a href="#3-公共道路测试" class="headerlink" title="3 公共道路测试"></a>3 公共道路测试</h2><h3 id="真实场景体验"><a href="#真实场景体验" class="headerlink" title="真实场景体验"></a>真实场景体验</h3><p>过去8年，Waymo 在美国4个州进行了测试，在20多个城市里实现了自动驾驶。经过旧金山及湾区的所有桥梁，也体验过圣克鲁斯山脉的山丘和亚利桑那州的沙尘暴。<br>例如：<br>辨别应急车辆<br>浇水车在路中间浇水的时候，速度可从 3 英里/小时提高到 45 英里/小时。<br>旧金山的陡峭山坡<br>大凤凰城的沙漠<br>罕见的行驶情况 （如遇到从帆布袋跳出来的人或躺在板上的滑板手）<br>常见的碰撞情况（如汽车翻出车道）。</p>
+<h3 id="极端温度下的自动驾驶"><a href="#极端温度下的自动驾驶" class="headerlink" title="极端温度下的自动驾驶"></a>极端温度下的自动驾驶</h3><ol>
+<li>风洞测试</li>
+<li>实际测试<br>酷热：</li>
+</ol>
+<ul>
+<li>在美国三个最热的地方也测试了我们的自动驾驶车辆：拉斯维加斯，戴维斯丹以及死亡峡谷。</li>
+<li>戴维斯丹位于亚利桑那和内华达州的边境，有漫长陡峭的沙漠公路可以在烈日下行驶。</li>
+<li>拉斯维加斯可以让我们在烈日下无数停停走走的城市拥堵路况下测试我们的车辆。</li>
+<li>死亡峡谷则拥有地球上官方记载的最高温度134℉（57℃）。<br>严寒：</li>
+<li>曾于 2018年 3 月在太浩湖（Lake Tahoe）的大雪天气进行测试。</li>
+</ul>
+<h3 id="硬件可靠性和耐久性测试"><a href="#硬件可靠性和耐久性测试" class="headerlink" title="硬件可靠性和耐久性测试"></a>硬件可靠性和耐久性测试</h3><p>首先，使零部件暴晒于紫外线辐射中，随后用强力水枪进行冲刷，将车辆浸在几近零度的水桶中、令其在充满盐雾的车间内慢慢腐蚀，借助强力晃动，使车辆摇晃及震颤，最后将其置于潮湿的空间内进行加热及冷冻，时间长达数周。</p>
+<h2 id="三种测试的关系"><a href="#三种测试的关系" class="headerlink" title="三种测试的关系"></a>三种测试的关系</h2><p>“结构化测试”流程</p>
+<p>无人车路测遇到问题后，他们会在 Castle 训练基地实地重建所遇到的场景，供无人车继续练习。在路测和Castle基地的测试中，Waymo的车辆都会收集大量数据，随后，这些数据会被用到他们的模拟软件Carcraft之中，在虚拟环境中重现这个场景。</p>
+<p>（路测 -&gt; Castle -&gt; Carcraft -&gt; …   循环，不断训练）</p>
+<p>经历了一轮又一轮的练习，自动驾驶程序的能力得到提升后，会被下载到实体的路测车辆之中，去完成更多、更复杂的路测里程。</p>
+<h1 id="三、数据"><a href="#三、数据" class="headerlink" title="三、数据"></a>三、数据</h1><h2 id="收集数据的方法"><a href="#收集数据的方法" class="headerlink" title="收集数据的方法"></a>收集数据的方法</h2><p>Waymo 先是使用性能强大的计算机进行模拟数据收集，之后再将这些数据应用到其自动驾驶车队当中。<br>（与此相反，特斯拉收集的是客户实际驾驶时的数据，数十万辆特斯拉汽车能够带来各种各样的数据资源。）</p>
+<h2 id="数据信息处理"><a href="#数据信息处理" class="headerlink" title="数据信息处理"></a>数据信息处理</h2><p>在模拟系统中，每天有超过 25000 辆虚拟自动驾驶汽车反复体验类似在实际道路上遇到的恶劣环境，有时甚至会把实际行驶的所有路程环境都重新模拟学习一遍。经过周期性的学习，汽车可以充分掌握所传授的先进必需驾驶技能。</p>
+<h1 id="四、评价体系"><a href="#四、评价体系" class="headerlink" title="四、评价体系"></a>四、评价体系</h1><p>##美国加州车管局(DMV)2017自动驾驶测试报告<br><img src="/images/ADAS_Waymo/66DC88045E32EF2FDB976FB5836ED1D5.jpg" alt="IMAGE"><br>DMV的报告中最核心的是两个数据：</p>
+<ol>
+<li>某公司在加州测试自动驾驶车的总里程。</li>
+<li>自动驾驶测试中发生的“脱离”（disengagement）数，“脱离”即车辆的自动驾驶系统Hold不住，必须中断自动驾驶模式的情况。</li>
+</ol>
+<p><img src="/images/ADAS_Waymo/A67E9F0D7D623C38082A836CDE2B5A90.jpg" alt="IMAGE"><br>两者相除，就能得到MPD（Miles Per Disengagement），即<strong>一辆自动驾驶车平均跑多少英里才脱离一次</strong>。<br>某种程度上，这是目前仅有的，政府制定的，涉及公司最多的，衡量自动驾驶技术水平的量化标准。</p>
+<p>##Waymo的情况</p>
+<p>2017年的12个月中，Waymo投入75台车在加州总共测试了352,545英里的路程，而脱离次数只有63次，也就是说Waymo的无人车平均每跑5600英里才会出现一次无法应对的情况。这个成绩在参与测试的无人车中一骑绝尘，和第二名的通用拉开了4倍的差距。<br>而谷歌的无人车出岔子主要有三条原因：感知系统出现了偏差，硬件、软件不对劲，还有一条谷歌的人也不知道怎么回事，只能写上“无人车开得谨慎过头”（unwanted maneuver of the vehicle ）。</p>
+<h1 id="五、质疑"><a href="#五、质疑" class="headerlink" title="五、质疑"></a>五、质疑</h1><p>有人觉得模拟驾驶无法带来技术上的提高。<br>RAND公司高级信息科学家尼迪•卡拉（Nidhi Kalra）举了个很有意思的例子，她说：“一个人可以在《侠盗猎车》游戏里开车几十亿英里，但这不能证明他在现实中的驾驶技术有所提高。”</p>
+<p>#参考资料<br>[1]李忠东.吹响自动驾驶集结号[J].汽车与配件,2018,(8):52-56.<br>[1].谷歌无人车路试新进展:56.6度高温正常工作[J].商业文化,2017(22):38.<br>[1]李忠东.聚焦自动驾驶汽车技术的国际资讯[J].轻型汽车技术,2018(03):49-56.<br><a target="_blank" rel="noopener" href="https://www.leiphone.com/news/201710/JknkYopJ14gVMSyK.html">Waymo无人车报告：通往自动驾驶之路</a><br><a target="_blank" rel="noopener" href="https://www.leiphone.com/news/201708/4h5nzrnCXeWuaWJH.html">揭秘Waymo，世界最先进自动驾驶公司的成长秘辛</a><br><a target="_blank" rel="noopener" href="http://k.sina.com.cn/article_1911132352_71e990c000100599b.html">特斯拉、Waymo，谁的自动驾驶数据收集更有效？</a><br><a target="_blank" rel="noopener" href="http://news.ifeng.com/a/20170824/51745181_0.shtml">Waymo无人车的两件秘密武器：模拟软件Carcraft，秘密基地Castle</a><br><a target="_blank" rel="noopener" href="http://www.jiemian.com/article/1922397.html">2017全球自动驾驶成绩单：谷歌彪悍奔驰垫底，百度首上榜</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CATARC/" rel="tag"># CATARC</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/05/09/ADAS_CameraInLoop/" rel="prev" title="【ADAS】Camera in the Loop">
+      <i class="fa fa-chevron-left"></i> 【ADAS】Camera in the Loop
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/06/28/Prose1/" rel="next" title="【Prose】01《从今以后，仔仔细细地过》">
+      【Prose】01《从今以后，仔仔细细地过》 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E8%83%8C%E6%99%AF%E3%80%81%E7%9B%AE%E7%9A%84"><span class="nav-number">1.</span> <span class="nav-text">项目背景、目的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%BC%A0%E6%84%9F%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">一、传感器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-LiDAR%EF%BC%88%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE%EF%BC%89%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.1.</span> <span class="nav-text">1 LiDAR（激光雷达）系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%A7%86%E8%A7%89%EF%BC%88%E7%85%A7%E7%9B%B8%E6%9C%BA%EF%BC%89%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.2.</span> <span class="nav-text">2 视觉（照相机）系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%9B%B7%E8%BE%BE%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.3.</span> <span class="nav-text">3 雷达系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E8%A1%A5%E5%85%85%E4%BC%A0%E6%84%9F%E5%99%A8"><span class="nav-number">2.4.</span> <span class="nav-text">4 补充传感器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%813%E7%A7%8D%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95"><span class="nav-number">3.</span> <span class="nav-text">二、3种自动驾驶软件测试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%A8%A1%E6%8B%9F%E6%B5%8B%E8%AF%95"><span class="nav-number">3.1.</span> <span class="nav-text">1 模拟测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%B0%81%E9%97%AD%E8%B7%AF%E6%AE%B5%E6%B5%8B%E8%AF%95"><span class="nav-number">3.2.</span> <span class="nav-text">2 封闭路段测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%85%AC%E5%85%B1%E9%81%93%E8%B7%AF%E6%B5%8B%E8%AF%95"><span class="nav-number">3.3.</span> <span class="nav-text">3 公共道路测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9C%9F%E5%AE%9E%E5%9C%BA%E6%99%AF%E4%BD%93%E9%AA%8C"><span class="nav-number">3.3.1.</span> <span class="nav-text">真实场景体验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%81%E7%AB%AF%E6%B8%A9%E5%BA%A6%E4%B8%8B%E7%9A%84%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6"><span class="nav-number">3.3.2.</span> <span class="nav-text">极端温度下的自动驾驶</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%E5%8F%AF%E9%9D%A0%E6%80%A7%E5%92%8C%E8%80%90%E4%B9%85%E6%80%A7%E6%B5%8B%E8%AF%95"><span class="nav-number">3.3.3.</span> <span class="nav-text">硬件可靠性和耐久性测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E6%B5%8B%E8%AF%95%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.4.</span> <span class="nav-text">三种测试的关系</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%95%B0%E6%8D%AE"><span class="nav-number">4.</span> <span class="nav-text">三、数据</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%B6%E9%9B%86%E6%95%B0%E6%8D%AE%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">4.1.</span> <span class="nav-text">收集数据的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%BF%A1%E6%81%AF%E5%A4%84%E7%90%86"><span class="nav-number">4.2.</span> <span class="nav-text">数据信息处理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E8%AF%84%E4%BB%B7%E4%BD%93%E7%B3%BB"><span class="nav-number">5.</span> <span class="nav-text">四、评价体系</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E8%B4%A8%E7%96%91"><span class="nav-number">6.</span> <span class="nav-text">五、质疑</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="VikingWang"
+      src="/images/avatar.JPG">
+  <p class="site-author-name" itemprop="name">VikingWang</p>
+  <div class="site-description" itemprop="description">这是一个需要耐心等着加载的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VikingWang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

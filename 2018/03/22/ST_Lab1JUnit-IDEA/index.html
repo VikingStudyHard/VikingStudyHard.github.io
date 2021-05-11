@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vikingstudyhard.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="在IDEA上使用JUnit对判断三角形的函数进行测试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【软件测试上机】1 在IDEA上使用JUnit和Eclemma进行测试">
+<meta property="og:url" content="https://vikingstudyhard.github.io/2018/03/22/ST_Lab1JUnit-IDEA/index.html">
+<meta property="og:site_name" content="加载起来特别特别慢的小博客">
+<meta property="og:description" content="在IDEA上使用JUnit对判断三角形的函数进行测试">
+<meta property="og:locale">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/B1DE6A8DC267E313259029C2935DDE98.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/4F768A9E99FCAB3C8300F5B742F8F6D1.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/D2A1502212F9CDF31065C3D33C329E2A.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/C7547C7C00382E0392B1CCDC74EE7F04.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/A0508FA9E6E63AAE7AD0D41606085FF9.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/B3745DA55B613D075917A33EDDA66720.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/71AE5DAE996134530F883C070479DD15.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/4C01F1383F9080DDEE8576C4A5B75E59.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/FD951535174474C81C9D98E229F4C542.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/BBE421C8BA022D86DC72A4EA7E523297.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/8B5E3321DB60F179EDCB64AB20920148.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/77A4730C8630658F97032D3CAB062D99.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/A2A23CD04066A6B8A6A71223EFB2F5EA.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/382536A0172275DA93900F5849876B92.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/DF85FEBC2D76CD4A0AD3B1F191317BAE.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/C92E5164F2AFB757AB8D1EED1A37A91E.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/FC9CE42B76C7F1B8077291AE184F1934.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/4B7AC488A03DD00A8A531A1B03F97F57.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/DB54406F4FEC24DB5C458B5F18108561.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/7A8A9A74CFFDAEA716B660184DF13B7F.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/67BF0939ABB35FEA40F4AC6572E6027C.jpg">
+<meta property="article:published_time" content="2018-03-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-05-11T06:56:58.522Z">
+<meta property="article:author" content="VikingWang">
+<meta property="article:tag" content="SoftwareTest">
+<meta property="article:tag" content="软件测试上机">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vikingstudyhard.github.io/images/ST_Lab1JUnit-IDEA/B1DE6A8DC267E313259029C2935DDE98.jpg">
+
+<link rel="canonical" href="https://vikingstudyhard.github.io/2018/03/22/ST_Lab1JUnit-IDEA/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>【软件测试上机】1 在IDEA上使用JUnit和Eclemma进行测试 | 加载起来特别特别慢的小博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">加载起来特别特别慢的小博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">图片墙第一弹第二弹欢迎惠顾！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-photo">
+
+    <a href="/photo/" rel="section"><i class="fa fa-camera fa-fw"></i>photo</a>
+
+  </li>
+        <li class="menu-item menu-item-photo2">
+
+    <a href="/photo2/" rel="section"><i class="fa fa-camera fa-fw"></i>photo2</a>
+
+  </li>
+        <li class="menu-item menu-item-friends">
+
+    <a href="/friends/" rel="section"><i class="fa fa-rocket fa-fw"></i>friends</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://vikingstudyhard.github.io/2018/03/22/ST_Lab1JUnit-IDEA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.JPG">
+      <meta itemprop="name" content="VikingWang">
+      <meta itemprop="description" content="这是一个需要耐心等着加载的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="加载起来特别特别慢的小博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【软件测试上机】1 在IDEA上使用JUnit和Eclemma进行测试
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-03-22 00:00:00" itemprop="dateCreated datePublished" datetime="2018-03-22T00:00:00+08:00">2018-03-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-11 14:56:58" itemprop="dateModified" datetime="2021-05-11T14:56:58+08:00">2021-05-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">软件测试</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/%E6%9C%AC%E7%A7%91%E8%AF%BE%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">本科课程</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">在IDEA上使用JUnit对判断三角形的函数进行测试</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="下载junit和hamcrest-all"><a href="#下载junit和hamcrest-all" class="headerlink" title="下载junit和hamcrest all"></a>下载junit和hamcrest all</h3><p>junit 下载地址：<br><a target="_blank" rel="noopener" href="http://mvnrepository.com/artifact/junit/junit">http://mvnrepository.com/artifact/junit/junit</a><br>hamcrest all下载地址：<br><a target="_blank" rel="noopener" href="http://mvnrepository.com/artifact/org.hamcrest/hamcrest-all">http://mvnrepository.com/artifact/org.hamcrest/hamcrest-all</a></p>
+<p>得到<br>junit-4.12.jar和hamcrest-all-1.3.jar</p>
+<h3 id="打开IDEA"><a href="#打开IDEA" class="headerlink" title="打开IDEA"></a>打开IDEA</h3><p>1.新建项目，建立与src平级的文件夹：</p>
+<ul>
+<li>lib文件夹，用于导入jar包</li>
+<li>test文件夹，作为测试文件夹</li>
+</ul>
+<p><img src="/images/ST_Lab1JUnit-IDEA/B1DE6A8DC267E313259029C2935DDE98.jpg" alt="IMAGE"></p>
+<p>2.将junit-4.12.jar和hamcrest-all-1.3.jar放入lib文件夹中</p>
+<p><img src="/images/ST_Lab1JUnit-IDEA/4F768A9E99FCAB3C8300F5B742F8F6D1.jpg" alt="IMAGE"></p>
+<p>3.将jar包导入IDEA</p>
+<p>File -&gt; Project Structure -&gt; Modules</p>
+<p><img src="/images/ST_Lab1JUnit-IDEA/D2A1502212F9CDF31065C3D33C329E2A.jpg" alt="IMAGE"></p>
+<p>Dependencies —&gt; 左下方+号 —&gt; JARs or Directories</p>
+<p><img src="/images/ST_Lab1JUnit-IDEA/C7547C7C00382E0392B1CCDC74EE7F04.jpg" alt="IMAGE"></p>
+<p>选择JAR包，apply</p>
+<p><img src="/images/ST_Lab1JUnit-IDEA/A0508FA9E6E63AAE7AD0D41606085FF9.jpg" alt="IMAGE"></p>
+<p>4.将test文件夹设为Test Source Root</p>
+<p>test文件夹 -&gt; 右键 -&gt; Mark Directory as -&gt; Test Sources Root</p>
+<p>test文件夹图标发生改变：</p>
+<p><img src="/images/ST_Lab1JUnit-IDEA/B3745DA55B613D075917A33EDDA66720.jpg" alt="IMAGE"></p>
+<p>5.在src文件夹中新建class：Main.java<br>要求：Function triangle takes three integers a,b,c which are length of triangle sides; calculates whether the triangle is equilateral, isosceles, or scalene. </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">testTriangle</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b,<span class="keyword">int</span> c)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(a&lt;<span class="number">0</span> || b&lt;<span class="number">0</span> || c&lt;<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;illegal triangle&quot;</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(a+b&gt;c &amp;&amp; a+c&gt;b &amp;&amp; b+c&gt;a)&#123;</span><br><span class="line">            <span class="keyword">if</span>(a==b &amp;&amp; a==c)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;equilateral triangle&quot;</span>;</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(a==b || b==c || c==a)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;isosceles triangle&quot;</span>;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;scalene triangle&quot;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        </span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;illegal triangle&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>6.Navigate -&gt; Test -&gt; Create New Test</p>
+<p><img src="/images/ST_Lab1JUnit-IDEA/71AE5DAE996134530F883C070479DD15.jpg" alt="IMAGE"></p>
+<p><img src="/images/ST_Lab1JUnit-IDEA/4C01F1383F9080DDEE8576C4A5B75E59.jpg" alt="IMAGE"></p>
+<p><img src="/images/ST_Lab1JUnit-IDEA/FD951535174474C81C9D98E229F4C542.jpg" alt="IMAGE"></p>
+<p>在test文件夹下得到MainTest.java：</p>
+<p><img src="/images/ST_Lab1JUnit-IDEA/BBE421C8BA022D86DC72A4EA7E523297.jpg" alt="IMAGE"></p>
+<p>编写测试内容</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.junit.Assert.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testTriangle</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a,b,c;</span><br><span class="line">        a = <span class="number">1</span>;</span><br><span class="line">        b = <span class="number">2</span>;</span><br><span class="line">        c = <span class="number">3</span>;</span><br><span class="line">        assertEquals((<span class="string">&quot;illegal triangle&quot;</span>),Main.testTriangle(a,b,c));</span><br><span class="line"></span><br><span class="line">        a = <span class="number">1</span>;</span><br><span class="line">        b = <span class="number">1</span>;</span><br><span class="line">        c = <span class="number">1</span>;</span><br><span class="line">        assertEquals((<span class="string">&quot;equilateral triangle&quot;</span>),Main.testTriangle(a,b,c));</span><br><span class="line"></span><br><span class="line">        a = <span class="number">1</span>;</span><br><span class="line">        b = <span class="number">1</span>;</span><br><span class="line">        c = -<span class="number">1</span>;</span><br><span class="line">        assertEquals((<span class="string">&quot;illegal triangle&quot;</span>),Main.testTriangle(a,b,c));</span><br><span class="line"></span><br><span class="line">        a = <span class="number">3</span>;</span><br><span class="line">        b = <span class="number">3</span>;</span><br><span class="line">        c = <span class="number">5</span>;</span><br><span class="line">        assertEquals((<span class="string">&quot;isosceles triangle&quot;</span>),Main.testTriangle(a,b,c));</span><br><span class="line"></span><br><span class="line">        a = <span class="number">3</span>;</span><br><span class="line">        b = <span class="number">4</span>;</span><br><span class="line">        c = <span class="number">5</span>;</span><br><span class="line">        assertEquals((<span class="string">&quot;scalene triangle&quot;</span>),Main.testTriangle(a,b,c));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/ST_Lab1JUnit-IDEA/8B5E3321DB60F179EDCB64AB20920148.jpg" alt="IMAGE"><br>运行起来：</p>
+<p><img src="/images/ST_Lab1JUnit-IDEA/77A4730C8630658F97032D3CAB062D99.jpg" alt="IMAGE"></p>
+<p>如果把上面代码改成错误的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">2</span>;</span><br><span class="line">b = <span class="number">2</span>;</span><br><span class="line">c = <span class="number">3</span>;</span><br><span class="line">assertEquals((<span class="string">&quot;illegal triangle&quot;</span>),Main.testTriangle(a,b,c));</span><br></pre></td></tr></table></figure>
+
+<p>就会得到：</p>
+<p><img src="/images/ST_Lab1JUnit-IDEA/A2A23CD04066A6B8A6A71223EFB2F5EA.jpg" alt="IMAGE"></p>
+<h3 id="进行覆盖测试"><a href="#进行覆盖测试" class="headerlink" title="进行覆盖测试"></a>进行覆盖测试</h3><p>EclEmma是一个开源的软件测试工具，可以在编码过程中查看代码调用情况、也可以检测单覆盖率。它是Eclipse的插件。</p>
+<h4 id="编辑测试设置"><a href="#编辑测试设置" class="headerlink" title="编辑测试设置"></a>编辑测试设置</h4><p>通过Run → Edit Configurations或工具栏上的标签来调整测试运行配置。</p>
+<p><img src="/images/ST_Lab1JUnit-IDEA/382536A0172275DA93900F5849876B92.jpg" alt="IMAGE"></p>
+<p>在Configuration选项卡选择需要运行的测试。比如，可以从一个类、程序包、测试套件或甚至模式中运行所有的测试。这里的Fork模式让用户在一个单独的进程运行每个测试。</p>
+<p><img src="/images/ST_Lab1JUnit-IDEA/DF85FEBC2D76CD4A0AD3B1F191317BAE.jpg" alt="IMAGE"></p>
+<p>可以调整覆盖率设置。目前IntelliJ IDEA支持3种测量覆盖率引擎。默认情况下它使用自己的引擎，也可以选择JaCoCo、Emma引擎。还可以在这里选择覆盖率模式。</p>
+<p><img src="/images/ST_Lab1JUnit-IDEA/C92E5164F2AFB757AB8D1EED1A37A91E.jpg" alt="IMAGE"></p>
+<h4 id="运行覆盖"><a href="#运行覆盖" class="headerlink" title="运行覆盖"></a>运行覆盖</h4><p>收集覆盖率, 通过Run → Run ‘MainTest.testTriangle’ with Coverage或工具栏上的选项运行特定模式的测试。</p>
+<p><img src="/images/ST_Lab1JUnit-IDEA/FC9CE42B76C7F1B8077291AE184F1934.jpg" alt="IMAGE"></p>
+<p>例如：</p>
+<h5 id="真实值和测试值相同："><a href="#真实值和测试值相同：" class="headerlink" title="真实值和测试值相同："></a>真实值和测试值相同：</h5><p><img src="/images/ST_Lab1JUnit-IDEA/4B7AC488A03DD00A8A531A1B03F97F57.jpg" alt="IMAGE"></p>
+<p><img src="/images/ST_Lab1JUnit-IDEA/DB54406F4FEC24DB5C458B5F18108561.jpg" alt="IMAGE"></p>
+<h5 id="真实值和测试值不同："><a href="#真实值和测试值不同：" class="headerlink" title="真实值和测试值不同："></a>真实值和测试值不同：</h5><p><img src="/images/ST_Lab1JUnit-IDEA/7A8A9A74CFFDAEA716B660184DF13B7F.jpg" alt="IMAGE"></p>
+<p><img src="/images/ST_Lab1JUnit-IDEA/67BF0939ABB35FEA40F4AC6572E6027C.jpg" alt="IMAGE"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SoftwareTest/" rel="tag"># SoftwareTest</a>
+              <a href="/tags/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E4%B8%8A%E6%9C%BA/" rel="tag"># 软件测试上机</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/03/10/STH2/" rel="prev" title="【软件测试】02 设计测试用例">
+      <i class="fa fa-chevron-left"></i> 【软件测试】02 设计测试用例
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/03/24/STH3/" rel="next" title="【软件测试】03 图覆盖">
+      【软件测试】03 图覆盖 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BDjunit%E5%92%8Chamcrest-all"><span class="nav-number">1.</span> <span class="nav-text">下载junit和hamcrest all</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%93%E5%BC%80IDEA"><span class="nav-number">2.</span> <span class="nav-text">打开IDEA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E8%A1%8C%E8%A6%86%E7%9B%96%E6%B5%8B%E8%AF%95"><span class="nav-number">3.</span> <span class="nav-text">进行覆盖测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E6%B5%8B%E8%AF%95%E8%AE%BE%E7%BD%AE"><span class="nav-number">3.1.</span> <span class="nav-text">编辑测试设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E8%A6%86%E7%9B%96"><span class="nav-number">3.2.</span> <span class="nav-text">运行覆盖</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%9C%9F%E5%AE%9E%E5%80%BC%E5%92%8C%E6%B5%8B%E8%AF%95%E5%80%BC%E7%9B%B8%E5%90%8C%EF%BC%9A"><span class="nav-number">3.2.1.</span> <span class="nav-text">真实值和测试值相同：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%9C%9F%E5%AE%9E%E5%80%BC%E5%92%8C%E6%B5%8B%E8%AF%95%E5%80%BC%E4%B8%8D%E5%90%8C%EF%BC%9A"><span class="nav-number">3.2.2.</span> <span class="nav-text">真实值和测试值不同：</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="VikingWang"
+      src="/images/avatar.JPG">
+  <p class="site-author-name" itemprop="name">VikingWang</p>
+  <div class="site-description" itemprop="description">这是一个需要耐心等着加载的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VikingWang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

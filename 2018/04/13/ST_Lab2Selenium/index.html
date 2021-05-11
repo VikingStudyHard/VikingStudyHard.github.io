@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vikingstudyhard.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="安装SeleniumIDE插件,使用SeleniumIDE录制脚本和导出脚本,编写Selenium Java WebDriver程序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【软件测试上机】2 Selenium">
+<meta property="og:url" content="https://vikingstudyhard.github.io/2018/04/13/ST_Lab2Selenium/index.html">
+<meta property="og:site_name" content="加载起来特别特别慢的小博客">
+<meta property="og:description" content="安装SeleniumIDE插件,使用SeleniumIDE录制脚本和导出脚本,编写Selenium Java WebDriver程序">
+<meta property="og:locale">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab2Selenium/F8372ACAAF0DB82B9C59C0A4478AFD1B.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab2Selenium/4F4202FB3B0945A6039CD3E66C5658D0.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab2Selenium/2008A1B9D38DD8E3264F33A9B35A08E3.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab2Selenium/B156FCE47DBC92E1DD012AF18F8E65E3.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab2Selenium/8ED2D43C90439EAB495867E61E0011DC.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab2Selenium/7C21D487725B6ABAF307B8523C9299D3.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab2Selenium/BB112B076CADCA62D1D41304E9A01DA0.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab2Selenium/C81D13C6E4BA57DB43D71EA62EF90528.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab2Selenium/1BB4F0BEC5D390A3B08535A19171FF4A.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ST_Lab2Selenium/F1E180DBBDC5034741CB92D8392FBFDB.jpg">
+<meta property="article:published_time" content="2018-04-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-05-11T06:56:58.524Z">
+<meta property="article:author" content="VikingWang">
+<meta property="article:tag" content="SoftwareTest">
+<meta property="article:tag" content="软件测试上机">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vikingstudyhard.github.io/images/ST_Lab2Selenium/F8372ACAAF0DB82B9C59C0A4478AFD1B.jpg">
+
+<link rel="canonical" href="https://vikingstudyhard.github.io/2018/04/13/ST_Lab2Selenium/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>【软件测试上机】2 Selenium | 加载起来特别特别慢的小博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">加载起来特别特别慢的小博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">图片墙第一弹第二弹欢迎惠顾！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-photo">
+
+    <a href="/photo/" rel="section"><i class="fa fa-camera fa-fw"></i>photo</a>
+
+  </li>
+        <li class="menu-item menu-item-photo2">
+
+    <a href="/photo2/" rel="section"><i class="fa fa-camera fa-fw"></i>photo2</a>
+
+  </li>
+        <li class="menu-item menu-item-friends">
+
+    <a href="/friends/" rel="section"><i class="fa fa-rocket fa-fw"></i>friends</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://vikingstudyhard.github.io/2018/04/13/ST_Lab2Selenium/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.JPG">
+      <meta itemprop="name" content="VikingWang">
+      <meta itemprop="description" content="这是一个需要耐心等着加载的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="加载起来特别特别慢的小博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【软件测试上机】2 Selenium
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-04-13 00:00:00" itemprop="dateCreated datePublished" datetime="2018-04-13T00:00:00+08:00">2018-04-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-11 14:56:58" itemprop="dateModified" datetime="2021-05-11T14:56:58+08:00">2021-05-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">软件测试</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/%E6%9C%AC%E7%A7%91%E8%AF%BE%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">本科课程</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">安装SeleniumIDE插件,使用SeleniumIDE录制脚本和导出脚本,编写Selenium Java WebDriver程序</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="安装SeleniumIDE插件"><a href="#安装SeleniumIDE插件" class="headerlink" title="安装SeleniumIDE插件"></a>安装SeleniumIDE插件</h1><p>这里，我试用两个浏览器进行的实验</p>
+<h2 id="Firefox"><a href="#Firefox" class="headerlink" title="Firefox"></a>Firefox</h2><p>1.下载Firefox浏览器<br>Firefox全历史版本下载： <a target="_blank" rel="noopener" href="http://ftp.mozilla.org/pub/mozilla.org//firefox/releases/">http://ftp.mozilla.org/pub/mozilla.org//firefox/releases/</a><br>2.若是56.0以上的版本，可直接用Firefox打开 <a target="_blank" rel="noopener" href="https://addons.mozilla.org/en-US/firefox/addon/selenium-ide/">https://addons.mozilla.org/en-US/firefox/addon/selenium-ide/</a> ，点击“Add to Firefox”.其他的需要在浏览器“添加组件”，然后搜索selenium ide 选择历史版本中匹配的版本。</p>
+<p>注：最新（59.0）版本<strong>没有导出脚本功能</strong></p>
+<h2 id="Chrome"><a href="#Chrome" class="headerlink" title="Chrome"></a>Chrome</h2><p>应用-&gt;应用商店-&gt;搜selenuim-&gt;添加Katalon Recorder </p>
+<h1 id="使用SeleniumIDE录制脚本和导出脚本"><a href="#使用SeleniumIDE录制脚本和导出脚本" class="headerlink" title="使用SeleniumIDE录制脚本和导出脚本"></a>使用SeleniumIDE录制脚本和导出脚本</h1><p>这里，我试用一下三种方法进行实验：</p>
+<h2 id="Firefox-59-0版本（没有导出脚本功能）"><a href="#Firefox-59-0版本（没有导出脚本功能）" class="headerlink" title="Firefox 59.0版本（没有导出脚本功能）"></a>Firefox 59.0版本（没有导出脚本功能）</h2><p><img src="/images/ST_Lab2Selenium/F8372ACAAF0DB82B9C59C0A4478AFD1B.jpg" alt="seleniumIDE.jpg"></p>
+<h3 id="录制脚本"><a href="#录制脚本" class="headerlink" title="录制脚本"></a>录制脚本</h3><p>1.点击红色圆形按钮，开始录制<br>selenium ide 右上角的在红色圆表示录制结束或尚未录制，红色正方形的时候表示正在录制。<br>2.访问 <a target="_blank" rel="noopener" href="https://psych.liebes.top/st">https://psych.liebes.top/st</a> ，输入学号和默认密码，点击提交，得到git地址，访问该git地址<br>3.点击红色正方形按钮，结束录制。将项目名、测试名重命名。<br><img src="/images/ST_Lab2Selenium/4F4202FB3B0945A6039CD3E66C5658D0.jpg" alt="seleniumIDE1.jpg"><br>4.点击运行按钮即可进行自动测试</p>
+<h3 id="脚本操作"><a href="#脚本操作" class="headerlink" title="脚本操作"></a>脚本操作</h3><p>1.添加一条脚本：点击右键，出现 Insert New Command, 在下方编辑<br>2.添加注释：点击右键， 出现 Insert New Comment，点击之后在command框中添加注释如搜索</p>
+<h2 id="Firefox-42-0版本"><a href="#Firefox-42-0版本" class="headerlink" title="Firefox 42.0版本"></a>Firefox 42.0版本</h2><p>安装的组件有：<br>Selenium IDE 2.9.1.1-signed<br>Selenium IDE Button 1.2.0.1-signed.1-signed<br><img src="/images/ST_Lab2Selenium/2008A1B9D38DD8E3264F33A9B35A08E3.jpg" alt="seleniumIDE5.jpg"></p>
+<h3 id="录制脚本-1"><a href="#录制脚本-1" class="headerlink" title="录制脚本"></a>录制脚本</h3><p>1.默认点开组件按钮自动开始录制<br>selenium ide 右上角的在红色实心圆表示录制结束或尚未录制，红色空心圆的时候表示正在录制。<br>2.访问 <a target="_blank" rel="noopener" href="https://psych.liebes.top/st">https://psych.liebes.top/st</a>，输入学号和默认密码，点击提交，得到git地址，访问该git地址<br>3.点击红色空心圆形按钮，结束录制。将项目名、测试名重命名。<br><img src="/images/ST_Lab2Selenium/B156FCE47DBC92E1DD012AF18F8E65E3.jpg" alt="seleniumIDE6.jpg"><br>4.点击运行按钮即可进行自动测试<br><img src="/images/ST_Lab2Selenium/8ED2D43C90439EAB495867E61E0011DC.jpg" alt="seleniumIDE8.jpg"><br>###导出脚本<br><img src="/images/ST_Lab2Selenium/7C21D487725B6ABAF307B8523C9299D3.jpg" alt="seleniumIDE7.jpg"><br>得到</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.tests;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.regex.Pattern;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"><span class="keyword">import</span> org.junit.*;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.junit.Assert.*;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.hamcrest.CoreMatchers.*;</span><br><span class="line"><span class="keyword">import</span> org.openqa.selenium.*;</span><br><span class="line"><span class="keyword">import</span> org.openqa.selenium.firefox.FirefoxDriver;</span><br><span class="line"><span class="keyword">import</span> org.openqa.selenium.support.ui.Select;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Lab2</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> WebDriver driver;</span><br><span class="line">  <span class="keyword">private</span> String baseUrl;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">boolean</span> acceptNextAlert = <span class="keyword">true</span>;</span><br><span class="line">  <span class="keyword">private</span> StringBuffer verificationErrors = <span class="keyword">new</span> StringBuffer();</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Before</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUp</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    driver = <span class="keyword">new</span> FirefoxDriver();</span><br><span class="line">    baseUrl = <span class="string">&quot;https://psych.liebes.top/&quot;</span>;</span><br><span class="line">    driver.manage().timeouts().implicitlyWait(<span class="number">30</span>, TimeUnit.SECONDS);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testLab2</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    driver.get(baseUrl + <span class="string">&quot;/st&quot;</span>);</span><br><span class="line">    driver.findElement(By.id(<span class="string">&quot;username&quot;</span>)).clear();</span><br><span class="line">    driver.findElement(By.id(<span class="string">&quot;username&quot;</span>)).sendKeys(<span class="string">&quot;3015218155&quot;</span>);</span><br><span class="line">    driver.findElement(By.id(<span class="string">&quot;password&quot;</span>)).clear();</span><br><span class="line">    driver.findElement(By.id(<span class="string">&quot;password&quot;</span>)).sendKeys(<span class="string">&quot;218155&quot;</span>);</span><br><span class="line">    driver.findElement(By.id(<span class="string">&quot;submitButton&quot;</span>)).click();</span><br><span class="line">    driver.findElement(By.cssSelector(<span class="string">&quot;p.login-box-msg&quot;</span>)).click();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@After</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">tearDown</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    driver.quit();</span><br><span class="line">    String verificationErrorString = verificationErrors.toString();</span><br><span class="line">    <span class="keyword">if</span> (!<span class="string">&quot;&quot;</span>.equals(verificationErrorString)) &#123;</span><br><span class="line">      fail(verificationErrorString);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isElementPresent</span><span class="params">(By by)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      driver.findElement(by);</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (NoSuchElementException e) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isAlertPresent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      driver.switchTo().alert();</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (NoAlertPresentException e) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> String <span class="title">closeAlertAndGetItsText</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      Alert alert = driver.switchTo().alert();</span><br><span class="line">      String alertText = alert.getText();</span><br><span class="line">      <span class="keyword">if</span> (acceptNextAlert) &#123;</span><br><span class="line">        alert.accept();</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        alert.dismiss();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> alertText;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      acceptNextAlert = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="Chrome的Katalon-Automation版本"><a href="#Chrome的Katalon-Automation版本" class="headerlink" title="Chrome的Katalon Automation版本"></a>Chrome的Katalon Automation版本</h2><p><img src="/images/ST_Lab2Selenium/BB112B076CADCA62D1D41304E9A01DA0.jpg" alt="seleniumIDE2.jpg"></p>
+<h3 id="录制脚本-2"><a href="#录制脚本-2" class="headerlink" title="录制脚本"></a>录制脚本</h3><p>1.点击Record，开始录制<br>2.访问 <a target="_blank" rel="noopener" href="https://psych.liebes.top/st">https://psych.liebes.top/st</a> ，输入学号和默认密码，点击提交，得到git地址，访问该git地址<br>3.点击Stop，结束录制<br><img src="/images/ST_Lab2Selenium/C81D13C6E4BA57DB43D71EA62EF90528.jpg" alt="seleniumIDE3.jpg"><br>4.点击运行按钮即可进行自动测试<br>###导出脚本<br><img src="/images/ST_Lab2Selenium/1BB4F0BEC5D390A3B08535A19171FF4A.jpg" alt="seleniumIDE4.jpg"><br>得到</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.tests;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.regex.Pattern;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"><span class="keyword">import</span> org.junit.*;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.junit.Assert.*;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.hamcrest.CoreMatchers.*;</span><br><span class="line"><span class="keyword">import</span> org.openqa.selenium.*;</span><br><span class="line"><span class="keyword">import</span> org.openqa.selenium.firefox.FirefoxDriver;</span><br><span class="line"><span class="keyword">import</span> org.openqa.selenium.support.ui.Select;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UntitledTestCase</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> WebDriver driver;</span><br><span class="line">  <span class="keyword">private</span> String baseUrl;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">boolean</span> acceptNextAlert = <span class="keyword">true</span>;</span><br><span class="line">  <span class="keyword">private</span> StringBuffer verificationErrors = <span class="keyword">new</span> StringBuffer();</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Before</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUp</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    driver = <span class="keyword">new</span> FirefoxDriver();</span><br><span class="line">    baseUrl = <span class="string">&quot;https://www.katalon.com/&quot;</span>;</span><br><span class="line">    driver.manage().timeouts().implicitlyWait(<span class="number">30</span>, TimeUnit.SECONDS);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testUntitledTestCase</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    driver.get(<span class="string">&quot;https://psych.liebes.top/st&quot;</span>);</span><br><span class="line">    driver.findElement(By.id(<span class="string">&quot;username&quot;</span>)).click();</span><br><span class="line">    driver.findElement(By.id(<span class="string">&quot;username&quot;</span>)).clear();</span><br><span class="line">    driver.findElement(By.id(<span class="string">&quot;username&quot;</span>)).sendKeys(<span class="string">&quot;3015218155&quot;</span>);</span><br><span class="line">    driver.findElement(By.id(<span class="string">&quot;password&quot;</span>)).click();</span><br><span class="line">    driver.findElement(By.id(<span class="string">&quot;password&quot;</span>)).clear();</span><br><span class="line">    driver.findElement(By.id(<span class="string">&quot;password&quot;</span>)).sendKeys(<span class="string">&quot;218155&quot;</span>);</span><br><span class="line">    driver.findElement(By.id(<span class="string">&quot;submitButton&quot;</span>)).click();</span><br><span class="line">    driver.findElement(By.xpath(<span class="string">&quot;//p&quot;</span>)).click();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@After</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">tearDown</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    driver.quit();</span><br><span class="line">    String verificationErrorString = verificationErrors.toString();</span><br><span class="line">    <span class="keyword">if</span> (!<span class="string">&quot;&quot;</span>.equals(verificationErrorString)) &#123;</span><br><span class="line">      fail(verificationErrorString);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isElementPresent</span><span class="params">(By by)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      driver.findElement(by);</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (NoSuchElementException e) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isAlertPresent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      driver.switchTo().alert();</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (NoAlertPresentException e) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> String <span class="title">closeAlertAndGetItsText</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      Alert alert = driver.switchTo().alert();</span><br><span class="line">      String alertText = alert.getText();</span><br><span class="line">      <span class="keyword">if</span> (acceptNextAlert) &#123;</span><br><span class="line">        alert.accept();</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        alert.dismiss();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> alertText;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      acceptNextAlert = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="编写Selenium-Java-WebDriver程序"><a href="#编写Selenium-Java-WebDriver程序" class="headerlink" title="编写Selenium Java WebDriver程序"></a>编写Selenium Java WebDriver程序</h1><p>测试input.xlsx表格中的学号和git地址的对应关系是否正确。</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><p>1.新建项目，新建文件夹lib，导入junit-4.12.jar，hamcrest-all-1.3.jar和selenium-java-2.53.1.jar<br>2.File-&gt; Project Structure -&gt; Modules -&gt; Dependencies —&gt; 左下方+号 —&gt; JARs or Directories 导入以上jar包<br>3.新建文件夹resource，设置为Resources Root，把input.xlsx另存为input.csv放在里面。<br>4.打开src/Main.Java</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.company;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.nio.charset.Charset;</span><br><span class="line"><span class="keyword">import</span> org.openqa.selenium.By;</span><br><span class="line"><span class="keyword">import</span> org.openqa.selenium.WebDriver;</span><br><span class="line"><span class="keyword">import</span> org.openqa.selenium.*;</span><br><span class="line"><span class="keyword">import</span> org.openqa.selenium.firefox.FirefoxDriver;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.csvreader.CsvReader;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;未通过列表：&quot;</span>);</span><br><span class="line">        <span class="keyword">int</span> pass = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> unpass = <span class="number">0</span>;</span><br><span class="line">        String BaseURL =<span class="string">&quot;https://psych.liebes.top&quot;</span>;</span><br><span class="line">        <span class="keyword">long</span> startTime = System.currentTimeMillis(); <span class="comment">//程序开始记录时间</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            CsvReader r = <span class="keyword">new</span> CsvReader(<span class="string">&quot;/Users/viking/Documents/IDEAproject/Lab2/resource/input.csv&quot;</span>, <span class="string">&#x27;,&#x27;</span>, Charset.forName(<span class="string">&quot;UTF-8&quot;</span>));</span><br><span class="line">            <span class="keyword">while</span> (r.readRecord()) &#123;</span><br><span class="line">                <span class="comment">//读取CSV文件中数据</span></span><br><span class="line">                String str = r.getRawRecord();</span><br><span class="line">                String[] strList = str.split(<span class="string">&quot;,&quot;</span>);</span><br><span class="line">                String number = strList[<span class="number">0</span>].trim();</span><br><span class="line">                <span class="keyword">if</span>(strList.length == <span class="number">2</span>) &#123;</span><br><span class="line">                    String address = strList[<span class="number">1</span>].trim();</span><br><span class="line">                    <span class="keyword">int</span> x = address.length();</span><br><span class="line"><span class="comment">//                    if (address.charAt(x - 1) == &#x27;/&#x27;) &#123;</span></span><br><span class="line"><span class="comment">//                        address = strList[1].trim().substring(0, x - 1);</span></span><br><span class="line"><span class="comment">//                    &#125; else &#123;</span></span><br><span class="line">                        address = strList[<span class="number">1</span>].trim();</span><br><span class="line"><span class="comment">//                    &#125;</span></span><br><span class="line"></span><br><span class="line">                    String pwd = number.substring(number.length() - <span class="number">6</span>, number.length());</span><br><span class="line"></span><br><span class="line">                    <span class="comment">//对应@Before</span></span><br><span class="line">                    WebDriver driver = <span class="keyword">new</span> FirefoxDriver();</span><br><span class="line">                    driver.manage().timeouts().implicitlyWait(<span class="number">30</span>, TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line">                    <span class="comment">//对应@Test</span></span><br><span class="line">                    driver.get(BaseURL + <span class="string">&quot;/st&quot;</span>);</span><br><span class="line">                    driver.findElement(By.id(<span class="string">&quot;username&quot;</span>)).clear();</span><br><span class="line">                    driver.findElement(By.id(<span class="string">&quot;username&quot;</span>)).sendKeys(number);</span><br><span class="line">                    driver.findElement(By.id(<span class="string">&quot;password&quot;</span>)).clear();</span><br><span class="line">                    driver.findElement(By.id(<span class="string">&quot;password&quot;</span>)).sendKeys(pwd);</span><br><span class="line">                    driver.findElement(By.id(<span class="string">&quot;submitButton&quot;</span>)).click();</span><br><span class="line"></span><br><span class="line">                    String targetGit = driver.findElement(By.cssSelector(<span class="string">&quot;p.login-box-msg&quot;</span>)).getAttribute(<span class="string">&quot;innerHTML&quot;</span>).trim();</span><br><span class="line">                    <span class="keyword">if</span> (address.equals(targetGit))</span><br><span class="line">                        pass++;</span><br><span class="line">                    <span class="keyword">else</span>&#123;</span><br><span class="line">                        unpass++;</span><br><span class="line">                        System.out.println(number + <span class="string">&quot; 未通过：git不匹配。&quot;</span>);</span><br><span class="line">                        System.out.println(<span class="string">&quot;网站反馈的是：&quot;</span> + targetGit);</span><br><span class="line">                        System.out.println(<span class="string">&quot;表格给出的是：&quot;</span> + address);</span><br><span class="line">                    &#125;</span><br><span class="line">                    driver.close();</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    unpass++;</span><br><span class="line">                    System.out.println(number + <span class="string">&quot; 未通过：表格中未读取到git&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            r.close();</span><br><span class="line">            <span class="keyword">long</span> endTime = System.currentTimeMillis(); <span class="comment">//程序结束记录时间</span></span><br><span class="line">            <span class="keyword">long</span> TotalTime = endTime - startTime; <span class="comment">//总消耗时间</span></span><br><span class="line">            System.out.println(<span class="string">&quot;--------测试结束--------&quot;</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;通过&quot;</span>+pass+<span class="string">&quot;人，未通过&quot;</span>+unpass+<span class="string">&quot;人。&quot;</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;测试总时长：&quot;</span>+TotalTime);</span><br><span class="line">        &#125;<span class="keyword">catch</span>(IOException e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="出现的问题"><a href="#出现的问题" class="headerlink" title="出现的问题"></a>出现的问题</h2><p>1.xlsx转化成csv出现格式错误，如多余的换行，已手动去掉。<br>2.对于<code>WebDriver driver = new FirefoxDriver();</code></p>
+<p>出现报错</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread <span class="string">&quot;main&quot;</span> java.lang.NoClassDefFoundError: com/google/common</span><br></pre></td></tr></table></figure>
+<p>解决方案：<br>导入selenium-server-standalone-2.53.0.jar<br>3.csv用UTF-8编码，表头出现问题。第一行输入的学号之前会有一串隐藏的字符，因此在输入时会出现账号错误，要求重新输入的提示，因此并不能匹配到目标git。<br>问题原因：<br>UTF-8 编码的文件可以分为no BOM 和 BOM两种格式。<br>有bom头的存储或者字节流，它一定是unicode字符集编码。到底属于那一种（utf-8还是utf-16或是utf-32)，通过头可以判断出来。<br>在utf-8编码文件中BOM在文件头部，占用三个字节，用来标示该文件属于utf-8编码。UTF-8的BOM是 EFBBBF，因为UE载入UTF-8文件会转成Utf16，上述的EFBBBF 在Utf16中是FFFE（Unicode-LE的BOM）。<br>解决方案：<br>用sublime打开文件后，另存为选项的编码格式里，选择utf-8 (无bom头）。<br>4.在git部分，有前面带空格的需要用trim()进行去除。<br>5.在git部分，csv中有以‘/’结尾的网址，事实上和网站给出的没有‘/’的网址是一个网址。因此读取csv时需要判断git地址是否以‘/’结尾，如果是，则去掉后再与网站上的地址进行对比。<br>但是后来到3015207537时发现，网站上给出的就是结尾带/的网址，所以如果事先进行了处理，反而不对了。<br>所以最后决定：不进行处理了。<br>因此，试验后发现，网站基本上和表格里的网址匹配，未通过的都是因为结尾‘/’有无。<br>6.对于3015218150，表格里没有对应的git地址，也就是没有strList[1]，因此在前面需要对strList的长度进行判断，否则会报错。<br>7.最后添加了已通过、未通过的人数统计，并显示了测试时间。</p>
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p>结果图片已经过处理<br><img src="/images/ST_Lab2Selenium/F1E180DBBDC5034741CB92D8392FBFDB.jpg" alt="seleniumIDE9.jpg"><br>可见有6个未通过的，其中5个是因为git网址结尾的/，还有1个是没有对应的git地址<br>运行时间约为576s</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SoftwareTest/" rel="tag"># SoftwareTest</a>
+              <a href="/tags/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E4%B8%8A%E6%9C%BA/" rel="tag"># 软件测试上机</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/04/10/ST_PerformanceTestingTools/" rel="prev" title="【软件测试】《高性能产品的必由之路—性能测试工具》课程笔记">
+      <i class="fa fa-chevron-left"></i> 【软件测试】《高性能产品的必由之路—性能测试工具》课程笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/04/18/ST_Lab3JMeter/" rel="next" title="【软件测试上机】3 JMeter压力测试">
+      【软件测试上机】3 JMeter压力测试 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85SeleniumIDE%E6%8F%92%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">安装SeleniumIDE插件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Firefox"><span class="nav-number">1.1.</span> <span class="nav-text">Firefox</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chrome"><span class="nav-number">1.2.</span> <span class="nav-text">Chrome</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8SeleniumIDE%E5%BD%95%E5%88%B6%E8%84%9A%E6%9C%AC%E5%92%8C%E5%AF%BC%E5%87%BA%E8%84%9A%E6%9C%AC"><span class="nav-number">2.</span> <span class="nav-text">使用SeleniumIDE录制脚本和导出脚本</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Firefox-59-0%E7%89%88%E6%9C%AC%EF%BC%88%E6%B2%A1%E6%9C%89%E5%AF%BC%E5%87%BA%E8%84%9A%E6%9C%AC%E5%8A%9F%E8%83%BD%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">Firefox 59.0版本（没有导出脚本功能）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%95%E5%88%B6%E8%84%9A%E6%9C%AC"><span class="nav-number">2.1.1.</span> <span class="nav-text">录制脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">2.1.2.</span> <span class="nav-text">脚本操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Firefox-42-0%E7%89%88%E6%9C%AC"><span class="nav-number">2.2.</span> <span class="nav-text">Firefox 42.0版本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%95%E5%88%B6%E8%84%9A%E6%9C%AC-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">录制脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chrome%E7%9A%84Katalon-Automation%E7%89%88%E6%9C%AC"><span class="nav-number">2.3.</span> <span class="nav-text">Chrome的Katalon Automation版本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%95%E5%88%B6%E8%84%9A%E6%9C%AC-2"><span class="nav-number">2.3.1.</span> <span class="nav-text">录制脚本</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E5%86%99Selenium-Java-WebDriver%E7%A8%8B%E5%BA%8F"><span class="nav-number">3.</span> <span class="nav-text">编写Selenium Java WebDriver程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4"><span class="nav-number">3.1.</span> <span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">3.2.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">3.3.</span> <span class="nav-text">出现的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C"><span class="nav-number">3.4.</span> <span class="nav-text">结果</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="VikingWang"
+      src="/images/avatar.JPG">
+  <p class="site-author-name" itemprop="name">VikingWang</p>
+  <div class="site-description" itemprop="description">这是一个需要耐心等着加载的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VikingWang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vikingstudyhard.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="摄像头在环测试的分类以及“黑箱”的理解">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【ADAS】Camera in the Loop">
+<meta property="og:url" content="https://vikingstudyhard.github.io/2018/05/09/ADAS_CameraInLoop/index.html">
+<meta property="og:site_name" content="加载起来特别特别慢的小博客">
+<meta property="og:description" content="摄像头在环测试的分类以及“黑箱”的理解">
+<meta property="og:locale">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_CameraInLoop/418FF1FE64FD0B7A05142C1DC72D698B.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_CameraInLoop/6D05EC8A05FE2282E4505A1C01528DBA.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_CameraInLoop/C9F23D2280D8660ADEAD78E3B447F4E9.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_CameraInLoop/E640F3639502F2726E9155FF5408710E.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_CameraInLoop/E58208AE70F6AEB87FC2DDD844366F81.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_CameraInLoop/9471C760C47C8D225BFDFF84C88F593B.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_CameraInLoop/D454EFC825E5570B1AA23429FB651BF0.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_CameraInLoop/A0F0F8AF0C819D9A2E108ABEC69937B9.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_CameraInLoop/617FBB2622D0CD76E9AE23A7B7406D0F.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_CameraInLoop/763DF06BBC2FF8E4BA2997333928A0E1.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_CameraInLoop/5EE0C819D1F928301C49E34B186369B3.jpg">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/ADAS_CameraInLoop/9C489F21B940A0A369E1A2B921C947CB.jpg">
+<meta property="article:published_time" content="2018-05-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-05-11T06:56:58.517Z">
+<meta property="article:author" content="VikingWang">
+<meta property="article:tag" content="CATARC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vikingstudyhard.github.io/images/ADAS_CameraInLoop/418FF1FE64FD0B7A05142C1DC72D698B.jpg">
+
+<link rel="canonical" href="https://vikingstudyhard.github.io/2018/05/09/ADAS_CameraInLoop/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>【ADAS】Camera in the Loop | 加载起来特别特别慢的小博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">加载起来特别特别慢的小博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">图片墙第一弹第二弹欢迎惠顾！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-photo">
+
+    <a href="/photo/" rel="section"><i class="fa fa-camera fa-fw"></i>photo</a>
+
+  </li>
+        <li class="menu-item menu-item-photo2">
+
+    <a href="/photo2/" rel="section"><i class="fa fa-camera fa-fw"></i>photo2</a>
+
+  </li>
+        <li class="menu-item menu-item-friends">
+
+    <a href="/friends/" rel="section"><i class="fa fa-rocket fa-fw"></i>friends</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://vikingstudyhard.github.io/2018/05/09/ADAS_CameraInLoop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.JPG">
+      <meta itemprop="name" content="VikingWang">
+      <meta itemprop="description" content="这是一个需要耐心等着加载的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="加载起来特别特别慢的小博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【ADAS】Camera in the Loop
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-05-09 00:00:00" itemprop="dateCreated datePublished" datetime="2018-05-09T00:00:00+08:00">2018-05-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-11 14:56:58" itemprop="dateModified" datetime="2021-05-11T14:56:58+08:00">2021-05-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E4%BB%BF%E7%9C%9F%E6%B5%8B%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">自动驾驶仿真测试</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">摄像头在环测试的分类以及“黑箱”的理解</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Camera-In-the-Loop"><a href="#Camera-In-the-Loop" class="headerlink" title="Camera In the Loop"></a>Camera In the Loop</h1><p>下面根据四个方面的信息来搜集相关资料。</p>
+<h2 id="PanoSim-像机模型"><a href="#PanoSim-像机模型" class="headerlink" title="PanoSim 像机模型"></a>PanoSim 像机模型</h2><p>参考：<br><a target="_blank" rel="noopener" href="https://wenku.baidu.com/view/7764eba705a1b0717fd5360cba1aa81144318fb3###">基于PanoSim的ADAS摄像头在环测试系统解决方案</a></p>
+<p>PanoSim 提供了高仿真度的像机模型，通过车载视觉传感建模虚拟化真实像机，包括鱼眼像机、针孔像机、双目像机。像机模型图像能够添加暗角、模糊、畸变等物理特性效果，逼真还原真实图像效果。并能够通过像机在环，对标真实相机参数，定制开发图像识别功能。</p>
+<p>PanoSim 依据现阶段各种机构、主机厂的像机要求，根据真实摄像头接入以及控制器接入，提供两种摄像头硬件在环仿真测试方案:</p>
+<ol>
+<li>摄像头暗箱在环:基于显示屏画面拍摄方案，直接接入真实摄像头系统;</li>
+<li>摄像头控制器在环:将场景环境数据直接注入ADAS控制器，单独对控制器进行测试。</li>
+</ol>
+<h3 id="摄像头暗箱在环"><a href="#摄像头暗箱在环" class="headerlink" title="摄像头暗箱在环"></a>摄像头暗箱在环</h3><p>采用由摄像头作为图像信号采集处理单元进行硬件在环仿真，在暗箱中，由工控机生成。<strong>暗箱中显示器虚拟场景画面</strong>，摄像头拍摄虚拟场景画面，实时采集传感数据，输出至传感数据处理单元供图像处理器进行数据处理，并将处理结果传输给传感融合ECU，最后通过控制算法对进行车辆闭环控制。</p>
+<p>摄像头暗箱在环实现流程如下图所示:</p>
+<p><img src="/images/ADAS_CameraInLoop/418FF1FE64FD0B7A05142C1DC72D698B.jpg" alt="IMAGE"></p>
+<p>采用<strong>真实摄像头在环</strong>功能性能:</p>
+<ol>
+<li>真实摄像头数据采集传输; </li>
+<li>为道路实测提高系统置信度; </li>
+<li>图像传输延迟≤1ms;</li>
+<li>精确的图像数据;</li>
+<li>支持各种摄像头在环</li>
+</ol>
+<h3 id="摄像头控制器在环"><a href="#摄像头控制器在环" class="headerlink" title="摄像头控制器在环"></a>摄像头控制器在环</h3><p>采用PanoSim作为汽车智能驾驶实时仿真平台，由工控机生成虚拟场景，根据摄像头控制器的数据接口匹配接口，将场景信息以图像数据流的方式实时注入控制器中，<strong>把图像数据流转换为传感数据</strong>，输出至传感数据处理单元供图像处理器进行数据处理，并将处理结果传输给传感融合ECU，通过用户开发的控制算法识别图像，对车辆进行算法控制。</p>
+<p><img src="/images/ADAS_CameraInLoop/6D05EC8A05FE2282E4505A1C01528DBA.jpg" alt="IMAGE"></p>
+<p>采用<strong>摄像头板卡数据接口</strong>功能性能:</p>
+<ol>
+<li>直接生成图像数据传输给ECU，无需真实摄像头;</li>
+<li>可以通过摄像头板卡生成多个摄像头信号;</li>
+<li>图像传输延迟≤1ms;</li>
+<li>精确的图像数据;</li>
+<li>支持各种摄像头镜头。</li>
+</ol>
+<h2 id="基于PreScan的摄像头在环"><a href="#基于PreScan的摄像头在环" class="headerlink" title="基于PreScan的摄像头在环"></a>基于PreScan的摄像头在环</h2><p>参考文献：</p>
+<p>张可科. 基于摄像头在环的AEB行人仿真研究[A]. 中国汽车工程学会.第19届亚太汽车工程年会暨2017中国汽车工程学会年会论文集[C].中国汽车工程学会:,2017:5.</p>
+<p><a target="_blank" rel="noopener" href="https://www.auto-made.com/news/show-7716.html">基于摄像头在环的AEB行人仿真研究</a></p>
+<h3 id="内容介绍"><a href="#内容介绍" class="headerlink" title="内容介绍"></a>内容介绍</h3><p>首先搭建了摄像头在环的仿真台架，并对摄像头进行了对标，然后介绍了车辆制动模型的建立和验证，最后针对 2018 版 CNCAP 规程中 AEB 行人测试场景进行仿真建模，并和实车测试和理论分析结果进行对比，对比结果趋于一致，充分验证了 HIL 仿真测试的可信度｡ </p>
+<h3 id="现有的摄像头硬件在环方案"><a href="#现有的摄像头硬件在环方案" class="headerlink" title="现有的摄像头硬件在环方案"></a>现有的摄像头硬件在环方案</h3><p>现有的摄像头硬件在环方案主要有两种:信号注入和投影方式｡</p>
+<ol>
+<li>信号注入方式包括图像注入和目标注入等方式，两种注入都需要供应商开放相应的注入硬件接口和信号描述，而且成本很高。</li>
+<li>投影方式的优点是不用开放摄像头内部硬件接口，具有通用性和成本低的优势。</li>
+</ol>
+<h3 id="摄像头标定过程"><a href="#摄像头标定过程" class="headerlink" title="摄像头标定过程"></a>摄像头标定过程</h3><p><img src="/images/ADAS_CameraInLoop/C9F23D2280D8660ADEAD78E3B447F4E9.jpg" alt="IMAGE"></p>
+<p>其中车辆动力学模型运行于dSPACE实时系统中;基于PreScan软件的虚拟视景运行于计算机中;实时系统计算得到的车辆状态与目标状态等信息传输到计算机中，PreScan对虚拟视景中的物体进行更新并显示到显示器上;同时摄像头传感器通过拍摄屏幕的画面，模拟摄像头在真实世界工作的情形。</p>
+<p>步骤:<br>(1) 虚拟摄像头参数设置。<br>显示器的图像由PreScan中的虚拟摄像头传感器输出得到,因此需要将虚拟传感器的安装位置和FOV（Field of View，视野）角度设置为与摄像头硬件一致。</p>
+<p>(2) 摄像头硬件物理位置的确定。首先将摄像头的镜头垂直对准显示屏的中心，进一步调整硬件摄像头与屏幕的垂直距离，使得硬件摄像头拍摄到的图像正好覆盖显示器的内部边框，以保证屏幕图像的比例与真实情况一致，如图2所示。</p>
+<p>摄像头标定结果如图3所示，显示了在本车与行人目标物接近过程中，摄像头输出的本车与行人之间相对距离、相对速度和碰撞TTC值与仿真软件输出的真实值的对比。从对比结果可以看出，标定后摄像头输出的结果具有较高准确性。</p>
+<p>（TTC 相对距离除以相对速度,即可得到本车与前方车辆或障碍物之碰撞时间 Time-to-Collision ）</p>
+<p><img src="/images/ADAS_CameraInLoop/E640F3639502F2726E9155FF5408710E.jpg" alt="IMAGE"></p>
+<h2 id="dSPACE-公司的-HIL-仿真"><a href="#dSPACE-公司的-HIL-仿真" class="headerlink" title="dSPACE 公司的 HIL 仿真"></a>dSPACE 公司的 HIL 仿真</h2><p>来源：<a target="_blank" rel="noopener" href="https://www.dspace.com/zh/zho/home/applicationfields/our_solutions_for/driver_assistance_systems/hil_simulation/hil_testing_camera_and_radar.cfm">释放试验用于基于摄像头和基于雷达的应用（使用闭环HIL系统）</a></p>
+<p><img src="/images/ADAS_CameraInLoop/E58208AE70F6AEB87FC2DDD844366F81.jpg" alt="IMAGE"></p>
+<p>其中：</p>
+<ul>
+<li>智能自适应巡航控制（ACC）和自动紧急制动（AEB）系统的典型的HIL装置</li>
+<li>MotionDesk通过3D可视化激励在环的摄相机</li>
+<li>dSPACE Automotive Simulation Models（ASM）用于车辆和交通仿真,雷达传感器模型用于将检测对象注入雷达ECU</li>
+<li>ModelDesk用于实现虚拟驾驶的参数化</li>
+<li>实时HIL系统保证雷达和摄像头传感器的检测对象之间具有时间相关性</li>
+</ul>
+<blockquote>
+<p>释放测试的一个典型方法是使用摄像头盒。<strong>摄像头传感器封闭在一个盒子中</strong>，并通过带有3D场景的监视器进行激励。这些图片基于车辆和环境模型的数据，在带有显卡的PC上生成。这就需要较高的帧速率和足够的细节精度，并且要求实时完成，因此摄像头控制单元能够正确地识别对象，并对其分类。</p>
+</blockquote>
+<h3 id="单盒-“One-Box”"><a href="#单盒-“One-Box”" class="headerlink" title="单盒 “One-Box”"></a>单盒 “One-Box”</h3><p><img src="/images/ADAS_CameraInLoop/9471C760C47C8D225BFDFF84C88F593B.jpg" alt="IMAGE"></p>
+<h3 id="产品视频"><a href="#产品视频" class="headerlink" title="产品视频"></a>产品视频</h3><p>MAN 与 dSPACE 联手开发出了一套可以对相机和雷达系统生成的组合警报自动进行验证的解决方案。</p>
+<p><a target="_blank" rel="noopener" href="https://www.dspace.com/zh/zho/home/medien/videos/productvideos/adas_video_man.cfm">视频链接</a></p>
+<p>为验证自动紧急制动系统，MAN 采用了相机在环配置以及创新性雷达相机数据融合技术。</p>
+<p>视频截图：<br><img src="/images/ADAS_CameraInLoop/D454EFC825E5570B1AA23429FB651BF0.jpg" alt="IMAGE"><br><img src="/images/ADAS_CameraInLoop/A0F0F8AF0C819D9A2E108ABEC69937B9.jpg" alt="IMAGE"><br><img src="/images/ADAS_CameraInLoop/617FBB2622D0CD76E9AE23A7B7406D0F.jpg" alt="IMAGE"></p>
+<h2 id="用于多传感器感知的实时硬件在环实验室测试"><a href="#用于多传感器感知的实时硬件在环实验室测试" class="headerlink" title="用于多传感器感知的实时硬件在环实验室测试"></a>用于多传感器感知的实时硬件在环实验室测试</h2><p>参考<a target="_blank" rel="noopener" href="https://www.hindawi.com/journals/ijae/2013/748751/">Real-Time Hardware-in-the-Loop Laboratory Testing for Multisensor Sense and Avoid Systems</a></p>
+<p>这篇文章讲述的硬件在环系统的总体架构如下图所示：</p>
+<p><img src="/images/ADAS_CameraInLoop/763DF06BBC2FF8E4BA2997333928A0E1.jpg" alt="IMAGE"></p>
+<p>其中光电传感器（EO）部分，相机被固定在光学工作台上，并处理投射在设置在其前方的LCD显示器上的图像。在摄像机和显示器之间安装了合适的准直透镜，以确保更好的均匀性条件。这些组件被封装在一个黑色的盒子里，这样可以忽略杂散光的影响。</p>
+<p>下图显示了光学平台上的摄像机，监视器和准直器。</p>
+<p><img src="/images/ADAS_CameraInLoop/5EE0C819D1F928301C49E34B186369B3.jpg" alt="IMAGE"></p>
+<p>下图显示了包含所有上述组件的黑盒。场景显示器计算机运行与预定义的飞行场景相关的合成视频。</p>
+<p><img src="/images/ADAS_CameraInLoop/9C489F21B940A0A369E1A2B921C947CB.jpg" alt="IMAGE"></p>
+<h1 id="个人总结"><a href="#个人总结" class="headerlink" title="个人总结"></a>个人总结</h1><h2 id="对于摄像头在环共分为两个方向"><a href="#对于摄像头在环共分为两个方向" class="headerlink" title="对于摄像头在环共分为两个方向"></a>对于摄像头在环共分为两个方向</h2><ol>
+<li>根据不同的介绍，“摄像头黑箱在环”、“视频采集箱在环”、“摄像头盒测试”、“投影方式的摄像头硬件在环”应该指的是同一种方法，即用摄像头通过透镜，对准显示器来采集图像。缺点是：显示器的对比度有限、光学透镜引起失真、渐晕和色差。优点是：接近实际。</li>
+<li>另一种是接将原始图像数据导入摄像头的图像处理单元。“摄像头控制器在环”、“场景环境数据直接注入ADAS控制器”、“信号注入方式的摄像头硬件在环”、“摄像头板卡进行数据接口”都指的是这种方法。优点是：可以不需要真实的摄像头，支持对多个摄像头信号的处理，而且与摄像头镜头的种类无关，因为只需要数据。</li>
+</ol>
+<h2 id="关于-“Black-Box”"><a href="#关于-“Black-Box”" class="headerlink" title="关于 “Black Box”"></a>关于 “Black Box”</h2><p>我一直以为是“黑盒测试”的“黑盒”，但是看了最后那篇论文才知道，“黑箱”指的是把所有相关的仪器放在一个“黑箱子”里进行测试，这样有效地避免了外界光源对实验的干扰。所以之前的网页里提到的“暗箱”、“黑箱”、“视频采集箱”、“单盒（One-Box）”都是指上述第一种摄像头在环。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CATARC/" rel="tag"># CATARC</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/05/08/ADAS_VisualPerceptionUsingMonocularCamera/" rel="prev" title="【ADAS】Visual Perception Using Monocular Camera">
+      <i class="fa fa-chevron-left"></i> 【ADAS】Visual Perception Using Monocular Camera
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/06/01/ADAS_Waymo/" rel="next" title="【ADAS】国外成熟项目调研 —— Waymo">
+      【ADAS】国外成熟项目调研 —— Waymo <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Camera-In-the-Loop"><span class="nav-number">1.</span> <span class="nav-text">Camera In the Loop</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PanoSim-%E5%83%8F%E6%9C%BA%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">PanoSim 像机模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%91%84%E5%83%8F%E5%A4%B4%E6%9A%97%E7%AE%B1%E5%9C%A8%E7%8E%AF"><span class="nav-number">1.1.1.</span> <span class="nav-text">摄像头暗箱在环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%91%84%E5%83%8F%E5%A4%B4%E6%8E%A7%E5%88%B6%E5%99%A8%E5%9C%A8%E7%8E%AF"><span class="nav-number">1.1.2.</span> <span class="nav-text">摄像头控制器在环</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8EPreScan%E7%9A%84%E6%91%84%E5%83%8F%E5%A4%B4%E5%9C%A8%E7%8E%AF"><span class="nav-number">1.2.</span> <span class="nav-text">基于PreScan的摄像头在环</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AE%B9%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.2.1.</span> <span class="nav-text">内容介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E7%9A%84%E6%91%84%E5%83%8F%E5%A4%B4%E7%A1%AC%E4%BB%B6%E5%9C%A8%E7%8E%AF%E6%96%B9%E6%A1%88"><span class="nav-number">1.2.2.</span> <span class="nav-text">现有的摄像头硬件在环方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%91%84%E5%83%8F%E5%A4%B4%E6%A0%87%E5%AE%9A%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.3.</span> <span class="nav-text">摄像头标定过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dSPACE-%E5%85%AC%E5%8F%B8%E7%9A%84-HIL-%E4%BB%BF%E7%9C%9F"><span class="nav-number">1.3.</span> <span class="nav-text">dSPACE 公司的 HIL 仿真</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E7%9B%92-%E2%80%9COne-Box%E2%80%9D"><span class="nav-number">1.3.1.</span> <span class="nav-text">单盒 “One-Box”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A7%E5%93%81%E8%A7%86%E9%A2%91"><span class="nav-number">1.3.2.</span> <span class="nav-text">产品视频</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E4%BA%8E%E5%A4%9A%E4%BC%A0%E6%84%9F%E5%99%A8%E6%84%9F%E7%9F%A5%E7%9A%84%E5%AE%9E%E6%97%B6%E7%A1%AC%E4%BB%B6%E5%9C%A8%E7%8E%AF%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%B5%8B%E8%AF%95"><span class="nav-number">1.4.</span> <span class="nav-text">用于多传感器感知的实时硬件在环实验室测试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93"><span class="nav-number">2.</span> <span class="nav-text">个人总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E4%BA%8E%E6%91%84%E5%83%8F%E5%A4%B4%E5%9C%A8%E7%8E%AF%E5%85%B1%E5%88%86%E4%B8%BA%E4%B8%A4%E4%B8%AA%E6%96%B9%E5%90%91"><span class="nav-number">2.1.</span> <span class="nav-text">对于摄像头在环共分为两个方向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E-%E2%80%9CBlack-Box%E2%80%9D"><span class="nav-number">2.2.</span> <span class="nav-text">关于 “Black Box”</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="VikingWang"
+      src="/images/avatar.JPG">
+  <p class="site-author-name" itemprop="name">VikingWang</p>
+  <div class="site-description" itemprop="description">这是一个需要耐心等着加载的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VikingWang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

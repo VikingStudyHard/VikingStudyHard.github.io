@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vikingstudyhard.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="一种贪婪算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【论文略读】Towards Crafting Text Adversarial Samples">
+<meta property="og:url" content="https://vikingstudyhard.github.io/2019/03/08/Paper_TowardsCraftingTextAdversarialSamples/index.html">
+<meta property="og:site_name" content="加载起来特别特别慢的小博客">
+<meta property="og:description" content="一种贪婪算法">
+<meta property="og:locale">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/Paper_TowardsCraftingTextAdversarialSamples/EE6EA758BD8C2978CE37A0CFB2F5C33C.png">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/Paper_TowardsCraftingTextAdversarialSamples/C59988A62F76C23451DEC7985CCB180C.png">
+<meta property="og:image" content="https://vikingstudyhard.github.io/images/Paper_TowardsCraftingTextAdversarialSamples/B8D1B059BC7BD065CB75613F51AB9784.jpg">
+<meta property="article:published_time" content="2019-03-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-05-11T06:56:58.515Z">
+<meta property="article:author" content="VikingWang">
+<meta property="article:tag" content="论文精读">
+<meta property="article:tag" content="Deep Learning">
+<meta property="article:tag" content="文本对抗样本的生成">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vikingstudyhard.github.io/images/Paper_TowardsCraftingTextAdversarialSamples/EE6EA758BD8C2978CE37A0CFB2F5C33C.png">
+
+<link rel="canonical" href="https://vikingstudyhard.github.io/2019/03/08/Paper_TowardsCraftingTextAdversarialSamples/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>【论文略读】Towards Crafting Text Adversarial Samples | 加载起来特别特别慢的小博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">加载起来特别特别慢的小博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">图片墙第一弹第二弹欢迎惠顾！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-photo">
+
+    <a href="/photo/" rel="section"><i class="fa fa-camera fa-fw"></i>photo</a>
+
+  </li>
+        <li class="menu-item menu-item-photo2">
+
+    <a href="/photo2/" rel="section"><i class="fa fa-camera fa-fw"></i>photo2</a>
+
+  </li>
+        <li class="menu-item menu-item-friends">
+
+    <a href="/friends/" rel="section"><i class="fa fa-rocket fa-fw"></i>friends</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://vikingstudyhard.github.io/2019/03/08/Paper_TowardsCraftingTextAdversarialSamples/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.JPG">
+      <meta itemprop="name" content="VikingWang">
+      <meta itemprop="description" content="这是一个需要耐心等着加载的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="加载起来特别特别慢的小博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【论文略读】Towards Crafting Text Adversarial Samples
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-03-08 00:00:00" itemprop="dateCreated datePublished" datetime="2019-03-08T00:00:00+08:00">2019-03-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-11 14:56:58" itemprop="dateModified" datetime="2021-05-11T14:56:58+08:00">2021-05-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI-testing/" itemprop="url" rel="index"><span itemprop="name">AI testing</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI-testing/%E6%96%87%E6%9C%AC%E5%AF%B9%E6%8A%97%E6%A0%B7%E6%9C%AC%E7%9A%84%E7%94%9F%E6%88%90/" itemprop="url" rel="index"><span itemprop="name">文本对抗样本的生成</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">一种贪婪算法</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1707.02812">https://arxiv.org/abs/1707.02812</a></p>
+<blockquote>
+<p>Samanta, S., &amp; Mehta, S. (2017). Towards crafting text adversarial samples. arXiv preprint arXiv:1707.02812.</p>
+</blockquote>
+<h1 id="做什么"><a href="#做什么" class="headerlink" title="做什么"></a>做什么</h1><p>Samanta等人提出一种文本的对抗样本生成方法，为了确保语义和句法的保留，作者通过删除或替换文本中的重要或突出单词或在文本样本中引入新单词，并且用贪婪算法考虑每个合适的替换词。</p>
+<p>此方法适合于具有<strong>子类别</strong>的数据集。</p>
+<p>子类别（sub-categories）：</p>
+<p>IMDB影评的情感分析</p>
+<p><strong>词义</strong></p>
+<p><em>“good、excellent、like”</em>等表明了积极的评价，而且这些与电影的类型（the genre of the movie）无关。<br><em>“The movie was hilarious[hɪ’leərɪəs]”</em> 好笑的，滑稽的。<br>当电影是喜剧片时 hilarious 代表积极的评价，是恐怖片时 hilarious 代表消极的评价（太搞笑了一点恐怖感都没有），这就与电影的类别有关。</p>
+<div align=center>
+  <img width=687 src="https://vikingstudyhard.github.io/images/Paper_TowardsCraftingTextAdversarialSamples/EE6EA758BD8C2978CE37A0CFB2F5C33C.png" >
+</div>
+
+
+<p><strong>副词</strong></p>
+<p>“The movie was fair”——一般的普通的电影——可能属于任何一类情绪<br>“The movie was <em>extremely</em> fair”——这电影也太一般了——负面情绪</p>
+<h1 id="怎么做"><a href="#怎么做" class="headerlink" title="怎么做"></a>怎么做</h1><h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><p>样本：$s$<br>情感分类器：$F$<br>类别：$y$<br>每个单词的贡献率：$C_F(\omega_i,y)$<br>$\omega_i$的候选池：$P$</p>
+<div align=center>
+  <img width=865 src="https://vikingstudyhard.github.io/images/Paper_TowardsCraftingTextAdversarialSamples/C59988A62F76C23451DEC7985CCB180C.png" >
+</div>
+
+<p><strong>贡献率</strong><br>一个单词有“高贡献”是指去掉它后文本将被分为当前类的概率大幅减小。<br>计算量大，一般借鉴FGSM的方法近似计算。（计算了成本梯度 –&gt; 白盒）</p>
+<p><strong>候选池</strong></p>
+<ul>
+<li><strong>同义语</strong><br>good = nice = decent</li>
+<li><strong>拼写错误</strong>——太显眼——约定：拼错成有效词汇<br>good –&gt; god, goods</li>
+<li><strong>特定类型的关键词</strong><br>hilarious 一类电影中被作为积极评价词，但在另一类电影中被作为负面评价词的单词</li>
+</ul>
+<h2 id="策略"><a href="#策略" class="headerlink" title="策略"></a>策略</h2><ul>
+<li>移除单词（removal of word）</li>
+<li>插入单词（addition of word）</li>
+<li>替换单词（replacement of word）</li>
+</ul>
+<p>这实际上是使用到了贪婪算法（greedy method），争取做最少的修改，同时最大程度地保留句子结构。</p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>作者在两个数据集上进行了实验：用于情感分析的IMDB电影评论数据集[1]和用于性别分类的twitter数据集[2]。</p>
+<h1 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h1><p>评估指标：<br>1.比较 <strong>准确性</strong>：分类器正确标记的样本的百分比<br>2.测量原始样本与对抗样本之间的 <strong>语义相似性</strong>，只有在成功地制作了对抗性样本之后, 文本样本与其对抗性对应方之间的语义相似性才有效。</p>
+<p>用IMBD数据集做情感分析，Textfool[3]相比较</p>
+<div align=center>
+  <img width=857 src="https://vikingstudyhard.github.io/images/Paper_TowardsCraftingTextAdversarialSamples/B8D1B059BC7BD065CB75613F51AB9784.jpg" >
+</div>
+
+<blockquote>
+<p>第3行Accuracy using original test set 是baseline的准确率 用来做对比<br>第4行Accuracy using adversarial test set 是生成对抗样本的准确率<br>第3列Proposed method using genre specific keywords 代表 在候选池中考虑“特定类型关键词”时的准确率；<br>第4列Proposed method w/o using genre specific keywords 代表 在候选池中不考虑“特定类型关键词”时的准确率。<br>第5行percentage of perturbed samples 代表：成功产生对抗样本的概率。由于语义约束，有的测试样本无法成功产生对抗样本。</p>
+</blockquote>
+<p><strong>准确性：</strong></p>
+<p>74.53: textfool效果不好 因为原文没有详细说明咋弄的 大家根据理解写的算法 效果并不好<br>90.64与42.76：包含特定类型的关键字肯定会提高样本制作的质量<br>retrain：用对抗样本重新训练后，这两行精度的差异非常小。</p>
+<p><strong>语义相似性：</strong></p>
+<p>使用/不使用genre specific keywords时产生的对抗样本和原始样本间的平均语义相似度分别为0.9164和0.9732。</p>
+<p>原始及其对应的扰动样本之间的语义相似性确实在候选池中的类型特定关键字减少了一点，<br>但是在这种情况下生成的有效对抗样本的数量也增加：90.64–42.76</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p>[1] A. L. Maas, R. E. Daly, P. T. Pham, D. Huang, A. Y. Ng, and C. Potts. Learning word vectors for sentiment analysis. In Association for Computational Linguistics: Human Language Technologies, 2011.<br>[2] CloudFlower. Twitter gender classification dataset. <a target="_blank" rel="noopener" href="https://www.kaggle.com/crowdflower/twitter-user-gender-cl">https://www.kaggle.com/crowdflower/twitter-user-gender-cl</a> 2013.<br>[3] Liang, B., Li, H., Su, M., Bian, P., Li, X., &amp; Shi, W. (2017). Deep text classification can be fooled. arXiv preprint arXiv:1704.08006.</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/" rel="tag"># 论文精读</a>
+              <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+              <a href="/tags/%E6%96%87%E6%9C%AC%E5%AF%B9%E6%8A%97%E6%A0%B7%E6%9C%AC%E7%9A%84%E7%94%9F%E6%88%90/" rel="tag"># 文本对抗样本的生成</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/02/15/Paper_DeepTextClassificationCanBeFooled/" rel="prev" title="【论文精读】Deep text classification can be fooled">
+      <i class="fa fa-chevron-left"></i> 【论文精读】Deep text classification can be fooled
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/03/11/Mac_pyltp/" rel="next" title="【Mac】安装 Pyltp">
+      【Mac】安装 Pyltp <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">做什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A"><span class="nav-number">2.</span> <span class="nav-text">怎么做</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5"><span class="nav-number">2.2.</span> <span class="nav-text">策略</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C"><span class="nav-number">3.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%84%E4%BC%B0"><span class="nav-number">4.</span> <span class="nav-text">评估</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="VikingWang"
+      src="/images/avatar.JPG">
+  <p class="site-author-name" itemprop="name">VikingWang</p>
+  <div class="site-description" itemprop="description">这是一个需要耐心等着加载的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VikingWang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
